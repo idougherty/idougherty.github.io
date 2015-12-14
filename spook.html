@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Spooky</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+</head>
+<body>
+    <p>get spooked on.</p>
+    <script>
+        var spook = new Audio('screamingGoat.mp3');
+        var timer = null;
+        
+        function getSpooked() {
+            spook.play();
+        }
+        
+        timer = setTimeout(getSpooked, 1200000);
+    </script>
+</body>
+</html>

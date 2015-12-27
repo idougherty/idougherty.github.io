@@ -6,7 +6,17 @@
 <body>
     <button onClick="seizure();">try me.</button>
     <script>
-        function seizure() {}
+        var bg_colour = Math.floor(Math.random() * 16777215).toString(16);
+        bg_colour = "#" + ("000000" + bg_colour).slice(-6);
+        document.bgColor = bg_colour;
+        
+        function seizure() {
+            setInterval(function() {
+                bg_colour = Math.floor(Math.random() * 16777215).toString(16);
+                bg_colour = "#" + ("000000" + bg_colour).slice(-6);
+                document.bgColor = bg_colour;
+            }, 10);
+        }
     </script>
 </body>
 </html>

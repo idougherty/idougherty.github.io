@@ -1,6 +1,18 @@
+var rng = null;
+var places = [{x: 0, y: 0, biome: "Plains"}];
+var existing = null;
+var placeInPlaces = null;
+var countNotExist = 0;
+
+var curPlace = {
+  x: 0,
+  y: 0,
+  biome: "Plains"
+};
+
 function startGame() {
     $("#textShown").html("Choose a direction!");
-    $('button').css('visibility', 'hidden');
+    $('#startButton').remove();
     chooseDirection();
 }
 
@@ -11,11 +23,9 @@ function chooseDirection() {
     $("#farRightField").append('<button onclick="west();" style="display: block; margin: auto">West</button>');
 }
 
-var rng = null;
-
 function newBiome() {
 	rng = Math.floor((Math.random()*4)+1);
-	switch(rng){
+	switch(rng) {
   case 1: 
     curPlace.biome = "Plains"; 
     break;
@@ -30,63 +40,78 @@ function newBiome() {
     break;
   default:
   }
-  alert(curPlace.biome + " places: " + places)
+  alert("New generation");
+  $("#textShown").html(curPlace.biome);
 }
 
-  var places = [];
-
-function isSame (value) {
-  if ((value.x == curPlace.x) && (value.y == curPlace.y)){
-  return value;
+function isSame () {
+  var i = null;
+  for (i = 0; i < places.length; i++) {
+    if(!((places[i].x == curPlace.x) && (places[i].y == curPlace.y))) {
+      countNotExist += 1;
+    }
   }
+  if(countNotExist == places.length) {
+    existing = false;
+  } else {
+    existing = true;
+    placeInPlaces = i;
+  }
+  countNotExist = 0;
 }
-
-var curPlace = {
-  x: 0,
-  y:0,
-  biome:"Plains"
-};
 
 function north(){
-  places.push({x: curPlace.x, y: curPlace.y, biome: curPlace.biome, existing: "existing"});
 	curPlace.y += 1;
-  if (places.filter(isSame).existing == "existing"){
-    curPlace.biome = places.filter(isSame).biome;
-    alert("hi mom");
-	}	else {
+	isSame();
+	if(existing === false) {
+	  places.push({x: curPlace.x, y: curPlace.y, biome: curPlace.biome, existing: true});
+    $("#textShown").html(curPlace.biome);
     newBiome();
+	} else {
+	  curPlace.biome = places[placeInPlaces].biome;
+	  alert(places[placeInPlaces].biome);
+    $("#textShown").html(curPlace.biome);
 	}
 }
 
 function south(){
-  places.push({x: curPlace.x, y: curPlace.y, biome: curPlace.biome, existing: "existing"});
 	curPlace.y -= 1;
-  if (places.filter(isSame).existing == "existing"){
-    curPlace.biome = places.filter(isSame).biome;
-    alert("hi mom");
-	}	else {
+	isSame();
+	if(existing === false) {
+	  places.push({x: curPlace.x, y: curPlace.y, biome: curPlace.biome, existing: true});
+    $("#textShown").html(curPlace.biome);
     newBiome();
+	} else {
+	  curPlace.biome = places[placeInPlaces].biome;
+	  alert(places[placeInPlaces].biome);
+    $("#textShown").html(curPlace.biome);
 	}
 }
 
 function east(){
-  places.push({x: curPlace.x, y: curPlace.y, biome: curPlace.biome, existing: "existing"});
-	curPlace.x -= 1;
-  if (places.filter(isSame).existing == "existing"){
-    curPlace.biome = places.filter(isSame).biome;
-    alert("hi mom");
-	}	else {
+	curPlace.x += 1;
+	isSame();
+	if(existing === false) {
+	  places.push({x: curPlace.x, y: curPlace.y, biome: curPlace.biome, existing: true});
+    $("#textShown").html(curPlace.biome);
     newBiome();
+	} else {
+	  curPlace.biome = places[placeInPlaces].biome;
+	  alert(places[placeInPlaces].biome);
+    $("#textShown").html(curPlace.biome);
 	}
 }
 
 function west(){
-  places.push({x: curPlace.x, y: curPlace.y, biome: curPlace.biome, existing: "existing"});
-	curPlace.x += 1;
-  if (places.filter(isSame).existing == "existing"){
-    curPlace.biome = places.filter(isSame).biome;
-    alert("hi mom");
-	}	else {
+	curPlace.x -= 1;
+	isSame();
+	if(existing === false) {
+	  places.push({x: curPlace.x, y: curPlace.y, biome: curPlace.biome, existing: true});
+    $("#textShown").html(curPlace.biome);
     newBiome();
+	} else {
+	  curPlace.biome = places[placeInPlaces].biome;
+	  alert(places[placeInPlaces].biome);
+    $("#textShown").html(curPlace.biome);
 	}
 }

@@ -40,7 +40,6 @@ function newBiome() {
     break;
   default:
   }
-  alert("New generation");
   $("#textShown").html(curPlace.biome);
 }
 
@@ -64,11 +63,11 @@ function isSame () {
 function generateLand() {
   	if(existing === false) {
 	  places.push({x: curPlace.x, y: curPlace.y, biome: curPlace.biome});
-    $("#textShown").html(curPlace.biome);
     newBiome();
-	} else if(existing === true) { //code block below not running for some reason
+    $("#textShown").html("New Generation: " + curPlace.biome);
+	} else if(existing === true) { //code block below kinda works :()
 	  curPlace.biome = places[placeInPlaces].biome;
-    $("#textShown").html(curPlace.biome);
+    $("#textShown").html("Old Generation: " + curPlace.biome);
 	}
 }
 

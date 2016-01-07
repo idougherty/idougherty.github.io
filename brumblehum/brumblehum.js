@@ -47,7 +47,9 @@ function newBiome() {
 function isSame () {
   var i = null;
   for (i = 0; i < places.length; i++) {
-    if(!((places[i].x == curPlace.x) && (places[i].y == curPlace.y))) {
+    if((places[i].x == curPlace.x) && (places[i].y == curPlace.y)) {
+      placeInPlaces = i;
+    } else {
       countNotExist += 1;
     }
   }
@@ -55,63 +57,41 @@ function isSame () {
     existing = false;
   } else {
     existing = true;
-    placeInPlaces = i;
   }
   countNotExist = 0;
+}
+
+function generateLand() {
+  	if(existing === false) {
+	  places.push({x: curPlace.x, y: curPlace.y, biome: curPlace.biome});
+    $("#textShown").html(curPlace.biome);
+    newBiome();
+	} else if(existing === true) { //code block below not running for some reason
+	  curPlace.biome = places[placeInPlaces].biome;
+    $("#textShown").html(curPlace.biome);
+	}
 }
 
 function north(){
 	curPlace.y += 1;
 	isSame();
-	if(existing === false) {
-	  places.push({x: curPlace.x, y: curPlace.y, biome: curPlace.biome, existing: true});
-    $("#textShown").html(curPlace.biome);
-    newBiome();
-	} else {
-	  curPlace.biome = places[placeInPlaces].biome;
-	  alert(places[placeInPlaces].biome);
-    $("#textShown").html(curPlace.biome);
-	}
+  generateLand()
 }
 
 function south(){
 	curPlace.y -= 1;
 	isSame();
-	if(existing === false) {
-	  places.push({x: curPlace.x, y: curPlace.y, biome: curPlace.biome, existing: true});
-    $("#textShown").html(curPlace.biome);
-    newBiome();
-	} else {
-	  curPlace.biome = places[placeInPlaces].biome;
-	  alert(places[placeInPlaces].biome);
-    $("#textShown").html(curPlace.biome);
-	}
+  generateLand()
 }
 
 function east(){
 	curPlace.x += 1;
 	isSame();
-	if(existing === false) {
-	  places.push({x: curPlace.x, y: curPlace.y, biome: curPlace.biome, existing: true});
-    $("#textShown").html(curPlace.biome);
-    newBiome();
-	} else {
-	  curPlace.biome = places[placeInPlaces].biome;
-	  alert(places[placeInPlaces].biome);
-    $("#textShown").html(curPlace.biome);
-	}
+  generateLand()
 }
 
 function west(){
 	curPlace.x -= 1;
 	isSame();
-	if(existing === false) {
-	  places.push({x: curPlace.x, y: curPlace.y, biome: curPlace.biome, existing: true});
-    $("#textShown").html(curPlace.biome);
-    newBiome();
-	} else {
-	  curPlace.biome = places[placeInPlaces].biome;
-	  alert(places[placeInPlaces].biome);
-    $("#textShown").html(curPlace.biome);
-	}
+  generateLand()
 }

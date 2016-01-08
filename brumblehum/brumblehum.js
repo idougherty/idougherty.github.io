@@ -1,5 +1,5 @@
 var rng = null;
-var places = [{x: 0, y: 0, biome: "Plains"}];
+var places = [{x: 0, y: 0, biome: "plains"}];
 var existing = null;
 var placeInPlaces = null;
 var countNotExist = 0;
@@ -27,19 +27,20 @@ function newBiome() {
 	rng = Math.floor((Math.random()*4)+1);
 	switch(rng) {
   case 1: 
-    curPlace.biome = "Plains"; 
+    curPlace.biome = "plains"; 
     break;
   case 2: 
-    curPlace.biome = "Mountain";
+    curPlace.biome = "mountain";
     break;
   case 3: 
-    curPlace.biome = "Desert";
+    curPlace.biome = "desert";
 	  break;
   case 4: 
-    curPlace.biome = "Forest";
+    curPlace.biome = "forest";
     break;
   default:
   }
+  places.push({x: curPlace.x, y: curPlace.y, biome: curPlace.biome});
   $("#textShown").html(curPlace.biome);
 }
 
@@ -62,13 +63,11 @@ function isSame () {
 
 function generateLand() {
   	if(existing === false) {
-	  places.push({x: curPlace.x, y: curPlace.y, biome: curPlace.biome});
     newBiome();
-    $("#textShown").html("New Generation: " + curPlace.biome);
 	} else if(existing === true) { //code block below kinda works :()
 	  curPlace.biome = places[placeInPlaces].biome;
-    $("#textShown").html("Old Generation: " + curPlace.biome);
 	}
+	$("#textShown").html("You find yourself in a " + curPlace.biome + " biome.");
 }
 
 function north(){

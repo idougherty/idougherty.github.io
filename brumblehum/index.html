@@ -12,30 +12,28 @@
             <div class="jumbotron" style="background: transparent; text-align: center;">
                 <h1>Brumblehum RPG Game</h1>
             </div>
-            
                 
                 <button onclick="startGame();" id="startButton" style="display: block; margin: auto;">Start Game</button>
             
-            
             <div id="gameField" style="height: 300px; margin-top: 15px;">
                 
-                <div id="textField" style="height:150px; width:100%">
-                    <p class="lead" id="textShown" style="text-align: center; padding-top: 15px;"></p>
+                <div id="textField" style="height:270px; width:100; border: 2px solid #444; background-color: #777"></div>
+                    <p class="lead" id="textShown" style="background-color: #AAA; text-align: center; margin-top: -270px; border: 2px solid #444; font-weight: bold;"></p>
                 </div>
                 
-                <div id="1choice">
+                <div id="1choice" style="border: 2px solid #444; height: 38px; background-color: #AAA; margin-top: -32px">
                     
-                    <div id="2choice-left">
+                    <div id="2choice-left" style="margin: 0px 0; height:25px; width:50%">
                 
-                        <div id="farLeftField" style="margin: 0px 0; height:150px; width:25%"></div>
-                        <div id="midLeftField" style="margin: -150px 25%; height:150px; width:25%"></div>
+                        <div id="farLeftField" style="margin: 0px 0; height:25px; width:50%"></div>
+                        <div id="midLeftField" style="margin: -25px 50%; height:25px; width: 50%"></div>
                 
                     </div>
                     
-                    <div id="4choice-right">
+                    <div id="2choice-right" style="margin: -25px 50%; height:25px; width:50%">
                 
-                        <div id="midRightField" style="margin: 0px 50%; height:150px; width:25%"></div>
-                        <div id="farRightField" style="margin: -150px 75%; height:150px; width:25%"></div>
+                        <div id="midRightField" style="margin: 0px 0%; height:25px; width: 50%"></div>
+                        <div id="farRightField" style="margin: -25px 50%; height:25px; width: 50%"></div>
                     
                     </div>
                 

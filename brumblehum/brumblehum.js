@@ -8,6 +8,27 @@ var randomMonster = Math.floor(Math.random()*4);
 var monsterChoices = ["bear", "giant snake", "giant eagle", "wandering bandit"];
 var swordUpgradeCost = 100;
 var newToVillage = true;
+var hit = Math.floor(Math.random()*4 + 1);
+
+var monster = [
+  bear = {
+    health: 15,
+    damage: 5
+  },
+  giantSnake = {
+    health: 7,
+    damage: 9
+  },
+  giantEagle = {
+    health: 10,
+    damage: 7
+  },
+  bandit = {
+    health: 20,
+    damage: 5
+  }
+];
+
 
 var user = {
   health: 10,
@@ -326,6 +347,43 @@ function fight() {
   $("#farRightField").append('<button onclick="flee();" id="fleeButton" class="btn btn-default" style="display: block; margin: auto">Flee</button>');
 }
 
+function attack() {
+  $("#attackButton").remove;
+  $("#fireButton").remove;
+  $("#potionButton").remove;
+  $("#fleeButton").remove;
+  hit = Math.floor(Math.random()*4 + 1);
+  if(hit < 4) {
+    monster[randomMonster].health -= user.sword;
+    $("#textShown").html("You hit the " + monsterChoices[randomMonster] + ".");
+    $("#1choice").append('<button onclick="monsterAttack();" id="continueButton" class="btn btn-default" style="display: block; margin: auto">Continue</button>');
+  } else {
+    $("#textShown").html("You miss the " + monsterChoices[randomMonster] + ".");
+    $("#1choice").append('<button onclick="monsterAttack();" id="continueButton" class="btn btn-default" style="display: block; margin: auto">Continue</button>');
+  }
+  if(monster[randomMonster].health <= 0) {
+    userRewards("monster");
+  } else {
+    $("#1choice").append('<button onclick="monsterAttack();" id="continueButton" class="btn btn-default" style="display: block; margin: auto">Continue</button>');
+  }
+}
+
+function userRewards() {
+  
+}
+
+function monsterAttack() {
+  if(hit < 4) {
+    $("#textShown").html("The " + monsterChoices[randomMonster] + "'s attack hits you. You have " + user.health + "left.");
+    monster[randomMonster].health -= user.sword;
+    $("#1choice").append('<button onclick="fight();" id="continueButton" class="btn btn-default" style="display: block; margin: auto">Continue</button>');
+  } else {
+    $("#textShown").html("You dodge the " + monsterChoices[randomMonster] + "'s attack.");
+    $("#1choice").append('<button onclick="fight();" id="continueButton" class="btn btn-default" style="display: block; margin: auto">Continue</button>');
+  }
+  user.health -= monster[randomMonster].damage;
+}
+
 function explore() {
   switch(curPlace.specialty) {
     case "dungeon":
@@ -348,9 +406,7 @@ function explore() {
       break;
     case "monster":
       var randomMonster = Math.floor(Math.random()*4);
-      var monster = monsterChoices[randomMonster];
       $("#textShown").html("You are attacked by a " + monsterChoices[randomMonster] + "!");
-      $("#2choice-right").append('<button onclick="fight();" id="" class="btn btn-default" style="display: block; margin: auto"></button>');
       break;
     case "village":
       $("#textShown").html("You find a village where you can heal your wounds and buy items.");

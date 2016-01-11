@@ -143,6 +143,10 @@ window.onload = function() {
 		}
 	}
 	
+	if((player.x + player.width >= crusher.top.left.x) && (player.x <= crusher.top.left.x + crusher.top.left.width) && (player.y + player.width >= crusher.top.left.y) && (player.y <= crusher.top.left.y + crusher.top.left.height)) {
+	  console.log("alert");
+	}
+	
 	c.fillStyle = "#ff6666";
 	c.fillRect(crusher.top.left.x, crusher.top.left.y, crusher.top.left.width, crusher.top.left.height);
 	c.fillRect(crusher.top.right.x, crusher.top.right.y, crusher.top.right.width, crusher.top.right.height);

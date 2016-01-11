@@ -15,6 +15,7 @@ window.onload = function() {
     y: canvas.height / 2 - 10,
     width: 20,
     height: 20
+    alive: true;
   };
   
   var crusher = {
@@ -141,6 +142,12 @@ window.onload = function() {
 		} else if(speed <= 5){
 			speed += 0.1;
 		}
+		
+		if(player.alive = true){
+		    score++;
+		    ctx.font = "15px Arial";
+            ctx.fillText("Score: " + score,10,10);
+		}
 	}
 	
 	if((player.x + player.width >= crusher.top.left.x) && (player.x <= crusher.top.left.x + crusher.top.left.width) && (player.y + player.width >= crusher.top.left.y) && (player.y <= crusher.top.left.y + crusher.top.left.height)) {
@@ -159,7 +166,9 @@ window.onload = function() {
 	c.fillRect(crusher.left.top.x, crusher.left.top.y, crusher.left.top.width, crusher.left.top.height);
 	c.fillRect(crusher.left.bottom.x, crusher.left.bottom.y, crusher.left.bottom.width, crusher.left.bottom.height);
 	
-    c.fillStyle = "#00aaaa";
-    c.fillRect(player.x, player.y, player.width, player.height);
+	if(player.alive === true) {
+        c.fillStyle = "#00aaaa";
+        c.fillRect(player.x, player.y, player.width, player.height);
+	}
   }, 30);
 };

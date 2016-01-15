@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Learning Activity Topic Randomizer</title>
+    </head>
+    <body>
+        <button onclick="randomTopic();">Randomize</button>
+        <h3 id="diction">Diction:</h3>
+        <h3 id="tone">Tone:</h3>
+        <h3 id="pov">Point of View:</h3>
+        <script>
+            var random;
+            
+            function randomTopic() {
+                random = Math.floor(Math.random()*3+1);
+                
+                switch(random) {
+                    case 1:
+                        document.getElementById("diction").innerHTML = "Diction: Low";
+                        break;
+                    case 2:
+                        document.getElementById("diction").innerHTML = "Diction: Nuetral";
+                        break;
+                    case 3:
+                        document.getElementById("diction").innerHTML = "Diction: High";
+                        break;
+                    default:
+                }
+                
+                random = Math.floor(Math.random()*25+1);
+                
+                switch(random) {
+                    case 1:
+                        document.getElementById("tone").innerHTML = "Tone: Accusatory";
+                        break;
+                    case 2:
+                        document.getElementById("tone").innerHTML = "Tone: Bitter";
+                        break;
+                    case 3:
+                        document.getElementById("tone").innerHTML = "Tone: Cynical";
+                        break;
+                    case 4:
+                        document.getElementById("tone").innerHTML = "Tone: Critical";
+                        break;
+                    case 5:
+                        document.getElementById("tone").innerHTML = "Tone: Caustic";
+                        break;
+                    case 6:
+                        document.getElementById("tone").innerHTML = "Tone: Disdainful";
+                        break;
+                    case 7:
+                        document.getElementById("tone").innerHTML = "Tone: Earnest";
+                        break;
+                    case 8:
+                        document.getElementById("tone").innerHTML = "Tone: Erudite";
+                        break;
+                    case 9:
+                        document.getElementById("tone").innerHTML = "Tone: Fanciful";
+                        break;
+                    case 10:
+                        document.getElementById("tone").innerHTML = "Tone: Gloomy";
+                        break;
+                    case 11:
+                        document.getElementById("tone").innerHTML = "Tone: Haughty";
+                        break;
+                    case 12:
+                        document.getElementById("tone").innerHTML = "Tone: Indignant";
+                        break;
+                    case 13:
+                        document.getElementById("tone").innerHTML = "Tone: Judgemental";
+                        break;
+                    case 14:
+                        document.getElementById("tone").innerHTML = "Tone: Jovial";
+                        break;
+                    case 15:
+                        document.getElementById("tone").innerHTML = "Tone: Lyrical";
+                        break;
+                    case 16:
+                        document.getElementById("tone").innerHTML = "Tone: Mocking";
+                        break;
+                    case 17:
+                        document.getElementById("tone").innerHTML = "Tone: Malicious";
+                        break;
+                    case 18:
+                        document.getElementById("tone").innerHTML = "Tone: Optimistic";
+                        break;
+                    case 19:
+                        document.getElementById("tone").innerHTML = "Tone: Patronizing";
+                        break;
+                    case 20:
+                        document.getElementById("tone").innerHTML = "Tone: Pessimistic";
+                        break;
+                    case 21:
+                        document.getElementById("tone").innerHTML = "Tone: Reflective";
+                        break;
+                    case 22:
+                        document.getElementById("tone").innerHTML = "Tone: Sarcastic";
+                        break;
+                    case 23:
+                        document.getElementById("tone").innerHTML = "Tone: Satirical";
+                        break;
+                    case 24:
+                        document.getElementById("tone").innerHTML = "Tone: Solemn";
+                        break;
+                    case 25:
+                        document.getElementById("tone").innerHTML = "Tone: Whimsical";
+                        break;
+                    default:
+                }
+                
+                random = Math.floor(Math.random()*4+1);
+                
+                switch(random) {
+                    case 1:
+                        document.getElementById("pov").innerHTML = "Point of View: First Person";
+                        break;
+                    case 2:
+                        document.getElementById("pov").innerHTML = "Point of View: Third Person Omniscient";
+                        break;
+                    case 3:
+                        document.getElementById("pov").innerHTML = "Point of View: Third Person Limited";
+                        break;
+                    case 4:
+                        document.getElementById("pov").innerHTML = "Point of View: Third Person Objective";
+                        break;
+                    default:
+                }
+            }
+        </script>
+    </body>
+</html>

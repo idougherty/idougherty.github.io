@@ -8,6 +8,7 @@
         <h3 id="diction">Diction:</h3>
         <h3 id="tone">Tone:</h3>
         <h3 id="pov">Point of View:</h3>
+        <h3 id="timer">Timer: </h3>
         <script>
             var random;
             
@@ -125,6 +126,13 @@
                         break;
                     default:
                 }
+                
+                var timer = 300;
+                
+                setInterval(function(){
+                    timer--;
+                    document.getElementById("timer").innerHTML = "Timer: " + timer + "seconds";
+                }, 1000);
             }
         </script>
     </body>

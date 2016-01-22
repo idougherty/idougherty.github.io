@@ -128,10 +128,17 @@
                 }
                 
                 var timer = 300;
+                var timerthing;
                 
-                setInterval(function(){
-                    timer--;
-                    document.getElementById("timer").innerHTML = "Timer: " + timer + "seconds";
+                
+                timerthing = setInterval(function(){
+                    if(timer === 0) {
+                        clearInterval(timerthing);
+                        timer = 0;
+                    } else {
+                        timer--;
+                        document.getElementById("timer").innerHTML = "Timer: " + Math.floor(timer/60) + ":" + timer % 60;
+                    }
                 }, 1000);
             }
         </script>

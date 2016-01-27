@@ -2,15 +2,22 @@
 <html>
     <head>
         <title>Learning Activity Topic Randomizer</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <style>
+            html {
+                margin: 40px;
+            }
+        </style>
     </head>
     <body>
-        <button onclick="randomTopic();">Randomize</button>
+        <button onclick="randomTopic();" class="btn">Randomize</button>
         <h3 id="diction">Diction:</h3>
         <h3 id="tone">Tone:</h3>
         <h3 id="pov">Point of View:</h3>
         <h3 id="timer">Timer: </h3>
         <script>
             var random;
+            var timerthing = null;
             
             function randomTopic() {
                 random = Math.floor(Math.random()*3+1);
@@ -128,16 +135,23 @@
                 }
                 
                 var timer = 300;
-                var timerthing;
-                
+                var placeHolder = "";
+                clearInterval(timerthing);
+                document.getElementById("timer").innerHTML = "Timer: 5:00";
                 
                 timerthing = setInterval(function(){
+                    if(timer % 60 < 10 && timer % 60 > 0) {
+                        placeHolder = "0";
+                    } else {
+                        placeHolder = "";
+                    }
                     if(timer === 0) {
                         clearInterval(timerthing);
                         timer = 0;
+                        document.getElementById("timer").innerHTML = "TIME IS UP!";
                     } else {
                         timer--;
-                        document.getElementById("timer").innerHTML = "Timer: " + Math.floor(timer/60) + ":" + timer % 60;
+                        document.getElementById("timer").innerHTML = "Timer: " + Math.floor(timer/60) + ":" + placeHolder + "" + timer % 60;
                     }
                 }, 1000);
             }

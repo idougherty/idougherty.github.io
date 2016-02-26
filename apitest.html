@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>API testing</title>
+        <script src="https://maps.googleapis.com/maps/api/js"></script>
+        <script>
+            
+            function initialize() {
+              var mapProp = {
+                center:new google.maps.LatLng(41.8369, -87.7847),
+                zoom: 10,
+                mapTypeId:google.maps.MapTypeId.ROADMAP
+              };
+              var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+            }
+            google.maps.event.addDomListener(window, 'load', initialize);
+            
+        </script>
+    </head>
+    <body>
+        <h1>Chicago Crimes</h1>
+        <input type="text" name="year"/>
+        <input type="text" name="type"/>
+        <input type="text" name="ward"/>
+        <div id="googleMap" style="width:500px;height:380px;"></div>
+    </body>
+</html>

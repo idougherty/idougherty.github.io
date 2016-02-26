@@ -182,7 +182,7 @@
             competitionNo += 1;
             var i;
             for(i = 0; i < ianling.length; i++) {
-                ianling[i].reset;
+                ianling[i].wins = 0;
             }
         }
         
@@ -315,7 +315,7 @@
             console.log(ianling);
             
             var oopsFixer = ianling.length/2;
-            for(j = 0; j <= oopsFixer; j++) {
+            for(j = 0; j < oopsFixer; j++) {
                 var mate1 = j;
                 var mate2 = Math.floor(Math.random()*ianling.length/2);
                 

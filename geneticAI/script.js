@@ -4,8 +4,8 @@
     var viewPane = "generate";
     var fighting = false;
     var fightSpeed = 1;
-    var contender1 = 10;
-    var contender2 = 10;
+    var contender1 = 10000;
+    var contender2 = 10000;
     var competition = false;
     var needsToGenerate = false;
     var fightInterval;
@@ -141,8 +141,8 @@
     }
     
     Ianling.prototype.dodge = function() {
-        this.x += (Math.abs(Math.abs(this.d) % 360 - 180) - 90) * 0.01 * this.speed;
-        this.y += (Math.abs(Math.abs(this.d - 90) % 360 - 180) - 90) * 0.01 * this.speed;
+        this.x += (Math.abs(Math.abs(this.d) % 360 - 180) - 90) * 0.02 * this.speed;
+        this.y += (Math.abs(Math.abs(this.d - 90) % 360 - 180) - 90) * 0.02 * this.speed;
         
         this.dodgeTimer++;
         if(this.dodgeTimer >= this.dodgeReady) {
@@ -160,8 +160,8 @@
     }
     
     function projectileMove(i) {
-        projectile[i].x += (Math.abs(Math.abs(projectile[i].d) % 360 - 180) - 90) * 0.03;
-        projectile[i].y += (Math.abs(Math.abs(projectile[i].d - 90) % 360 - 180) - 90) * 0.037;
+        projectile[i].x += (Math.abs(Math.abs(projectile[i].d) % 360 - 180) - 90) * 0.06;
+        projectile[i].y += (Math.abs(Math.abs(projectile[i].d - 90) % 360 - 180) - 90) * 0.074;
     }
     
     function chooseContender() {
@@ -190,6 +190,7 @@
         if(contender1 + 2 === ianling.length) {
             competition = false;
             needsToGenerate = true;
+            generate();
         }
     }
     
@@ -291,7 +292,7 @@
     function generate() {
         if(ianling.length === 0) {
             var i;
-            for(i = 0; i < 4; i++) {
+            for(i = 0; i < 10; i++) {
                 ianling.push(new Ianling(
                 Math.floor(Math.random()*150)+10,
                 Math.floor(Math.random()*150),
@@ -334,6 +335,7 @@
             
             console.log(ianling);
         }
+        fight();
     }
     
 window.onload = function() {

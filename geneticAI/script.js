@@ -174,7 +174,7 @@
         }
         
         if(contender1 > ianling.length || contender1 < 0 || contender1 + 1 === ianling.length) {
-            generate();
+            
             contender1 = 0;
             contender2 = 1;
             
@@ -248,9 +248,6 @@
             projectileMove(i);
         }
         
-        if(competition === false) {
-            generate();
-        }
     }
     
     
@@ -290,12 +287,18 @@
             ianling[contender1].health = 3;
             ianling[contender1].d = 180;
         }
+        
+        if(competition === false) {
+            competition = true;
+            console.log("hey dude");
+            setTimeout(generate, 100);
+        }
     }
     
     function generate() {
         if(ianling.length === 0) {
             var i;
-            for(i = 0; i < 4; i++) {
+            for(i = 0; i < 10; i++) {
                 ianling.push(new Ianling(
                 Math.floor(Math.random()*150)+10,
                 Math.floor(Math.random()*150),
@@ -390,6 +393,7 @@ window.onload = function() {
                 break;
                 default:
         }
+        
         
         c.strokeStyle = "#aaa";
         c.lineWidth = 50;

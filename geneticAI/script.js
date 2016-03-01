@@ -173,12 +173,12 @@
             contender2 += 1;
         }
         
-        competition = true;
-        
         if(contender1 > ianling.length || contender1 < 0 || contender1 + 1 === ianling.length) {
+            generate();
             contender1 = 0;
             contender2 = 1;
             
+            competition = true;
             competitionNo += 1;
             var i;
             for(i = 0; i < ianling.length; i++) {
@@ -190,7 +190,6 @@
         if(contender1 + 2 === ianling.length) {
             competition = false;
             needsToGenerate = true;
-            generate();
         }
     }
     
@@ -248,6 +247,10 @@
         for(i = 0; i < projectile.length; i++) {
             projectileMove(i);
         }
+        
+        if(competition === false) {
+            generate();
+        }
     }
     
     
@@ -292,7 +295,7 @@
     function generate() {
         if(ianling.length === 0) {
             var i;
-            for(i = 0; i < 10; i++) {
+            for(i = 0; i < 4; i++) {
                 ianling.push(new Ianling(
                 Math.floor(Math.random()*150)+10,
                 Math.floor(Math.random()*150),
@@ -306,8 +309,7 @@
         } else if(needsToGenerate === true) {
             findRank();
             showInfo();
-            
-            console.log(ianling);
+            needsToGenerate = false;
             
             var j;
             for(j = 0; j < ianling.length; j++) {
@@ -315,8 +317,6 @@
                     ianling.splice(j, 1);
                 }
             }
-            
-            console.log(ianling);
             
             var oopsFixer = ianling.length/2;
             for(j = 0; j <= oopsFixer; j++) {
@@ -332,10 +332,9 @@
                 ianlingID));
                 ianlingID += 1;
             }
-            
-            console.log(ianling);
+                
+            fight();
         }
-        fight();
     }
     
 window.onload = function() {

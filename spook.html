@@ -5,16 +5,30 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 </head>
 <body>
-    <p>get spooked on.</p>
+    <div id="spooky"></div>
+    
     <script>
         var spook = new Audio('screamingGoat.mp3');
-        var timer = null;
         
-        function getSpooked() {
-            spook.play();
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF'.split('');
+            var color = '#';
+            for (var i = 0; i < 6; i++ ) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
         }
         
-        timer = setTimeout(getSpooked, 1200000);
+        
+        
+        function getSpooked() {
+            setInterval(function() {
+                spook.play();
+                $("#spooky").append("<p style='position: absolute; top: "+Math.random()*90+"%; left: "+Math.random()*90+"%; -webkit-transform: rotate("+Math.random() * 180+"deg); color: "+getRandomColor()+"'>get spooked on.</p>");
+            }, 700);
+        }
+        
+        setTimeout(getSpooked, 300000);
     </script>
 </body>
 </html>

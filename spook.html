@@ -24,11 +24,11 @@
         function getSpooked() {
             setInterval(function() {
                 spook.play();
-                $("#spooky").append("<p style='position: absolute; top: "+Math.random()*90+"%; left: "+Math.random()*90+"%; -webkit-transform: rotate("+Math.random() * 180+"deg); color: "+getRandomColor()+"'>get spooked on.</p>");
+                $("#spooky").append("<p style='position: absolute; top: "+Math.random()*90+"%; left: "+Math.random()*90+"%; -webkit-transform: rotate("+Math.random() * 180+"deg); color: "+getRandomColor()+"; font-size: "+(Math.random()*10 + 10)+"px;'>get spooked on.</p>");
             }, 700);
         }
         
-        setTimeout(getSpooked, 300000);
+        setTimeout(getSpooked, 600000);
     </script>
 </body>
 </html>

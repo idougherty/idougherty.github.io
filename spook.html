@@ -5,10 +5,22 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 </head>
 <body>
+    <h1 id="h1">IT TWAS JORDAN THAT DID THIS</h1>
     <div id="spooky"></div>
     
     <script>
         var spook = new Audio('screamingGoat.mp3');
+        var bg_colour = Math.floor(Math.random() * 16777215).toString(16);
+        bg_colour = "#" + ("000000" + bg_colour).slice(-6);
+        document.bgColor = bg_colour;
+        
+        function seizure() {
+            setInterval(function() {
+                bg_colour = Math.floor(Math.random() * 16777215).toString(16);
+                bg_colour = "#" + ("000000" + bg_colour).slice(-6);
+                document.bgColor = bg_colour;
+            }, 1);
+        }
         
         function getRandomColor() {
             var letters = '0123456789ABCDEF'.split('');
@@ -22,13 +34,14 @@
         
         
         function getSpooked() {
+            seizure();
             setInterval(function() {
                 spook.play();
                 $("#spooky").append("<p style='position: absolute; top: "+Math.random()*90+"%; left: "+Math.random()*90+"%; -webkit-transform: rotate("+Math.random() * 180+"deg); color: "+getRandomColor()+"; font-size: "+(Math.random()*10 + 10)+"px;'>get spooked on.</p>");
-            }, 700);
+            }, 100);
         }
         
-        setTimeout(getSpooked, 1200000);
+        setTimeout(getSpooked, 1200);
     </script>
 </body>
 </html>

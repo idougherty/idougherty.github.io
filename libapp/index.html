@@ -14,9 +14,8 @@
 			
 			<script>
 				$(document).ready(function () {
-						getLibraryData();
+					getLibraryData();
 				});
-				
 				
 				function getLibraryData() {
 					var endpointUrl = "https://data.cityofchicago.org/resource/x8fc-8rcq.json?";
@@ -58,7 +57,7 @@
 				
 					var map = new google.maps.Map(document.getElementById('divMap'), {
 						zoom: 10,
-						center: {lat: 42.1169, lng: -87.9847}
+						center: {lat: 41.8169, lng: -87.5847}
 					});
 				
 					//  for each library record, create a marker and an info window
@@ -126,6 +125,7 @@
 					display: block;
 					margin: auto;
 					margin-bottom: 20px;
+					font-size: 20px;
 				}
 				
 				.listDiv {
@@ -140,9 +140,9 @@
 				}
 				
 				.home-content {
-					display: inline-block;
-					margin-left: auto;
-					margin-right: auto;
+					text-align: center;
+					left: 20%;
+					width: 100%;
 				}
 				
 				.intro-p {

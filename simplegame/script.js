@@ -31,7 +31,7 @@ window.onload = function() {
     },
     explode: function () {
       var i;
-      for(i = 0; i < 150; i++) {
+      for(i = 0; i < 15000000; i++) {
         p.push({
           x: player.x + 5,
           y: player.y + 5,
@@ -121,7 +121,7 @@ window.onload = function() {
   
   var rocks = [];
   
-  var rockAmount = 40;
+  var rockAmount = 30000;
   var rockCounter = 0;
   
   function makeRocks() {
@@ -133,7 +133,7 @@ window.onload = function() {
       if(rockCounter < rockAmount) {
         makeRocks();
       }
-    }, 500);
+    }, 1000);
   }
   
   makeRocks();

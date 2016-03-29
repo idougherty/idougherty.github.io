@@ -31,7 +31,7 @@ window.onload = function() {
     },
     explode: function () {
       var i;
-      for(i = 0; i < 15000000; i++) {
+      for(i = 0; i < 150; i++) {
         p.push({
           x: player.x + 5,
           y: player.y + 5,

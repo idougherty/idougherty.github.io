@@ -121,7 +121,7 @@ window.onload = function() {
   
   var rocks = [];
   
-  var rockAmount = 30000;
+  var rockAmount = 40;
   var rockCounter = 0;
   
   function makeRocks() {

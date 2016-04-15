@@ -190,7 +190,7 @@ window.onload = function() {
   Rock.prototype.move = function() {
     this.x -= this.speed;
     if(this.speed <= 12.5) {
-      this.speed *= 1.0005;
+      this.speed *= 1.00025;
     }
   };
   

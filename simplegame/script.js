@@ -8,26 +8,60 @@ window.onload = function() {
   var player = {
     x: 50,
     y: 295,
-    width: 20,
+    vy: 0,
+    width: 40,
     height: 20,
     keyDown: null,
     alive: true,
     score: 0,
     shotReady: true,
+    health: 3,
+    hurtin: 0,
+    vulnerable: true,
+    visibility: 0,
+    visibilityMod: -1,
     draw: function() {
       var i;
       for(i = 0; i < rocks.length; i++) {
         player.collision(i);
       }
       
+      player.y += player.vy;
+      player.vy *= 0.3;
+      
+      if(player.vulnerable === false) {
+        player.visibility += player.visibilityMod;
+        if(player.visibility >= 1) {
+          player.visibilityMod = -0.05;
+        } else if(player.visibility <= 0) {
+          player.visibilityMod = 0.05;
+        }
+      } else {
+        player.visibility = 1;
+      }
+      
+      c.globalAlpha = player.visibility;
       c.fillStyle = "white";
-      c.fillRect(player.x, player.y, player.width, player.height);
+      c.drawImage(document.getElementById("ufo"), player.x, player.y, player.width, player.height);
+      c.globalAlpha = 1;
     },
     collision: function(i) {
-      if(player.x <= rocks[i].x + rocks[i].width && player.x + player.width >= rocks[i].x && player.y <= rocks[i].y + rocks[i].height && player.y + player.height >= rocks[i].y) {
+      if(player.x <= rocks[i].x + rocks[i].width && player.x + player.width >= rocks[i].x && player.y <= rocks[i].y + rocks[i].height && player.y + player.height >= rocks[i].y && player.vulnerable === true) {
         if(rocks[i].type === "rock") {
-          player.alive = false;
-          player.explode();
+          player.health -= 1;
+          rocks.splice(i, 1);
+          
+          player.hurtin = 1;
+          player.vulnerable = false;
+          setTimeout(function(){player.vulnerable = true}, 2000);
+          
+          c.fillStyle = "rgba(255, 100, 100, 1)";
+          c.fillRect(0, 0, canvas.width, canvas.height);
+          
+          if(player.health <= 0) {
+            player.alive = false;
+            player.explode();
+          }
         } else {
           player.score += 500;
           rocks.splice(i, 1);
@@ -40,8 +74,8 @@ window.onload = function() {
         p.push({
           x: player.x + 5,
           y: player.y + 5,
-          vx: Math.random()*10 - 5,
-          vy: Math.random()*5-2.5,
+          vx: Math.random() * 10 - 5 + player.vy * 0.7,
+          vy: Math.random() * 5 - 2.5 + player.vy * 0.7,
           isBullet: false,
         });
       }
@@ -68,6 +102,20 @@ window.onload = function() {
         }
       });
     },
+    reset: function() {
+      player.x = 50;
+      player.y = 295;
+      player.keyDown = null;
+      player.alive = true;
+      player.score = 0;
+      player.shotReady = true;
+      player.health = 3;
+      player.hurtin = 0;
+      
+      rocks.splice(0, rocks.length);
+      rockCounter = 0;
+      makeRocks();
+    }
   };
   
   document.body.addEventListener('keydown', function(e) {
@@ -76,7 +124,7 @@ window.onload = function() {
         if(player.keyDown === null) {
           player.keyDown = setInterval(function() {
             if(player.y > 0)
-              player.y -= 7;
+              player.vy = -7;
           }, 30);
         }
         break;
@@ -84,14 +132,15 @@ window.onload = function() {
         if(player.keyDown === null) {
           player.keyDown = setInterval(function() {
             if(player.y + player.height < canvas.height)
-              player.y += 7;
+              player.vy = 7;
           }, 30);
         }
         break;
       case 32:
-        if(player.shotReady === true && player.alive) {
-          //player.shoot();
+        if(player.alive === false) {
+          player.reset();
         }
+        break;
       default:
     }
   });
@@ -110,42 +159,44 @@ window.onload = function() {
   function Rock(type) {
     this.x = canvas.width;
     this.y = Math.random() * canvas.height - 10;
-    this.width = Math.random() * 15 + 10;
-    this.height = Math.random() * 15 + 10;
+    this.width = Math.random() * 15 + 20;
+    this.height = Math.random() * 15 + 20;
     this.speed = 5;
     this.type = type;
+    this.i = rocks.length;
   }
   
-  Rock.prototype.collision = function() {
+  Rock.prototype.collision = function(i) {
     if(this.x + this.width <= -50) {
       this.x = canvas.width;
       this.y = Math.random() * canvas.height - 10;
+      if(this.type !== "rock") {
+        rocks.splice(i, 1);
+      }
     }
   };
   
-  Rock.prototype.draw = function() {
+  Rock.prototype.draw = function(i) {
     this.move();
-    this.collision();
+    this.collision(i);
     
     if(this.type === "rock") {
-      c.fillStyle = "red";
+      c.drawImage(document.getElementById("rock"), this.x, this.y, this.width, this.height);
     } else {
-      c.fillStyle = "green";
+      c.drawImage(document.getElementById("coin"), this.x, this.y, this.width, this.height);
     }
-    
-    c.fillRect(this.x, this.y, this.width, this.height);
   };
   
   Rock.prototype.move = function() {
     this.x -= this.speed;
-    if(this.speed <= 7) {
-      this.speed *= 1.0001;
+    if(this.speed <= 12.5) {
+      this.speed *= 1.0005;
     }
   };
   
   var rocks = [];
   
-  var rockAmount = 80;
+  var rockAmount = 40;
   var rockCounter = 0;
   
   function makeRocks() {
@@ -156,7 +207,7 @@ window.onload = function() {
       if(rockCounter < rockAmount) {
         makeRocks();
       }
-    }, 1000);
+    }, 200);
   }
   
   makeRocks();
@@ -165,9 +216,19 @@ window.onload = function() {
     rocks.push(new Rock("not a rock lololol"));
   }, 5000);
   
+  var position = 0;
+  
   setInterval(function(){
-    c.fillStyle = "rgba(0, 0, 0, 0.3)";
-    c.fillRect(0, 0, canvas.width, canvas.height);
+    c.globalAlpha = 0.45;
+    c.drawImage(document.getElementById("background"), position, 0, 600, 600);
+    c.drawImage(document.getElementById("background"), position + 600, 0, 600, 600);
+    c.drawImage(document.getElementById("background"), position + 1200, 0, 600, 600);
+    c.globalAlpha = 1;
+    
+    if(position <= -600) {
+      position = 0;
+    }
+    position -= 1;
     
     if(player.alive) {
       player.draw();
@@ -176,7 +237,7 @@ window.onload = function() {
     
     var i;
     for(i = 0; i < rocks.length; i++) {
-      rocks[i].draw();
+      rocks[i].draw(i);
     }
     
     for(i = 0; i < p.length; i++) {
@@ -184,7 +245,7 @@ window.onload = function() {
         p[i].y += p[i].vy;
         //p[i].vy += 0.1;
       if(p[i].isBullet === false) {
-        p[i].x -= rocks[0].speed * 0.9;
+        p[i].vx -= 7 * 0.05;
         p[i].vx *= 0.98;
         p[i].vy *= 0.95;
       } else {
@@ -195,9 +256,22 @@ window.onload = function() {
       c.fillRect(p[i].x, p[i].y, 3, 3);
     }
     
-    document.getElementById("rockCounter").innerHTML = "Amount of obsticles: " + rocks.length;
     
+    c.font = "15px Courier New";
     c.fillStyle = "white";
-    c.fillText(player.score, 20, 20);
+    c.fillText("Score: " + player.score, 20, 20);
+  
+    c.fillText("Health: " + player.health, 20, 35);
+    
+    if(player.alive || player.hurtin > 0.01) {
+      c.fillStyle = "rgba(0, 0, 0, 0)";
+      c.fillStyle = "rgba(255, 100, 100, "+player.hurtin+")";
+      c.fillRect(0, 0, canvas.width, canvas.height);
+      player.hurtin *= 0.90;
+    } else {
+      c.font = "35px Courier New";
+      c.fillStyle = "white";
+      c.fillText("Press [space] to restart", 200, 290);
+    }
   }, 30);
 };

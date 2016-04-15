@@ -273,5 +273,12 @@ window.onload = function() {
       c.fillStyle = "white";
       c.fillText("Press [space] to restart", 200, 290);
     }
+    
+    if(player.score > 20000) {
+      c.font = "35px Courier New";
+      c.fillStyle = "white";
+      c.fillText("Good job Delgado", 200, 290);
+      c.fillRect(0, 598, 2, 2);
+    }
   }, 30);
 };

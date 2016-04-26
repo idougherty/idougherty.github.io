@@ -5,10 +5,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 </head>
 <body>
-    <div id="spooky">
-        
-    </div>
-    <h2 style="color: white; font-size: 100px; position: absolute; width:50%; left: 25%; top: 25%; text-align: center; font-family: Andale Mono" id="spookTimer">5:00</h2>
+    <div id="spooky"></div>
     
     <script>
         var spook = new Audio('screamingGoat.mp3');
@@ -43,30 +40,7 @@
             }, 100);
         }
         
-        var time = 1200;
-        
-        function countDown() {
-            time -= 1;
-            
-            var minutes = Math.floor(time/60);
-            
-            var seconds = time % 60;
-            
-            if(seconds < 10) {
-                seconds = "0"+seconds;
-            }
-            
-            document.getElementById("spookTimer").innerHTML = minutes+":"+seconds;
-            
-            if(time <= 0) {
-                getSpooked();
-            } else {
-                setTimeout(countDown, 1000);
-            }
-            
-        }
-        
-        countDown();
+        //add when button on controller pressed spooks activate
     </script>
 </body>
 </html>

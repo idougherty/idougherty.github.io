@@ -8,7 +8,10 @@
     <div id="spooky">
         
     </div>
-    <h2 style="color: white; font-size: 100px; position: absolute; width:50%; left: 25%; top: 25%; text-align: center; font-family: Andale Mono" id="spookTimer">5:00</h2>
+    <h2 style="color: white; font-size: 100px; position: absolute; width:50%; left: 25%; top: 25%; text-align: center; font-family: Andale Mono" id="spookTimer">20:00</h2>
+    
+    
+    <h6 style="color: white">Ian most likely did not set this page up to scare you (unless you're Alex Delgado) therefore you should not be angry at him. This page is only meant to be for scaring Alex Delgado, and if you are it's victim, but not Alex, I apologize.</h6>
     
     <script>
         var spook = new Audio('screamingGoat.mp3');
@@ -39,11 +42,11 @@
             seizure();
             setInterval(function() {
                 spook.play();
-                $("#spooky").append("<p style='position: absolute; top: "+Math.random()*90+"%; left: "+Math.random()*90+"%; -webkit-transform: rotate("+Math.random() * 180+"deg); color: "+getRandomColor()+"; font-size: "+(Math.random()*10 + 10)+"px;'>get spooked on.</p>");
+                //$("#spooky").append("<p style='position: absolute; top: "+Math.random()*90+"%; left: "+Math.random()*90+"%; -webkit-transform: rotate("+Math.random() * 180+"deg); color: "+getRandomColor()+"; font-size: "+(Math.random()*10 + 10)+"px;'>get spooked on.</p>");
             }, 100);
         }
         
-        var time = 1200;
+        var time = 12;
         
         function countDown() {
             time -= 1;

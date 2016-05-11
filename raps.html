@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Spooky</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    
+    <script>
+        var words = ["spaghetti", "machete", "confetti", "sweaty", "ready", "by the"];
+        
+        function rap() {
+            var string = "Rap: ";
+            var random = Math.floor(Math.random()*words.length);
+            
+            for(var i = 0; i < 100; i++) {
+                var newRandom = Math.floor(Math.random()*words.length);
+                
+                while (random === newRandom) {
+                    newRandom = Math.floor(Math.random()*words.length);
+                }
+                
+                string += " " + words[newRandom];
+            
+                document.getElementById("rap").innerHTML = string;
+                
+                random = newRandom;
+            }
+        }
+        
+        //window.onload = function() {
+        //    rap();
+        //};
+    </script>
+</head>
+<body>
+    
+    <button onclick="rap();">RAP</button>
+    
+    <p id="rap"></p>
+    
+</body>
+</html>

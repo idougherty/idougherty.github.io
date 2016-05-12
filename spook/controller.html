@@ -5,11 +5,25 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 </head>
 <body>
-    <button onclick="activateSpooks();" style="background-color: red; border-radius: 100%; width: 100px; height: 100px; font-size: 40px; color: #e99; border: 5px solid #e99;"> >:) </button>
+    <button onclick="spook();" style="background-color: red; border-radius: 100%; width: 100px; height: 100px; font-size: 40px; color: #e99; border: 5px solid #e99;"> >:) </button>
     
     <script>
-        function activateSpooks() {
-            
+        function spook() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (xhttp.readyState == 4 && xhttp.status == 200) {
+                    myFunction(xhttp);
+                }
+            };
+            xhttp.open("GET", "spook.xml", true);
+            xhttp.send();
+        }
+        
+        function myFunction(xml) {
+            var xmlDoc = xml.responseXML;
+            console.log(xml);
+            var x = xmlDoc.getElementsByTagName('spook');
+            x[0].setAttribute("activated","true");
         }
     </script>
 </body>

@@ -30,14 +30,31 @@
             return color;
         }
         
-        
-        
         function getSpooked() {
             seizure();
-            setInterval(function() {
-                spook.play();
-                $("#spooky").append("<p style='position: absolute; top: "+Math.random()*90+"%; left: "+Math.random()*90+"%; -webkit-transform: rotate("+Math.random() * 180+"deg); color: "+getRandomColor()+"; font-size: "+(Math.random()*10 + 10)+"px;'>get spooked on.</p>");
-            }, 100);
+            spook.play();
+            $("#spooky").append("<p style='position: absolute; top: "+Math.random()*90+"%; left: "+Math.random()*90+"%; -webkit-transform: rotate("+Math.random() * 180+"deg); color: "+getRandomColor()+"; font-size: "+(Math.random()*10 + 10)+"px;'>get spooked on.</p>");
+        }
+        
+        function checkForSpooks() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (xhttp.readyState == 4 && xhttp.status == 200) {
+                    myFunction(xhttp);
+                }
+            };
+            xhttp.open("GET", "spook.xml", true);
+            xhttp.send();
+            
+            function myFunction(xml) {
+                var xmlDoc = xml.responseXML;
+                var x = xmlDoc.getElementsByTagName('spook');
+                var activated = x[0].getAttribute("activated");
+                
+                if(activated === "true") {
+                    getSpooked();
+                }
+            }
         }
         
         //add when button on controller pressed spooks activate

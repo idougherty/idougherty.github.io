@@ -21,9 +21,9 @@
         
         function myFunction(xml) {
             var xmlDoc = xml.responseXML;
-            console.log(xml);
-            var x = xmlDoc.getElementsByTagName('spook');
-            x[0].setAttribute("activated","true");
+            var x = xmlDoc.getElementsByTagName('spook')[0];
+            console.log(x);
+            x.setAttribute("activated","true");
         }
     </script>
 </body>

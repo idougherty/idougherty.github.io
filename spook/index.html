@@ -43,13 +43,14 @@
                     myFunction(xhttp);
                 }
             };
-            xhttp.open("GET", "spook.xml", true);
+            xhttp.open("GET", "spook.php", true);
             xhttp.send();
             
             function myFunction(xml) {
                 var xmlDoc = xml.responseXML;
                 var x = xmlDoc.getElementsByTagName('spook');
                 var activated = x[0].getAttribute("activated");
+                console.log(activated);
                 
                 if(activated === "true") {
                     getSpooked();
@@ -57,7 +58,7 @@
             }
         }
         
-        setInterval(checkForSpooks, 5000);
+        setInterval(checkForSpooks, 2000);
         //add when button on controller pressed spooks activate
     </script>
 </body>

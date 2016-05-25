@@ -15,13 +15,12 @@ window.onload = function() {
             c.fillRect(this.x, this.y, this.width, this.height);
         },
         collision: function () {
-            if((this.x + this.width > ball.x && this.x < ball.x + ball.width && this.y + this.height > ball.y && this.y < ball.y + ball.height) && (ball.vy > 0 || ball.possession !== "nope")) {
-                setTimeout(function() {
-                    ball.reset();
-                    player1.reset();
-                    player2.reset();
-                    ball.possession = "player1";
-                }, 100);
+            if((this.x + this.width > ball.x && this.x < ball.x + ball.width && this.y + this.height > ball.y && this.y < ball.y + ball.height) && (ball.vy >= 0 || ball.possession !== "nope")) {
+                
+                ball.reset();
+                player1.reset();
+                player2.reset();
+                ball.possession = "player1";
                 
                 player2.score += 1;
             }
@@ -38,7 +37,7 @@ window.onload = function() {
             c.fillRect(this.x, this.y, this.width, this.height);
         },
         collision: function () {
-            if((this.x + this.width > ball.x && this.x < ball.x + ball.width && this.y + this.height > ball.y && this.y < ball.y + ball.height) && (ball.vy > 0 || ball.possession !== "nope")) {
+            if((this.x + this.width > ball.x && this.x < ball.x + ball.width && this.y + this.height > ball.y && this.y < ball.y + ball.height) && (ball.vy >= 0 || ball.possession !== "nope")) {
                 
                 ball.reset();
                 player1.reset();
@@ -148,7 +147,7 @@ window.onload = function() {
                 player1.x = 20;
             }
             
-            if(player1.x > canvas.width - 20) {
+            if(player1.x + player2.width > canvas.width - 20) {
                 player1.vx = 0;
                 player1.x = canvas.width - 20 - player1.width;
             }
@@ -157,6 +156,7 @@ window.onload = function() {
                 
                 if(ball.possession === "player2") {
                     player2.possessionable = false;
+                    player2.charge = 0;
                     setTimeout(function () {player2.possessionable = true;}, 1000);
                 }
                 
@@ -248,7 +248,7 @@ window.onload = function() {
                 player2.x = 20;
             }
             
-            if(player2.x > canvas.width - 20) {
+            if(player2.x + player2.width > canvas.width - 20) {
                 player2.vx = 0;
                 player2.x = canvas.width - 20 - player2.width;
             }
@@ -257,6 +257,7 @@ window.onload = function() {
                 
                 if(ball.possession === "player1") {
                     player1.possessionable = false;
+                    player1.charge = 0;
                     setTimeout(function () {player1.possessionable = true;}, 1000);
                 }
                 
@@ -331,7 +332,7 @@ window.onload = function() {
                     player1.charge = 5;
                     
                     player1.keytoggle.s = setInterval(function() {
-                        if(player1.charge < 17) {
+                        if(player1.charge < 17 && ball.possession === "player1") {
                             player1.charge += 0.3;
                         }
                     }, 30);
@@ -385,7 +386,7 @@ window.onload = function() {
                     player2.charge = 5;
                     
                     player2.keytoggle.down = setInterval(function() {
-                        if(player2.charge < 17) {
+                        if(player2.charge < 17 && ball.possession === "player2") {
                             player2.charge += 0.3;
                         }
                     }, 30);
@@ -480,11 +481,19 @@ window.onload = function() {
         c.fillStyle = "rgba(255, 255, 255, 1)";
         c.fillRect(0, 0, canvas.width, canvas.height);
         
-        player1.draw();
-        player2.draw();
+        c.font = "300px Impact";
+        c.fillStyle = "#ddd";
+        c.textAlign = "center";
+        c.fillText(player1.score, 250, 360);
+        c.fillText(player2.score, canvas.width - 250, 360);
+        c.fillRect(0, 0, 20, canvas.height);
+        c.fillRect(0, canvas.height - 20, canvas.width, 20);
+        c.fillRect(canvas.width - 20, 0, 20, canvas.height);
         
+        player1.draw();
         c.fillStyle = "rgba(25, 125, 175, 1)";
         c.fillRect(player1.x + 10, player1.y + 10, player1.width - 20, player1.charge * 3);
+        player2.draw();
         c.fillStyle = "rgba(175, 25, 25, 1)";
         c.fillRect(player2.x + 10, player2.y + 10, player2.width - 20, player2.charge * 3);
         
@@ -506,8 +515,10 @@ window.onload = function() {
         
         if(ball.possession === "player1") {
             player1.possession();
+            ball.vy = 0;
         } else if(ball.possession === "player2") {
             player2.possession();
+            ball.vy = 0;
         } else {
             ball.gravity();
         }

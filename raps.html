@@ -5,24 +5,19 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     
     <script>
-        var words = ["spaghetti", "machete", "confetti", "sweaty", "ready", "by the"];
+        var nouns = [{text: "spaghetti"}];
         
         function rap() {
             var string = "Rap: ";
-            var random = Math.floor(Math.random()*words.length);
+            var last = {next: "noun"};
             
             for(var i = 0; i < 100; i++) {
-                var newRandom = Math.floor(Math.random()*words.length);
                 
-                while (random === newRandom) {
-                    newRandom = Math.floor(Math.random()*words.length);
-                }
-                
-                string += " " + words[newRandom];
+                switch(last.next) {}
+                string += " " + nouns[Math.floor(Math.random())].text;
             
                 document.getElementById("rap").innerHTML = string;
                 
-                random = newRandom;
             }
         }
         

@@ -117,7 +117,8 @@ window.onload = function() {
       makeRocks();
     }
   };
-  
+    //npm install express --save
+    //npm install socket.io --save
   document.body.addEventListener('keydown', function(e) {
     switch(e.which) {
       case 38:

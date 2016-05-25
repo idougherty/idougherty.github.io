@@ -1,0 +1,292 @@
+window.onload = function() {
+    var canvas = document.getElementById("paper");
+    var c = canvas.getContext("2d");
+    var scl = 20;
+    
+    var food = {
+        foods: [],
+        create: function() {
+            food.foods.push({x: Math.floor(Math.random()*canvas.height/scl) * scl, y: Math.floor(Math.random()*canvas.height/scl)*scl});
+        },
+        draw: function() {
+            c.fillStyle = "#11ee55";
+            for(var i = 0; i < food.foods.length; i++) {
+                c.fillRect(food.foods[i].x, food.foods[i].y, scl, scl);
+            }
+        }
+    };
+    
+    food.create();
+    food.create();
+    food.create();
+    food.create();
+    
+    var snake = {
+        x: 40,
+        y: 40,
+        vx: 1,
+        vy: 0,
+        height: 20,
+        width: 20,
+        length: 3,
+        tail: [],
+        dead: false,
+        move: function() {
+            snake.x += snake.vx * scl;
+            snake.y += snake.vy * scl;
+        },
+        draw: function() {
+            c.fillStyle = "#3388bb";
+            
+            c.fillRect(snake.x, snake.y, scl, scl);
+            
+            for(var i = 0; i < snake.tail.length; i++) {
+                c.fillStyle = "#3366aa";
+                c.fillRect(snake.tail[i].x, snake.tail[i].y, scl, scl);
+            }
+        },
+        grow: function () {
+            if(snake.tail.length <= snake.length) {
+                snake.tail.push({x: snake.x, y: snake.y, life: snake.length-1});
+            }
+            
+            for(var i = 0; i < snake.tail.length; i++) {
+                
+                if(snake.tail[i].life === 0) {
+                    snake.tail.splice(i, 1);
+                }
+                
+                snake.tail[i].life -= 1;
+            }
+        },
+        collision: function() {
+            for(var i = 0; i < food.foods.length; i++) {
+                if(snake.x === food.foods[i].x && snake.y === food.foods[i].y) {
+                    snake.length += 1;
+                    food.foods.splice(i, 1);
+                    food.create();
+                }
+            }
+            
+            for(i = 0; i < snake.tail.length; i++) {
+                if(snake.x === snake.tail[i].x && snake.y === snake.tail[i].y) {
+                    snake.dead = true;
+                }
+            }
+            
+            if(snake.x < 0 || snake.y < 0 || snake.y === canvas.height || snake.x === canvas.width) {
+                snake.dead = true;
+            }
+        },
+    };
+    
+    var AI = {
+        x: canvas.width - 60,
+        y: canvas.height - 60,
+        vx: -1,
+        vy: 0,
+        height: 20,
+        width: 20,
+        length: 3,
+        tail: [],
+        dead: false,
+        move: function() {
+            AI.sense();
+            
+            AI.x += AI.vx * scl;
+            AI.y += AI.vy * scl;
+        },
+        draw: function() {
+            c.fillStyle = "#bb8833";
+            
+            c.fillRect(AI.x, AI.y, scl, scl);
+            
+            for(var i = 0; i < AI.tail.length; i++) {
+                c.fillStyle = "#aa6633";
+                c.fillRect(AI.tail[i].x, AI.tail[i].y, scl, scl);
+            }
+        },
+        grow: function () {
+            if(AI.tail.length <= AI.length) {
+                AI.tail.push({x: AI.x, y: AI.y, life: AI.length-1});
+            }
+            
+            for(var i = 0; i < AI.tail.length; i++) {
+                
+                if(AI.tail[i].life === 0) {
+                    AI.tail.splice(i, 1);
+                }
+                
+                AI.tail[i].life -= 1;
+            }
+        },
+        collision: function() {
+            for(var i = 0; i < food.foods.length; i++) {
+                if(AI.x === food.foods[i].x && AI.y === food.foods[i].y) {
+                    AI.length += 1;
+                    food.foods.splice(i, 1);
+                    food.create();
+                }
+            }
+            
+            for(i = 0; i < AI.tail.length; i++) {
+                if(AI.x === AI.tail[i].x && AI.y === AI.tail[i].y) {
+                    AI.dead = true;
+                }
+            }
+            
+            for(i = 0; i < snake.tail.length; i++) {
+                if(AI.x === snake.tail[i].x && AI.y === snake.tail[i].y) {
+                    AI.dead = true;
+                }
+            }
+            
+            if(AI.x < 0 || AI.y < 0 || AI.y === canvas.height || AI.x === canvas.width) {
+                AI.dead = true;
+            }
+        },
+        sense: function () {
+            
+            for(var i = 0; i < snake.tail.length; i++) {
+                if(AI.x + (AI.vx * scl) === snake.tail[i].x && AI.y === snake.tail[i].y) {
+                    AI.vx = 0;
+                    AI.vy = Math.floor(Math.random()*2);
+                    
+                    if(AI.vy === 0) {
+                        AI.vy = 1;
+                    }
+                    
+                    if(AI.y + (AI.vy * scl) < 0 || AI.y + (AI.vy * scl) === 500) {
+                        AI.vy *= -1;
+                    }
+                    
+                    for(var j = 0; j < snake.tail.length; j++) {
+                        if(AI.y + scl === snake.tail[j].y && AI.x === snake.tail[j].x) {
+                            AI.vy = -1;
+                        }
+                    }
+                    
+                    if(AI.vy === 0) {
+                        for(j = 0; j < snake.tail.length; j++) {
+                            if(AI.y - scl === snake.tail[j].y && AI.x === snake.tail[j].x) {
+                                AI.vy = 1;
+                            }
+                        }
+                    }
+                }
+                
+                if(AI.y + (AI.vy * scl) === snake.tail[i].y && AI.x === snake.tail[i].x) {
+                    AI.vy = 0;
+                    AI.vx = Math.floor(Math.random()*2);
+                    
+                    if(AI.vx === 0) {
+                        AI.vx = 1;
+                    }
+                    
+                    if(AI.x + (AI.vx * scl) < 0 || AI.x + (AI.vx * scl) === 500) {
+                        AI.vx *= -1;
+                    }
+                    
+                    for(j = 0; j < snake.tail.length; j++) {
+                        if(AI.x + scl === snake.tail[j].x && AI.y === snake.tail[j].y) {
+                            AI.vx = -1;
+                        }
+                    }
+                    
+                    if(AI.vy === 0) {
+                        for(j = 0; j < snake.tail.length; j++) {
+                            if(AI.x - scl === snake.tail[j].x && AI.y === snake.tail[j].y) {
+                                AI.vx = 1;
+                            }
+                        }
+                    }
+                }
+            }
+            
+            if(AI.x + (AI.vx * scl) < 0 || AI.x + (AI.vx * scl) === 500) {
+                AI.vx = 0;
+                AI.vy = Math.floor(Math.random() * 2);
+                if(AI.vy === 0) {
+                    AI.vy -= 1;
+                }
+                if(AI.y + (AI.vy * scl) < 0 || AI.y + (AI.vy * scl) === 500) {
+                    AI.vy *= -1;
+                }
+            }
+            
+            if(AI.y + (AI.vy * scl) < 0 || AI.y + (AI.vy * scl) === 500 ) {
+                AI.vy = 0;
+                AI.vx = Math.floor(Math.random() * 2);
+                if(AI.vx === 0) {
+                    AI.vx -= 1;
+                }
+                if(AI.x + (AI.vx * scl) < 0 || AI.x + (AI.vx * scl) === 500) {
+                    AI.vx *= -1;
+                }
+            }
+            
+        }
+    };
+    
+    
+    
+    
+    document.addEventListener("keydown", function(e) {
+        switch (e.keyCode) {
+            case 37:
+                if(snake.vx !== 1) {
+                    snake.vx = -1;
+                }
+                snake.vy = 0;
+                break;
+                
+            case 38:
+                snake.vx = 0;
+                if(snake.vy !== 1) {
+                    snake.vy = -1;
+                }
+                break;
+                
+            case 39:
+                if(snake.vx !== -1) {
+                    snake.vx = 1;
+                }
+                snake.vy = 0;
+                break;
+                
+            case 40:
+                snake.vx = 0;
+                if(snake.vy !== -1) {
+                    snake.vy = 1;
+                }
+                break;
+            
+            default:
+        }
+    });
+    
+    function draw() {
+        c.fillStyle = "#555";
+        c.fillRect(0, 0, canvas.width, canvas.height);
+        
+        snake.draw();
+        food.draw();
+        AI.draw();
+    }
+    
+    setInterval(function() {
+        draw();
+        if(snake.dead === false) {
+            snake.collision();
+            snake.grow();
+            snake.move();
+            
+        }
+        
+        if(AI.dead === false) {
+            AI.collision();
+            AI.grow();
+            AI.move();
+        }
+    }, 100);
+};

@@ -11,8 +11,7 @@ window.onload = function() {
         width: 80,
         height: 20,
         draw: function () {
-            c.fillStyle = "#bbb";
-            c.fillRect(this.x, this.y, this.width, this.height);
+            c.drawImage(document.getElementById("net"), basket1.x, basket1.y, 80, 80);
         },
         collision: function () {
             if((this.x + this.width > ball.x && this.x < ball.x + ball.width && this.y + this.height > ball.y && this.y < ball.y + ball.height) && (ball.vy > 0 || ball.possession === "player2")) {
@@ -33,8 +32,7 @@ window.onload = function() {
         width: 80,
         height: 20,
         draw: function () {
-            c.fillStyle = "#bbb";
-            c.fillRect(this.x, this.y, this.width, this.height);
+            c.drawImage(document.getElementById("net"), basket2.x, basket2.y, 80, 80);
         },
         collision: function () {
             if((this.x + this.width > ball.x && this.x < ball.x + ball.width && this.y + this.height > ball.y && this.y < ball.y + ball.height) && (ball.vy > 0 || ball.possession === "player1")) {
@@ -501,9 +499,13 @@ window.onload = function() {
         c.textAlign = "center";
         c.fillText(player1.score, 300, 360);
         c.fillText(player2.score, canvas.width - 300, 360);
+        
+        c.fillStyle = "#ddd";
         c.fillRect(0, 0, 20, canvas.height);
-        c.fillRect(0, canvas.height - 20, canvas.width, 20);
         c.fillRect(canvas.width - 20, 0, 20, canvas.height);
+        
+        c.fillStyle = "#bbb";
+        c.fillRect(0, canvas.height - 20, canvas.width, 20);
         
         player1.draw();
         c.fillStyle = "rgba(25, 125, 175, 1)";
@@ -525,7 +527,7 @@ window.onload = function() {
         player1.collision();
         player2.gravity();
         player2.collision();
-        
+         
         if(ball.possession === "player1") {
             player1.possession();
             ball.vy = 0;

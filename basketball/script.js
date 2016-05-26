@@ -15,7 +15,7 @@ window.onload = function() {
             c.fillRect(this.x, this.y, this.width, this.height);
         },
         collision: function () {
-            if((this.x + this.width > ball.x && this.x < ball.x + ball.width && this.y + this.height > ball.y && this.y < ball.y + ball.height) && (ball.vy >= 0 || ball.possession !== "nope")) {
+            if((this.x + this.width > ball.x && this.x < ball.x + ball.width && this.y + this.height > ball.y && this.y < ball.y + ball.height) && (ball.vy > 0 || ball.possession === "player2")) {
                 
                 ball.reset();
                 player1.reset();
@@ -37,7 +37,7 @@ window.onload = function() {
             c.fillRect(this.x, this.y, this.width, this.height);
         },
         collision: function () {
-            if((this.x + this.width > ball.x && this.x < ball.x + ball.width && this.y + this.height > ball.y && this.y < ball.y + ball.height) && (ball.vy >= 0 || ball.possession !== "nope")) {
+            if((this.x + this.width > ball.x && this.x < ball.x + ball.width && this.y + this.height > ball.y && this.y < ball.y + ball.height) && (ball.vy > 0 || ball.possession === "player1")) {
                 
                 ball.reset();
                 player1.reset();
@@ -59,6 +59,21 @@ window.onload = function() {
         possession: "nope",
         draw: function () {
             c.fillStyle = "rgba(250, 130, 55, 1)";
+            
+            if(ball.y + ball.width < 0) {
+                c.beginPath();
+                c.moveTo(ball.x + ball.width/2, 15);
+                c.lineTo(ball.x, 35);
+                c.lineTo(ball.x + ball.width, 35);
+                c.lineTo(ball.x + ball.width/2, 15);
+                c.lineTo(ball.x, 35);
+                
+                c.fillStyle = "#ee3";
+                c.strokeStyle = "#777";
+                c.lineWidth = 10;
+                c.stroke();
+                c.fill();
+            }
             
             c.fillRect(this.x, this.y, this.width, this.height);
         },
@@ -484,8 +499,8 @@ window.onload = function() {
         c.font = "300px Impact";
         c.fillStyle = "#ddd";
         c.textAlign = "center";
-        c.fillText(player1.score, 250, 360);
-        c.fillText(player2.score, canvas.width - 250, 360);
+        c.fillText(player1.score, 300, 360);
+        c.fillText(player2.score, canvas.width - 300, 360);
         c.fillRect(0, 0, 20, canvas.height);
         c.fillRect(0, canvas.height - 20, canvas.width, 20);
         c.fillRect(canvas.width - 20, 0, 20, canvas.height);
@@ -511,8 +526,6 @@ window.onload = function() {
         player2.gravity();
         player2.collision();
         
-        ball.collision();
-        
         if(ball.possession === "player1") {
             player1.possession();
             ball.vy = 0;
@@ -521,6 +534,7 @@ window.onload = function() {
             ball.vy = 0;
         } else {
             ball.gravity();
+            ball.collision();
         }
         
         basket1.collision();
@@ -584,7 +598,6 @@ window.onload = function() {
                 options();
                 break;
             default:
-                
         }
         
     }, 30);

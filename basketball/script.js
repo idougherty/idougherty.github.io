@@ -500,12 +500,12 @@ window.onload = function() {
         c.fillText(player1.score, 300, 360);
         c.fillText(player2.score, canvas.width - 300, 360);
         
+        c.fillStyle = "#";
+        c.fillRect(0, canvas.height - 20, canvas.width, 20);
+        
         c.fillStyle = "#ddd";
         c.fillRect(0, 0, 20, canvas.height);
         c.fillRect(canvas.width - 20, 0, 20, canvas.height);
-        
-        c.fillStyle = "#bbb";
-        c.fillRect(0, canvas.height - 20, canvas.width, 20);
         
         player1.draw();
         c.fillStyle = "rgba(25, 125, 175, 1)";

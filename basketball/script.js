@@ -581,6 +581,33 @@ window.onload = function() {
         pane = "options";
     };
     
+    
+    var p = [];
+    
+    function Particle(x, y) {
+        this.x = x;
+        this.y = y;
+        this.vx = Math.random() * 5 - 2.5;
+        this.vy = Math.random() * -5.5;
+        this.life = 70;
+        this.color = {
+            h: Math.floor(Math.random()*40 + 20),
+            s: Math.floor((Math.random()*50) + 50),
+            l: Math.floor((Math.random()*20) + 40),
+        };
+    }
+    
+    Particle.prototype.draw = function() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.vy += 0.1;
+        this.vx *= 0.92;
+        
+        c.fillStyle = "hsl("+this.color.h+", 100%, 50%)";
+        
+        c.fillRect(this.x, this.y, this.life/13, this.life/13);
+    };
+    
     setInterval(function() {
         
         switch (pane) {
@@ -600,6 +627,26 @@ window.onload = function() {
                 options();
                 break;
             default:
+        }
+        
+        if(p.length < 1000) {
+            var limit = Math.random() * 5 + 2;
+            for(var i = 0; i < limit; i++) {
+                p.push(new Particle(ball.x + Math.random()*20, ball.y + Math.random()* 20));
+            }
+        }
+        
+        for(i = 0; i < p.length; i++) {
+            p[i].life--;
+            p[i].color.h --;
+            
+            if(p[i].vy > 0 || p[i].color.h < 0) {
+                p.splice(i, 1);
+            }
+            
+            //c.globalCompositeOperation = "lighter";
+            p[i].draw();
+            c.globalCompositeOperation = "source-over";
         }
         
     }, 30);

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
+        <title>Firebase Chat App</title>
+        <style type="text/css">
+            body {
+                font-family: "Roboto";
+                background-color: #444;
+                color: #bbb;
+            }
+            
+            h1{color:orange;}
+        </style>
+    </head>
+    <body>
+        <h1>Firebase Chat App</h1>
+        
+        
+          <div id="messages" style="height:400px;width: 600px;overflow-y:scroll;border:3px solid grey;border-radius:10px 10px 0px 0px;background-color:#555"></div>
+          <form id="form" style="display:none;" style="height: 25px; width: 600px; border:3px solid grey; border-top: none; border-radius: 0px 0px 10px 10px">
+              <input id="username" placeholder="username" style="width:245px;height:100%;"/>
+              <input id="message" placeholder="message" style="width:245px;height:100%;"/>
+              <button id="send" type="submit" style="width:100px;height:100%;background-color:#666; color: #bbb; text-decoration: bold; border:2px solid grey">Send</button>
+          </form>
+          
+        <div id="login">
+            <button>Login with Google</button>
+        </div>
+
+        <div id="greeting"></div>
+        <script src="https://www.gstatic.com/firebasejs/3.4.1/firebase.js"></script>
+        <script src="app.js"></script> 
+    </body>
+</html>

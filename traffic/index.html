@@ -4,13 +4,21 @@
         <script type="text/javascript" src="script.js"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
         <title>Traffic Simulator</title>
+        <style type="text/css">
+            #paper {
+                height: 600px;
+                width: 600px;
+            }
+        </style>
     </head>
     <body>
         <div class="container">
             <div style="margin-top:30px" class="jumbotron">
-                <h1>Traffic Light Simulator</h1>
+                <h1>Traffic Signal Simulator</h1>
             </div>
-            <canvas id="paper" style="height: 600px; width: 600px; border:5px ridge #999"></canvas>
+            <canvas id="paper" height="600" width="600" style="border:5px ridge #999;"></canvas>
+            <button id="startbtn">Start</button>
+            <input id="lightinpt"></input>
         </div>
     </body>
 </html>

@@ -8,6 +8,11 @@
             #paper {
                 height: 600px;
                 width: 600px;
+                float: left;
+            }
+            
+            .data-form {
+                float: right;
             }
         </style>
     </head>
@@ -16,9 +21,12 @@
             <div style="margin-top:30px" class="jumbotron">
                 <h1>Traffic Signal Simulator</h1>
             </div>
-            <canvas id="paper" height="600" width="600" style="border:5px ridge #999;"></canvas>
-            <button id="startbtn">Start</button>
-            <input id="lightinpt"></input>
+            <div class="container" style="width: 90%">
+                <canvas id="paper" height="600" width="600" style="border:5px ridge #999;"></canvas>
+                <div class="data-form">
+                    <button class="btn" id="startbtn">Start</button>
+                </div>
+            </div>
         </div>
     </body>
 </html>

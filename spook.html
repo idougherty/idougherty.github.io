@@ -8,13 +8,18 @@
     <div id="spooky">
         
     </div>
+    <button onclick="changetime();" style="position: absolute; left: 10px; top: 10px;">Change Time</button>
     <h2 style="color: white; font-size: 100px; position: absolute; width:50%; left: 25%; top: 25%; text-align: center; font-family: Andale Mono" id="spookTimer">20:00</h2>
     
     <script>
-        var spook = new Audio('screamingGoat.mp3');
+        var spook = new Audio('screaming_goat.mp3');
         var bg_colour = Math.floor(Math.random() * 16777215).toString(16);
         bg_colour = "#" + ("000000" + bg_colour).slice(-6);
         document.bgColor = bg_colour;
+        
+        function changetime() {
+            time = prompt("Enter new time (minutes):")*60;
+        }
         
         function seizure() {
             setInterval(function() {

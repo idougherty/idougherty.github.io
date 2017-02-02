@@ -1,5 +1,5 @@
 window.onload = function() {
-var time = 60;
+var time = 3;
     
 var canvas = document.getElementById("paper");
 var c = canvas.getContext("2d");
@@ -8,17 +8,8 @@ var carnum = 0;
 var data = {
     flowtotal: 0,
     collecting: false,
+    trafficintensity: 9,
 };
-
-document.getElementById("startbtn").addEventListener("click", function() {
-    data.collecting = true;
-    
-    setTimeout(function() {
-        data.collecting = false;
-        console.log(data.flowtotal/6);
-        data.flowtotal = 0;
-    }, 21600000/time);
-});
 
 var intersection = {
     x: 210,
@@ -32,6 +23,7 @@ var intersection = {
     redLength: 15,
     greenNS: function() {
         intersection.stateNS = "green";
+        intersection.stateWE = "red";
         setTimeout(intersection.yellowNS, (intersection.redLength-intersection.yellowLength)*1000/time);
     },
     yellowNS: function() {
@@ -40,24 +32,14 @@ var intersection = {
     },
     redNS: function() {
         intersection.stateNS = "red";
-        setTimeout(intersection.greenNS, intersection.redLength*1000/time);
-    },
-    greenWE: function() {
         intersection.stateWE = "green";
-        setTimeout(intersection.yellowWE, (intersection.redLength-intersection.yellowLength)*1000/time);
+        setTimeout(intersection.greenNS, intersection.redLength*1000/time);
+        setTimeout(intersection.yellowWE, intersection.yellowLength*1000/time);
     },
     yellowWE: function() {
         intersection.stateWE = "yellow";
-        setTimeout(intersection.redWE, intersection.yellowLength*1000/time);
-    },
-    redWE: function() {
-        intersection.stateWE = "red";
-        setTimeout(intersection.greenWE, intersection.redLength*1000/time);
-    },
+    }
 };
-
-intersection.greenNS();
-intersection.redWE();
 
 function Car(x, y, d, exitPath) {
     this.x = x;
@@ -72,7 +54,7 @@ function Car(x, y, d, exitPath) {
     this.height = 20;
     this.speed = 3;
     this.vspeed = 0;
-    this.color = "blue";
+    this.color = "hsl("+(Math.random()*360)+", "+((Math.random()*20)+30)+"%, "+((Math.random()*20)+20)+"%)";
     this.turning = false;
     this.turned = false;
     this.runCar = function() {
@@ -82,6 +64,13 @@ function Car(x, y, d, exitPath) {
         
         if(this.turning) {
             this.turn();
+        }
+        
+        if(this.y - this.width/2 > 600 || this.x - this.width/2 > 600 || this.y + this.width/2 < 0 || this.x + this.width/2 < 0) {
+            cars.splice(cars.indexOf(this), 1);
+            carnum--;
+            if(data.collecting)
+                data.flowtotal++;
         }
     };
     this.turn = function() {
@@ -176,32 +165,25 @@ function Car(x, y, d, exitPath) {
         }
         
         for(var i = 0; i < cars.length; i++) {
-            if(this.d === 90 && cars[i].speed < 3 && cars[i].y - this.width/2 < this.y + this.width/2 + 40 && cars[i].y > this.y && cars[i].d === 90) {
+            if(this.d === 90 && cars[i].y - this.width/2 < this.y + this.width/2 + 40 && cars[i].y > this.y && cars[i].d === 90) {
                 this.stop();
-            } else if(this.d === -90 && cars[i].speed < 3 && cars[i].y + this.width/2 > this.y - this.width/2 - 40 && cars[i].y < this.y && cars[i].d === -90) {
+            } else if(this.d === -90 && cars[i].y + this.width/2 > this.y - this.width/2 - 40 && cars[i].y < this.y && cars[i].d === -90) {
                 this.stop();
-            } else if(this.d === 0 && cars[i].speed < 3 && cars[i].x - this.width/2 < this.x + this.width/2 + 40 && cars[i].x > this.x && cars[i].d === 0) {
+            } else if(this.d === 0 && cars[i].x - this.width/2 < this.x + this.width/2 + 40 && cars[i].x > this.x && cars[i].d === 0) {
                 this.stop();
-            } else if(this.d === 180 && cars[i].speed < 3 && cars[i].x + this.width/2 > this.x - this.width/2 - 40 && cars[i].x < this.x && cars[i].d === 180) {
+            } else if(this.d === 180 && cars[i].x + this.width/2 > this.x - this.width/2 - 40 && cars[i].x < this.x && cars[i].d === 180) {
                 this.stop();
             }
         }
     };
     this.move = function() {
+        this.speed += this.vspeed;
         this.vx = this.speed * Math.cos(this.d * Math.PI / 180);
         this.vy = this.speed * Math.sin(this.d * Math.PI / 180);
         
         this.x += this.vx;
         this.y += this.vy;
         this.d += this.vd;
-        this.speed += this.vspeed;
-        
-        if(this.y - this.width/2 > 600 || this.x - this.width/2 > 600 || this.y + this.width/2 < 0 || this.x + this.width/2 < 0) {
-            cars.splice(cars.indexOf(this), 1);
-            carnum--;
-            if(data.collecting)
-                data.flowtotal++;
-        }
     };
     this.draw = function() {
         c.translate(this.x, this.y);
@@ -236,10 +218,7 @@ function runsim() {
     c.fillRect(340, 210, 50, 180);
     c.globalAlpha = 1;
     
-    c.fillStyle = "#fff";
-    c.fillText(data.flowtotal, 20, 20);
-    
-    if(carnum < 5) {
+    if(carnum < data.trafficintensity && data.collecting) {
         carnum++;
         setTimeout(function() {
             switch(Math.floor(Math.random() * 4)) {
@@ -260,6 +239,17 @@ function runsim() {
     }
 }
 
+document.getElementById("startbtn").addEventListener("click", function() {
+    intersection.greenNS();
+    
+    data.collecting = true;
+    
+    setTimeout(function() {
+        data.collecting = false;
+        console.log(data.flowtotal/6);
+        data.flowtotal = 0;
+    }, 21600000/time);
+});
 
 setInterval(runsim, 60/time);
 };

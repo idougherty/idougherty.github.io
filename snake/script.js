@@ -2,11 +2,13 @@ window.onload = function() {
     var canvas = document.getElementById("paper");
     var c = canvas.getContext("2d");
     var scl = 20;
+    var time = 300;
     
     var food = {
         foods: [],
         create: function() {
             food.foods.push({x: Math.floor(Math.random()*canvas.height/scl) * scl, y: Math.floor(Math.random()*canvas.height/scl)*scl});
+            time *= .9;
         },
         draw: function() {
             c.fillStyle = "#11ee55";
@@ -28,9 +30,10 @@ window.onload = function() {
         vy: 0,
         height: 20,
         width: 20,
-        length: 3,
+        length: 2,
         tail: [],
         dead: false,
+        steps: [],
         move: function() {
             snake.x += snake.vx * scl;
             snake.y += snake.vy * scl;
@@ -62,7 +65,7 @@ window.onload = function() {
         collision: function() {
             for(var i = 0; i < food.foods.length; i++) {
                 if(snake.x === food.foods[i].x && snake.y === food.foods[i].y) {
-                    snake.length += 1;
+                    snake.length += 100;
                     food.foods.splice(i, 1);
                     food.create();
                 }
@@ -74,11 +77,101 @@ window.onload = function() {
                 }
             }
             
-            if(snake.x < 0 || snake.y < 0 || snake.y === canvas.height || snake.x === canvas.width) {
+            for(i = 0; i < snake2.tail.length; i++) {
+                if(snake.x === snake2.tail[i].x && snake.y === snake2.tail[i].y) {
+                    snake.dead = true;
+                }
+            }
+            
+            /*if(snake.x < 0 || snake.y < 0 || snake.y === canvas.height || snake.x === canvas.width) {
                 snake.dead = true;
+            }*/
+            if(snake.x < 0) {
+                snake.x = 500;
+            } else if(snake.y < 0) {
+                snake.y = 500;
+            } else if(snake.x > 480) {
+                snake.x = 0;
+            } else if(snake.y > 480) {
+                snake.y = 0;
             }
         },
     };
+    
+    /* var snake2 = {
+        x: canvas.width- 60,
+        y: canvas.height - 60,
+        vx: -1,
+        vy: 0,
+        height: 20,
+        width: 20,
+        length: 2,
+        tail: [],
+        dead: false,
+        move: function() {
+            snake2.x += snake2.vx * scl;
+            snake2.y += snake2.vy * scl;
+        },
+        draw: function() {
+            c.fillStyle = "#bb8833";
+            
+            c.fillRect(snake2.x, snake2.y, scl, scl);
+            
+            for(var i = 0; i < snake2.tail.length; i++) {
+                c.fillStyle = "#aa6633";
+                c.fillRect(snake2.tail[i].x, snake2.tail[i].y, scl, scl);
+            }
+        },
+        grow: function () {
+            if(snake2.tail.length <= snake2.length) {
+                snake2.tail.push({x: snake2.x, y: snake2.y, life: snake2.length-1});
+            }
+            
+            for(var i = 0; i < snake2.tail.length; i++) {
+                
+                if(snake2.tail[i].life === 0) {
+                    snake2.tail.splice(i, 1);
+                }
+                
+                snake2.tail[i].life -= 1;
+            }
+        },
+        collision: function() {
+            for(var i = 0; i < food.foods.length; i++) {
+                if(snake2.x === food.foods[i].x && snake2.y === food.foods[i].y) {
+                    snake2.length += 100;
+                    food.foods.splice(i, 1);
+                    food.create();
+                }
+            }
+            
+            for(i = 0; i < snake2.tail.length; i++) {
+                if(snake2.x === snake2.tail[i].x && snake2.y === snake2.tail[i].y) {
+                    snake2.dead = true;
+                }
+            }
+            
+            for(i = 0; i < snake.tail.length; i++) {
+                if(snake2.x === snake.tail[i].x && snake2.y === snake.tail[i].y) {
+                    snake2.dead = true;
+                }
+            }
+            
+            if(snake2.x < 0 || snake2.y < 0 || snake2.y === canvas.height || snake2.x === canvas.width) {
+                snake2.dead = true;
+            }
+            if(snake2.x < 0) {
+                snake2.x = 500;
+            } else if(snake2.y < 0) {
+                snake2.y = 500;
+            } else if(snake2.x > 480) {
+                snake2.x = 0;
+            } else if(snake2.y > 480) {
+                snake2.y = 0;
+            }
+        },
+    };
+    */
     
     var AI = {
         x: canvas.width - 60,
@@ -91,6 +184,7 @@ window.onload = function() {
         tail: [],
         dead: false,
         move: function() {
+            AI.gotofood();
             AI.sense();
             
             AI.x += AI.vx * scl;
@@ -143,6 +237,14 @@ window.onload = function() {
             
             if(AI.x < 0 || AI.y < 0 || AI.y === canvas.height || AI.x === canvas.width) {
                 AI.dead = true;
+            }
+        },
+        gotofood: function() {
+            var distancetofood = 100000;
+            for(var i = 0; i < food.foods.length; i++) {
+                if(Math.abs(food.foods[i].x - this.x) + Math.abs(food.foods[i].y - this.y) < distancetofood) {
+                    distancetofood = Math.abs(food.foods[i].x - this.x) + Math.abs(food.foods[i].y - this.y);
+                }
             }
         },
         sense: function () {
@@ -265,13 +367,48 @@ window.onload = function() {
         }
     });
     
+    document.addEventListener("keydown", function(e) {
+        switch (e.keyCode) {
+            case 65:
+                if(snake2.vx !== 1) {
+                    snake2.vx = -1;
+                }
+                snake2.vy = 0;
+                break;
+                
+            case 87:
+                snake2.vx = 0;
+                if(snake2.vy !== 1) {
+                    snake2.vy = -1;
+                }
+                break;
+                
+            case 68:
+                if(snake2.vx !== -1) {
+                    snake2.vx = 1;
+                }
+                snake2.vy = 0;
+                break;
+                
+            case 83:
+                snake2.vx = 0;
+                if(snake2.vy !== -1) {
+                    snake2.vy = 1;
+                }
+                break;
+            
+            default:
+        }
+    });
+    
     function draw() {
         c.fillStyle = "#555";
         c.fillRect(0, 0, canvas.width, canvas.height);
         
         snake.draw();
+        snake2.draw();
         food.draw();
-        AI.draw();
+        //AI.draw();
     }
     
     setInterval(function() {
@@ -282,11 +419,16 @@ window.onload = function() {
             snake.move();
             
         }
+        //if(snake2.dead === false) {
+        //    snake2.collision();
+        //    snake2.grow();
+        //    snake2.move();
+        //}
         
         if(AI.dead === false) {
             AI.collision();
             AI.grow();
             AI.move();
         }
-    }, 100);
+    }, time);
 };

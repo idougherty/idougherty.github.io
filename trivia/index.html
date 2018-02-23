@@ -10,6 +10,15 @@
     <div class="container">
         <h2>Leaderboard</h2>
         <h3 id = "loading" style = "position: absolute"><em>Loading...</em></h3>
+        
+        <div id="dogstuff">
+            <br>
+            <br>
+            <br>
+            <h6>sometimes this takes a while, try the dog button:</h6>
+            <button onclick="getDog();">Instant Dog</button>
+            <img id="dogpic" src=""/>
+        </div>
         <ul class="list-group" id="leaderboard">
         </ul>
     </div>
@@ -131,6 +140,20 @@
                 players[i].pushlist(i+1);
             }
             document.getElementById("loading").style.visibility = "hidden";
+            document.getElementById("dogstuff").style.visibility = "hidden";
+            document.getElementById("dogstuff").style.position = "absolute";
+        }
+        
+        function getDog() {
+            var url = "https://dog.ceo/api/breeds/image/random";
+            var img = document.getElementById("dogpic");
+            $.getJSON(url)
+                .done(function(data){
+                    img.src = data.message;
+                })
+            	.fail(function(){
+                	console.log("broke-dog");
+            	});
         }
     </script>
 </body>

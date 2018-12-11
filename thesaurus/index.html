@@ -35,7 +35,7 @@
                 <textarea cols="40" rows="15" id="text"></textarea>
                 <p></p>
             </form>
-                <button onclick="convertText();">Convert!</button>
+                <button onclick="convertText();">looong</button>
         </div>
         
         <div class="output">
@@ -44,24 +44,39 @@
         </div>
         
         <script>
-        
-        
+            var length = 0;
+            var words = [];
         
             function convertText() {
+                document.getElementById("output").innerHTML = "";
                 var text = document.getElementById("text").value;
                 
-                var words = text.split(" ");
-                
+                words = text.split(" ");
+                length = words.length;
                 text = "";
                 
                 for(var i = 0; i < words.length; i++) {
                     word = "";
                     var word = words[i];
                     
-                    var dataUrl = "https://words.bighugelabs.com/api/2/8ce4259e0f34b2c93531dbd3e35437d5/"+word+"/json";
-                    
-                    var jqxhr = $.get(dataUrl)
-    			    	.done(function(data){
+                    var synonym = getSynonym(word, i);
+                    text += synonym + " ";
+                }
+            }
+            
+            
+            
+            
+            
+            
+            function getSynonym(word, position) {
+                //var word = "poop";
+                
+    			var url = "https://words.bighugelabs.com/api/2/8ce4259e0f34b2c93531dbd3e35437d5/"+word+"/json";
+                
+                $.getJSON(url)
+            		.done(function(data){
+            		    if(data) {
     						if(data.hasOwnProperty("noun")) {
                                 for(var i = 0; i < data.noun.syn.length; i++) {
                                     if(data.noun.syn[i].length > word.length) {
@@ -85,88 +100,28 @@
                                     }
                                 }
                             }
-                            
-                            console.log(word);
-                            text += word + " ";
-                            document.getElementById("output").innerHTML = text;
-    					})
-    					.fail(function() {
-    					});
-                }
-                
-                    console.log(text);
-                
-            }
-            
-            
-            
-            
-            
-            
-            
-            var fml = "";
-            
-            function findLongWords(data, word) {
-                if(data.hasOwnProperty("noun")) {
-                    for(var i = 0; i < data.noun.syn.length; i++) {
-                        if(data.noun.syn[i].length > word.length) {
-                            word = data.noun.syn[i];
-                        }
-                    }
-                }
-                
-                if(data.hasOwnProperty("adjective")) {
-                    for(var i = 0; i < data.adjective.syn.length; i++) {
-                        if(data.adjective.syn[i].length > word.length) {
-                            word = data.adjective.syn[i];
-                        }
-                    }
-                }
-                
-                if(data.hasOwnProperty("verb")) {
-                    for(var i = 0; i < data.verb.syn.length; i++) {
-                        if(data.verb.syn[i].length > word.length) {
-                            word = data.verb.syn[i];
-                        }
-                    }
-                }
-                console.log(word);
-            }
-            
-            function getSynonym(word) {
-				var dataUrl = "https://words.bighugelabs.com/api/2/8ce4259e0f34b2c93531dbd3e35437d5/"+word+"/json";
-                
-                var jqxhr = $.get(dataUrl)
-					.done(function(data){
-						//return findLongWords(data, word);
-						if(data.hasOwnProperty("noun")) {
-                            for(var i = 0; i < data.noun.syn.length; i++) {
-                                if(data.noun.syn[i].length > word.length) {
-                                    word = data.noun.syn[i];
-                                }
-                            }
-                        }
-                        
-                        if(data.hasOwnProperty("adjective")) {
-                            for(var i = 0; i < data.adjective.syn.length; i++) {
-                                if(data.adjective.syn[i].length > word.length) {
-                                    word = data.adjective.syn[i];
-                                }
-                            }
-                        }
-                        
-                        if(data.hasOwnProperty("verb")) {
-                            for(var i = 0; i < data.verb.syn.length; i++) {
-                                if(data.verb.syn[i].length > word.length) {
-                                    word = data.verb.syn[i];
-                                }
-                            }
-                        }
-					})
-					.fail(function() {
-					});
-            }
-        
+            		    } else {
+                        	console.log("broke");
+            		    }
+            		    
+            		    appendWord(word, position);
+                    })
+                	.fail(function(){
+            		    appendWord(word, position);
+                	});
+            	}
+                	
+            	function appendWord(word, position) {
+            	    words[position] = word;
+            	    console.log(words);
+            	    
+            	    var text = "";
+            	    for(var i = 0; i < length; i++) {
+            	       text += words[i] + " ";
+            	    }
+            	    
+            	    document.getElementById("output").innerHTML = text;
+            	}
         </script>
     </body>
 </html>

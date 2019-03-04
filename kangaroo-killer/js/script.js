@@ -43,7 +43,7 @@ function fightBadEv(cost) {
 	}
 }
 
-function killPeople(numToKill) {
+/*function killPeople(numToKill) {
 	loop: while (numToKill) {
 		for (const hex of shuffleArray(activeHexes)) {
 			const newToKill = Math.max(0, numToKill - 5);
@@ -56,7 +56,7 @@ function killPeople(numToKill) {
 			if (!numToKill) break loop;
 		}
 	}
-}
+}*/
 
 function shuffleArray(array) {
 	array = array.slice();
@@ -65,6 +65,28 @@ function shuffleArray(array) {
 		[array[i], array[j]] = [array[j], array[i]];
 	}
 	return array;
+}
+
+function killPeople(numToKill) {
+	gameState.population = Math.floor(gameState.population);
+	unemployed = gameState.population - gameState.employed;
+	console.log("population: "+gameState.population);
+	console.log("unemployed: "+unemployed);
+	console.log("killed initially: "+Math.min(unemployed, numToKill));
+	gameState.population -= Math.min(unemployed, numToKill);
+	numToKill -= Math.min(unemployed, numToKill);
+	while (numToKill > 0) {
+		console.log(numToKill);
+		for (const hex of shuffleArray(activeHexes)) {
+			console.log("searching");
+			if(hex.state.workers > 0 && numToKill > 0) {
+				console.log("killing");
+				hex.state.workers--;
+				gameState.population--;
+				numToKill--;
+			}
+		}
+	}
 }
 
 function runTurn() {
@@ -124,16 +146,17 @@ function runTurn() {
 				}
 				break;
 			case "none":
+			case "cityHall":
 				break;
 			default:
 				throw new Error(`Unknown building type ${hex.state.type}`);
 		}
 	}
-
+	
 	const newFood = Math.max(0, gameState.food - gameState.population);
 	if (newFood === 0) {
 		let numToKill = gameState.population - gameState.food;
-		killPeople(numToKill)
+		killPeople(numToKill);
 	}
 	gameState.food = newFood;
 
@@ -151,8 +174,8 @@ function runTurn() {
 	if (rand * 100 <= impChance) {
 		// imperialism
 		if (!fightBadEv(25)) {
-			modal.innerHTML = "The British Empire wants to do imperialism!  25 percent of wood, food, stone, metal, IQ, population, and military is lost unless military is at least 25 strong.";
-			gameState.population *= 0.5;
+			modal.innerHTML = "The British Empire wants to do imperialism!  Half of your wood, food, stone, metal, IQ, population, and military is lost unless military is at least 25 strong.";
+			killPeople(Math.floor(gameState.population * 0.5));
 			gameState.food *= 0.5;
 			gameState.wood *= 0.5;
 			gameState.stone *= 0.5;
@@ -179,7 +202,7 @@ function runTurn() {
 			case "antivax":
 				if (!fightBadEv(10)) {
 					gameState.iq *= 0.85;
-					gameState.population *= 0.85;
+					killPeople(Math.floor(gameState.population * 0.15));
 					modal.innerHTML = "<img src='./assets/anti-mom.png'/> Anti-vax parents attack the schools and universities in order to stop their children from evil vaccinations!  15 percent of population and 15 percent of IQ is lost unless military is at least 10 strong.";
 				}
 				break;
@@ -208,11 +231,11 @@ function runTurn() {
 				modal.innerHTML = "<img src='./assets/hawk.png'/> A good hawk inspires your people!  IQ increases by 1.";
 				break;
 			default:
-				throw new Error("event not implemented");
+				//throw new Error("event not implemented");
 		}
 	}
 
-	gameState.population = Math.floor(gameState.population);
+	gameState.population = Math.ceil(gameState.population);
 	gameState.food = Math.floor(gameState.food);
 	gameState.wood = Math.floor(gameState.wood);
 	gameState.stone = Math.floor(gameState.stone);
@@ -266,7 +289,7 @@ function updateStats() {
 	populationInfo.textContent = gameState.population;
 	turnInfo.textContent = gameState.turnCount;
 	militaryInfo.textContent = gameState.military;
-	govInfo.textContent = gameState.military;
+	govInfo.textContent = gameState.govt;
 	
 	stat = ""
 	
@@ -364,8 +387,7 @@ function updateStats() {
 			cityHallWindow.style.position = "absolute";
 			workerWindow.style.visibility = "visible";
 			workerWindow.style.position = "static";
-			bnameInfo.innerHTML =
-				bname.charAt(0).toUpperCase() + bname.substring(1, bname.length) + ":";
+			bnameInfo.innerHTML = bname.charAt(0).toUpperCase() + bname.substring(1, bname.length) + ":";
 			workerInfo.innerHTML = g.Hexes[gameState.selectedHex].state.workers;
 			unemployedInfo.innerHTML = gameState.population - gameState.employed;
 		}
@@ -386,26 +408,22 @@ function moveWorkers(amt) {
 			case "school":
 				if (curHex.workers + amt <= 3) {
 					curHex.workers += amt;
-					gameState.employed += amt;
 				}
 				break;
 			case "university":
 				if (curHex.workers + amt <= 5) {
 					curHex.workers += amt;
-					gameState.employed += amt;
 				}
 				break;
 			case "barracks":
 				if (curHex.workers + amt <= 10) {
 					curHex.workers += amt;
-					gameState.employed += amt;
 				}
 				break;
 			case "cityHall":
 			case "nuclearFacilities":
 				if (curHex.workers + amt <= 1) {
 					curHex.workers += amt;
-					gameState.employed += amt;
 				}
 				break;
 			default:
@@ -496,7 +514,6 @@ class GameState {
 
 		//materials
 		this.population = 5;
-		this.employed = 0;
 		this.food = 20;
 		this.wood = 20;
 		this.stone = 20;
@@ -504,6 +521,7 @@ class GameState {
 		this.iq = 0;
 		this.militaryBuildUp = 0;
 		this.extraMilitary = 0;
+		this.working = 0;
 
 		//modifiers
 		this.productionModifier = 1;
@@ -516,7 +534,15 @@ class GameState {
 		this.woodProductionModifier = 1;
 		this.iqProductionModifier = 1;
 	}
-
+	
+	get employed() {
+		this.working = 0;
+		for (const hex of activeHexes) {
+			this.working += hex.state.workers;
+		}
+		return this.working;
+	}
+		
 	get military() {
 		return this.militaryBuildUp + this.extraMilitary;
 	}

@@ -442,7 +442,7 @@ function draw() {
 	updateStats();
 }
 
-function drawHex(/* HT.Hexagon */ hex) {
+function drawHex(hex) {
 	c.strokeStyle = "#5abcd8";
 	c.lineWidth = 3;
 
@@ -497,6 +497,14 @@ function drawHex(/* HT.Hexagon */ hex) {
 
 	c.fill();
 
+	if(hex.state.type != "none") {
+		c.fillStyle = "#ccc";
+		c.font = "20px Courier";
+		c.textAlign = "center";
+		c.textBaseline = 'middle';
+		c.fillText(hex.state.workers, hex.MidPoint.X, hex.MidPoint.Y);
+	}
+		
 	if (hex.state.selected) {
 		c.fillStyle = "rgba(255, 255, 255, .3)";
 		c.fill();

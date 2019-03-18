@@ -37,7 +37,7 @@ function Controller() {
 			default:
 				throw new Error("unknown display type");
 		}
-	}
+	};
 	
 	this.pickTransition = function() {
 		this.transitionIDX = Math.floor(Math.random()*this.displays.length);
@@ -48,10 +48,11 @@ function Controller() {
 			default:
 				throw new Error("unknown transition type");
 		}
-	}
+	};
 }
 
 var controller = new Controller();
+controller.display.setup();
 
 setInterval(function() {	
 	c.clearRect(0, 0, canvas.width, canvas.height);

@@ -52,7 +52,7 @@ function Controller() {
 }
 
 var controller = new Controller();
-controller.display.setup();
+controller.display.setup();//please be here cmon githubs
 
 setInterval(function() {	
 	c.clearRect(0, 0, canvas.width, canvas.height);

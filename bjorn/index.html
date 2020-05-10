@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>bjorn</title>
+    <link rel="icon" href="art/icon.png">
+    <style type="text/css">
+      @font-face {
+        font-family: "Arbre";
+        src: url(art/Arbre.ttf) format("truetype");
+      }
+  
+      #paper {
+        position: absolute;
+        top:0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+      }
+
+      body {
+        background-color: #122;
+        overflow: hidden;
+      }
+      
+      .vignette {
+        position: fixed;
+        top: 0;
+        left: 0;
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        box-shadow: 0 0 400px rgba(0, 10, 10, 1) inset;
+      }
+    </style>
+  </head>
+  <body style="overflow: hidden"class="vignette">
+    <div>
+      <canvas id="paper" height="1000px" width="1000px"></canvas>
+    </div>
+  
+    <script type="text/javascript" src="environment.js"></script>
+    <script type="text/javascript" src="bug.js"></script>
+    <script type="text/javascript" src="frog.js"></script>
+    <script type="text/javascript" src="rabbit.js"></script>
+    <script type="text/javascript" src="raccoon.js"></script>
+    <script type="text/javascript" src="doe.js"></script>
+    <script type="text/javascript" src="buck.js"></script>
+    <script type="text/javascript" src="bear.js"></script>
+    <script type="text/javascript" src="player.js"></script>
+    <script type="text/javascript" src="particles.js"></script>
+    <script type="text/javascript" src="main.js"></script>
+</html>

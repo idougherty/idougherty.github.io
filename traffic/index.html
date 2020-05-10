@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script type="text/javascript" src="script.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+        <title>Traffic Simulator</title>
+        <style type="text/css">
+            #paper {
+                height: 600px;
+                width: 600px;
+                float: left;
+            }
+            
+            .data-form {
+                float: right;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div style="margin-top:30px" class="jumbotron">
+                <h1>Traffic Signal Simulator</h1>
+            </div>
+            <div class="container" style="width: 90%">
+                <canvas id="paper" height="600" width="600" style="border:5px ridge #999;"></canvas>
+                <div class="data-form">
+                    <button class="btn" id="startbtn">Start</button>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Trivia Leaderboard</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h2>Leaderboard</h2>
+        <h3 id = "loading" style = "position: absolute"><em>Loading...</em></h3>
+        
+        <div id="dogstuff">
+            <br>
+            <br>
+            <br>
+            <h6>sometimes this takes a while, try the dog button:</h6>
+            <button onclick="getDog();">Instant Dog</button>
+            <img id="dogpic" src=""/>
+        </div>
+        <ul class="list-group" id="leaderboard">
+        </ul>
+    </div>
+    <script>
+        function Player (name, score) {
+            this.name = name;
+            this.score = score;
+            this.place = null;
+            this.pushlist = function(id) {
+                this.place = id;
+                var node = document.createElement("LI");
+                var textnode = document.createTextNode(this.place + ". " + this.name + " - ");//<em>"+this.score+"</em>");
+                var inode = document.createElement("EM");
+                var itextnode = document.createTextNode(this.score);
+                inode.appendChild(itextnode);
+                node.appendChild(textnode);
+                node.appendChild(inode);
+                node.className = "list-group-item";
+                document.getElementById("leaderboard").appendChild(node);
+            };
+        }
+        
+        var players = [];
+        
+        var playerdatas = [];
+        
+        function PlayerData(name, score) {
+            this.name = name;
+            this.score = score;
+        }
+        
+        for(var i = 2; i <= 100; i++) {
+            var data = new PlayerData(null, null);
+            playerdatas.push(data);
+        }
+        
+        function getCell(r, c, type){
+            var api = 'https://spreadsheets.google.com/feeds/cells/';
+        	var spreadsheet = "1cYJsOOtS78efqsgwqP_kNPBjkhfcDvWC4d7ikGbZz8E";
+            var worksheet =   "default";
+            var row = r;
+            var col = c;
+            var url = api+spreadsheet+'/'+worksheet+'/public/basic/R'+row+'C'+col+'?alt=json';
+            $.getJSON(url)
+        		.done(function(data){
+        		    if(data.entry) {
+        		        playerdatas[r-2][type] = data.entry.content.$t;
+        		    } else {
+                    	console.log("broke");
+                    	retry(r, c, type);
+        		    }
+                })
+            	.fail(function(){
+                	console.log("broke");
+                	retry(r, c, type);
+            	});
+        }
+        
+        function retry(r, c, type) {
+            getCell(r, c, type);
+        }
+        
+        function confirmData() {
+            var lost = 0;
+            for(var i = 0; i < playerdatas.length; i++) {
+                if(playerdatas[i].name === null || playerdatas[i].score === null) {
+                    lost++;
+                }
+            }
+            if(lost === 0) {
+                cleanData();
+            } else {
+                console.log("ugh");
+                retryConfirm();
+            }
+        }
+        
+        function retryConfirm() {
+            window.setTimeout(function(){confirmData();}, 1000);
+        }
+        
+        function getPlayerData() {
+            for (var i = 0; i < playerdatas.length; i++){
+                getCell(i+2, 2, "name");
+                getCell(i+2, 3, "score");
+            }
+            console.log(playerdatas);
+            confirmData();
+        }
+        
+        getPlayerData();
+        
+        function cleanData() {
+            for(var i = 0; i < playerdatas.length; i++) {
+                if(playerdatas[i].name !== "" && playerdatas[i].name !== null) {
+                    var isaplayer = false;
+                    for(var j = 0; j < players.length; j++) {
+                        if(playerdatas[i].name === players[j].name) {
+                            players[j].score += parseInt(playerdatas[i].score, 10);
+                            isaplayer = true;
+                        }
+                    }
+                    if(!isaplayer) {
+                        players.push(new Player(playerdatas[i].name, parseInt(playerdatas[i].score, 10)));
+                    }
+                }
+            }
+            
+            playerCreate();
+        }
+        
+        function playerCreate() {
+            players.sort(function(a, b){return b.score - a.score;});
+            
+            console.log(players);
+            
+            for(var i = 0; i < players.length; i++) {
+                players[i].pushlist(i+1);
+            }
+            document.getElementById("loading").style.visibility = "hidden";
+            document.getElementById("dogstuff").style.visibility = "hidden";
+            document.getElementById("dogstuff").style.position = "absolute";
+        }
+        
+        function getDog() {
+            var url = "https://dog.ceo/api/breeds/image/random";
+            var img = document.getElementById("dogpic");
+            $.getJSON(url)
+                .done(function(data){
+                    img.src = data.message;
+                })
+            	.fail(function(){
+                	console.log("broke-dog");
+            	});
+        }
+    </script>
+</body>
+</html>

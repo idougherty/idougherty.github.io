@@ -1,3 +1,4 @@
+
 canvas = document.getElementById("canvas");
 c = canvas.getContext("2d");
 

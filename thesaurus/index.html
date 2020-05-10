@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Text Lengthener</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+        <style type="text/css">
+            .input {
+                float: left;
+                width: 50%;
+                height: 400px;
+                border: 1px solid black;
+                border-width: 0px 1px 0px 0px;
+                overflow: scroll;
+            }
+            
+            .output {
+                float: right;
+                width: 49%;
+                height: 400px;
+            }
+            
+            .input > * {
+                margin: 10px;
+            }
+            .output > * {
+                margin: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        
+        <div class="input">
+            <h2>Input text here:</h2>
+            <form>
+                <textarea cols="40" rows="15" id="text"></textarea>
+                <p></p>
+            </form>
+                <button onclick="convertText();">looong</button>
+        </div>
+        
+        <div class="output">
+            <h2>Long Text:</h2>
+            <p id="output"></p>
+        </div>
+        
+        <script>
+            var length = 0;
+            var words = [];
+        
+            function convertText() {
+                document.getElementById("output").innerHTML = "";
+                var text = document.getElementById("text").value;
+                
+                words = text.split(" ");
+                length = words.length;
+                text = "";
+                
+                for(var i = 0; i < words.length; i++) {
+                    word = "";
+                    var word = words[i];
+                    
+                    var synonym = getSynonym(word, i);
+                    text += synonym + " ";
+                }
+            }
+            
+            
+            
+            
+            
+            
+            function getSynonym(word, position) {
+                //var word = "poop";
+                
+    			var url = "https://words.bighugelabs.com/api/2/8ce4259e0f34b2c93531dbd3e35437d5/"+word+"/json";
+                
+                $.getJSON(url)
+            		.done(function(data){
+            		    if(data) {
+    						if(data.hasOwnProperty("noun")) {
+                                for(var i = 0; i < data.noun.syn.length; i++) {
+                                    if(data.noun.syn[i].length > word.length) {
+                                        word = data.noun.syn[i];
+                                    }
+                                }
+                            }
+                            
+                            if(data.hasOwnProperty("adjective")) {
+                                for(var i = 0; i < data.adjective.syn.length; i++) {
+                                    if(data.adjective.syn[i].length > word.length) {
+                                        word = data.adjective.syn[i];
+                                    }
+                                }
+                            }
+                            
+                            if(data.hasOwnProperty("verb")) {
+                                for(var i = 0; i < data.verb.syn.length; i++) {
+                                    if(data.verb.syn[i].length > word.length) {
+                                        word = data.verb.syn[i];
+                                    }
+                                }
+                            }
+            		    } else {
+                        	console.log("broke");
+            		    }
+            		    
+            		    appendWord(word, position);
+                    })
+                	.fail(function(){
+            		    appendWord(word, position);
+                	});
+            	}
+                	
+            	function appendWord(word, position) {
+            	    words[position] = word;
+            	    console.log(words);
+            	    
+            	    var text = "";
+            	    for(var i = 0; i < length; i++) {
+            	       text += words[i] + " ";
+            	    }
+            	    
+            	    document.getElementById("output").innerHTML = text;
+            	}
+        </script>
+    </body>
+</html>

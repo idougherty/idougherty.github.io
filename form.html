@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+		<head>
+				<title>Web Dev Form</title>
+				<style type="text/css">
+						form {
+								margin-top: 25px;
+						}
+				</style>
+				<script type="text/javascript">
+						
+				</script>
+					<meta charset="utf-8">
+					<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+					<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+					<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+		</head>
+		<body>
+				<div class="container">
+						<div class="page-header">
+								<h1>Crime Mapping Form</h1>
+						</div>
+						<div class="form">
+								<form>
+									
+									Year: <select id="year" name="year">
+										<option value="2010">2010</option>
+										<option value="2011">2011</option>
+										<option value="2012">2012</option>
+										<option value="2013">2013</option>
+										<option value="2014">2014</option>
+										<option value="2015">2015</option>
+										<option value="2016">2016</option>
+									</select>
+									
+									<br />
+									
+									Ward: <input id="ward" placeholder="Ward">
+									
+									<br />
+									
+									Type of Crime: <select id="primary_type" name="primary_type">
+										<option value="arson">Arson</option>
+										<option value="assault">Assault</option>
+										<option value="battery">Battery</option>
+										<option value="burglary">Burglary</option>
+										<option value="damage">Damage</option>
+										<option value="weapons">Weapons</option>
+										<option value="narcotics">Narcotics</option>
+										<option value="theft">Theft</option>
+										<option value="trespass">Trespass</option>
+									</select>
+									
+									<br />
+									
+									Map Crimes: <button id="btnMapCrimes">Map Crimes</button>
+									
+								</form>
+						</div>
+				</div>
+		</body>
+</html>

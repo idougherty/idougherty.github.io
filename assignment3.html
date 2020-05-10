@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Collage</title>
+    <meta charset="utf-8" />
+    <style>
+        body {
+            background-image: url("http://p1.pichost.me/i/33/1561150.jpg");
+        }
+        
+        .title {
+            color: #FFF;
+            text-shadow: -3px 0 black, 0 3px black, 3px 0 black, 0 -3px black;
+        }
+        
+        .sleepingKoala {
+            position: absolute;
+            border: 3px solid #141;
+            top: 60px;
+            left: 10px;
+            height: 300px;
+            z-index: -1;
+        }
+        
+        .coffeeKoala {
+            position: absolute;
+            border: 3px solid #141;
+            top: 60px;
+            left: 430px;
+            height: 300px;
+            z-index: -1;
+        }
+        
+        .idek {
+            position: absolute;
+            border: 3px solid #141;
+            top: 363px;
+            left: 10px;
+            height: 250px;
+            width: 236px;
+            z-index: -1;
+        }
+        
+        .cinematicKoala {
+            position: absolute;
+            border: 3px solid #141;
+            top: 363px;
+            left: 637px;
+            height: 250px;
+            z-index: -1;
+        }
+        
+        .flyingKoala {
+            position: absolute;
+            border: 3px solid #141;
+            top: 363px;
+            left: 250px;
+            height: 250px;
+            width: 385px;
+            z-index: -2;
+        }
+        
+        .veryHappyKoala {
+            position: absolute;
+            border: 3px solid #141;
+            top: 60px;
+            left: 810px;
+            height: 300px;
+            z-index: -1;
+        }
+        
+        .meInTheMorning {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            top: 0px;
+            left: 0px;
+            z-index: -10;
+        }
+        
+        .KOALA {
+            position: absolute;
+            color: #FFF;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="title">Koala Collage</h1>
+    <img class="sleepingKoala" src="http://www.acuteaday.com/blog/wp-content/uploads/2013/01/koala-lazing-about.jpg">
+    <img class="coffeeKoala" src="http://www.animateit.net/data/media/june2010/output.gif">
+    <img class="idek" src="http://www.ratemykoala.com/Content/CSS/Images/Koalas/koala_gif_1.gif">
+    <img class="cinematicKoala" src="http://img.pandawhale.com/post-42432-koala-gif-ears-imgur-tumblr-1fPd.gif">
+    <img class="flyingKoala" src="http://www.funnypics4all.com/pics/2/8/2854.jpg">
+    <img class="veryHappyKoala" src="https://pbs.twimg.com/media/BmrHoksIEAA6XqH.jpg">
+    <img class="meInTheMorning" src="https://2.bp.blogspot.com/-lhQqBJguazg/UQBnO79vJTI/AAAAAAAAFXU/ZDYKYGY8gRc/s1600/wet+koala.jpg">
+    <script src="site.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script>
+        var randomL = 0;
+        var randomT = 0;
+        var timer = null;
+        var spook = new Audio('screamingGoat.mp3');
+        $(".meInTheMorning").hide();
+        
+        function reHide() {
+            $(".meInTheMorning").hide();
+        }
+        
+        function veryScary() {
+            spook.play();
+            $(".meInTheMorning").css("z-index", "10");
+            $(".meInTheMorning").show();
+            setTimeout(reHide, 3000);
+        }
+        
+        $(document).ready(function() {
+            setInterval(veryScary , 1000);
+        });
+        
+        function addFun() {
+            randomL = Math.round(Math.random()*100);
+            randomT = Math.round(Math.random()*100);
+            $("body").append('<p class="KOALA">KOALA</p>');
+            $("p:last").css({top: +randomT+"%", left: +randomL+"%"});
+        }
+        
+        timer = setInterval(addFun, 3000);
+    </script>
+</body>
+</html>

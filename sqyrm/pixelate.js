@@ -1,3 +1,4 @@
+
 function Pixel(x, y, color, size) {
     this.x = x;
     this.y = y;

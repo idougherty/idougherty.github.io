@@ -153,10 +153,6 @@ function Player() {
 
     this.y += this.vy + this.ky;
     this.x += this.vx + this.kx;
-
-    if(this.keyDown.shift) {
-      this.size *= 1.02;
-    }
   };
 
   this.draw = function(camX, camY, camHeight) {

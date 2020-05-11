@@ -42,13 +42,13 @@ function Environment() {
     } else if(45 < chance && chance < 60) {
       let r = new Rabbit(x, y);
       this.animals.push(r);
-    } else if(60 < chance && chance < 75) {
+    } else if(55 < chance && chance < 65) {
       let r = new Raccoon(x, y);
       this.animals.push(r);
-    } else if(75 < chance && chance < 82) {
+    } else if(65 < chance && chance < 80) {
       let d = new Doe(x, y);
       this.animals.push(d);
-    } else if(82 < chance && chance < 95) {
+    } else if(80 < chance && chance < 95) {
       let b = new Buck(x, y);
       this.animals.push(b);
     } else if(95 < chance) {

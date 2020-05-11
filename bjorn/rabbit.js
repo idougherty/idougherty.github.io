@@ -7,7 +7,7 @@ function Rabbit(x, y) {
   this.ky = 0;
   this.d = 0;
   this.size = 2 + Math.random();
-  this.base = 1;
+  this.base = 2;
   this.mass = 3;
   this.health = this.size * this.base;
   this.maxHealth = this.health;

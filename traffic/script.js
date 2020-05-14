@@ -20,7 +20,7 @@ var intersection = {
     stateWE: "red",
     timer: 0,
     yellowLength: 5,
-    redLength: 15,
+    redLength: 30,
     greenNS: function() {
         intersection.stateNS = "green";
         intersection.stateWE = "red";
@@ -34,7 +34,7 @@ var intersection = {
         intersection.stateNS = "red";
         intersection.stateWE = "green";
         setTimeout(intersection.greenNS, intersection.redLength*1000/time);
-        setTimeout(intersection.yellowWE, intersection.yellowLength*1000/time);
+        setTimeout(intersection.yellowWE, (intersection.redLength-intersection.yellowLength)*1000/time);
     },
     yellowWE: function() {
         intersection.stateWE = "yellow";

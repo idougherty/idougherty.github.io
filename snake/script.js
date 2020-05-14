@@ -65,7 +65,7 @@ window.onload = function() {
         collision: function() {
             for(var i = 0; i < food.foods.length; i++) {
                 if(snake.x === food.foods[i].x && snake.y === food.foods[i].y) {
-                    snake.length += 100;
+                    snake.length += 3;
                     food.foods.splice(i, 1);
                     food.create();
                 }
@@ -77,15 +77,15 @@ window.onload = function() {
                 }
             }
             
-            for(i = 0; i < snake2.tail.length; i++) {
-                if(snake.x === snake2.tail[i].x && snake.y === snake2.tail[i].y) {
+            for(i = 0; i < AI.tail.length; i++) {
+                if(snake.x === AI.tail[i].x && snake.y === AI.tail[i].y) {
                     snake.dead = true;
                 }
             }
             
-            /*if(snake.x < 0 || snake.y < 0 || snake.y === canvas.height || snake.x === canvas.width) {
+            if(snake.x < 0 || snake.y < 0 || snake.y === canvas.height || snake.x === canvas.width) {
                 snake.dead = true;
-            }*/
+            }
             if(snake.x < 0) {
                 snake.x = 500;
             } else if(snake.y < 0) {
@@ -406,9 +406,9 @@ window.onload = function() {
         c.fillRect(0, 0, canvas.width, canvas.height);
         
         snake.draw();
-        snake2.draw();
+        //snake2.draw();
         food.draw();
-        //AI.draw();
+        AI.draw();
     }
     
     setInterval(function() {

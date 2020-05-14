@@ -17,18 +17,21 @@ h2 {
 }
 
 .splash {
-  background-image: url('img/low-poly-lizard.png');
-  height: 50%; 
-  background-attachment: fixed;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  box-shadow: inset 0 0 100px black;
+	height: 50%; 
+	width: 100%; 
+	z-index: -2;
+}
+
+.splash-bgd { 
+	width: 100%; 
 }
 
 .splash-section {
-	padding-top: 15vh;
+	position: absolute;
+	top: 16%;
+	width: 100%;
 	text-align: center;
+	z-index: 1;
 	color: #fff;
 }
 
@@ -44,18 +47,22 @@ h2 {
 	margin: 30px 0;
 }
 
+.card-title {
+	color: #036458;
+}
+
 .about-text {
 	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
 	font-size: 1rem;
 	font-weight: 400;
 	line-height: 1.5;
-	color: #aaa;
+	color: #ccc;
 	text-align: left;
 }
 
 li > .about-text:hover {
   text-decoration: none;
-	color: #777;
+	color: #fff;
 }
 
 .footer-copyright {
@@ -64,10 +71,76 @@ li > .about-text:hover {
 	color: white;
 }
 
+.bg-light-green {
+	background-color: #047d6e;
+	color: #fff;
+}
+
 .bg-green {
 	background-color: #036458;
+	color: #fff;
 }
 
 .bg-dark-green {
 	background-color: #024b42;
+}
+
+.btn-info {
+	border-radius: 0%;
+	border: 0px;
+	letter-spacing: 2px;
+	background-color: #047d6e;
+}
+
+.modal-header {
+	border-radius: 2px;
+}
+
+.modal-body-text {
+	/* position: relative; */
+	padding: 10px;
+	width: 47%;
+	float: right;
+}
+
+.img_wrap {
+	position: relative;
+	width: 50%;
+	float: left;
+}
+
+.img_img {
+	width: 100%;
+	box-shadow: 0 0 10px #aaa;
+}
+
+.img_description_layer {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background: rgba(4,125,110,.4);
+	color: #fff;
+	visibility: hidden;
+	opacity: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	transition: opacity .2s, visibility .2s;
+}
+
+.img_wrap:hover .img_description_layer {
+	visibility: visible;
+	opacity: 1;
+}
+
+.img_description {
+	transition: .2s;
+	transform: translateY(1em);
+}
+
+.img_wrap:hover .img_description {
+	transform: translateY(0);
 }

@@ -14,14 +14,14 @@
 				<div class="row">
 					<div class="col-sm-8 col-md-7 py-4">
 						<h4 class="text-white">About</h4>
-						<p class="about-text">I'm a senior at Lane Tech, I have a big interest in computer science. This page is a collection of projects and things that are important to me. Some are computer science based, others are just things I've made for class or for my own interest. This isn't a complete list, but these are the projects that stand out to me.</p>
+						<p class="about-text">I'm a senior at Lane Tech, I have an invested interest in computer science. This page is a collection of projects and things that I think are worth sharing - some are computer science based, others are just for my own interest. This isn't a complete list, but these are the projects that stand out to me.</p>
 					</div>
 					<div class="col-sm-4 offset-md-1 py-4">
 						<h4 class="text-white">Skip Through:</h4>
 						<ul class="list-unstyled">
-							<li><a href="#2019" class="about-text"> 2018-2019</a></li>
-							<li><a href="#2017" class="about-text"> 2016-2017</a></li>
-							<li><a href="#2015" class="about-text"> 2014-2015</a></li>
+							<li><a href="#2019" class="about-text"> 2019-2020</a></li>
+							<li><a href="#2017" class="about-text"> 2017-2018</a></li>
+							<li><a href="#2015" class="about-text"> 2014-2016</a></li>
 						</ul>
 					</div>
 				</div>
@@ -40,14 +40,13 @@
 		</div>
    </header>
 		
-		
 	<div class="splash">
+		<canvas class="splash-bgd" id="canvas"></canvas>
 		<div class="splash-section">
 			<h1>Ian's Portfolio</h1>
-			<h2>here's a collection of a bunch of things i made</h2>
+			<h2>here's few things i've made</h2>
 		</div>
 	</div>
-	
 	
 	<div class="container">
 		<div class="alert alert-warning" role="alert">
@@ -57,24 +56,27 @@
 		<div class="card-deck" id="2019">
 			<div class="card">
 				<img class="card-img-top" src="img/supersuit.png" alt="Card image cap">
+				<button type="button" class="btn btn-info" onclick="showModal('supersuit')"> - see more - </button>
 				<div class="card-body">
-					<h5 class="card-title"><a href="https://idougherty.github.io/supersuit">SuperSuit</a></h5>
+					<h5 class="card-title">SuperSuit</h5>
 					<p class="card-text">This is 2 dimensional superhot miami inspired dungeon crawler game. This was made by a small team of students in 24 only hours at CodeDay Chicago.</br></p>
 					<p class="card-text"><small class="text-muted">2019</small></p>
 				</div>
 			</div>
 			<div class="card">
 				<img class="card-img-top" src="img/sqyrm.PNG" alt="Card image cap">
+				<button type="button" class="btn btn-info" onclick="showModal('sqyrm')"> - see more - </button>
 				<div class="card-body">
-					<h5 class="card-title"><a href="https://idougherty.github.io/sqyrm">Sqyrm</a></h5>
-					<p class="card-text">This is a small project I made to test a cool animation idea I had. A camera flies through a long tunnel of S shapes as they twist and change color.</p>
+					<h5 class="card-title">Sqyrm</h5>
+					<p class="card-text">A few javascript/canvas animations that I made with some transitions between them. Click to cycle through them, more features will be coming soon.</p>
 					<p class="card-text"><small class="text-muted">2019</small></p>
 				</div>
 			</div>
 			<div class="card">
 				<img class="card-img-top" src="img/cruiser.jpg" alt="Card image cap">
+				<button type="button" class="btn btn-info" onclick="showModal('cruiser')"> - see more - </button>
 				<div class="card-body">
-					<h5 class="card-title"><a href="">Wood Cruiser</a></h5>
+					<h5 class="card-title">Wood Cruiser</h5>
 					<p class="card-text">I wanted to make a custom deck for a cruiser for cheap, so I made one with help from my dad. The deck is a laminate of 4 maple sheets stained and sanded.</p>
 					<p class="card-text"><small class="text-muted">2019</small></p>
 				</div>
@@ -215,11 +217,46 @@
 				</div>
 			</div>
 		</div>
+
+		<div id="infoModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-lg modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header bg-light-green">
+						<h5 class="modal-title" id="exampleModalLongTitle">Description</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<svg class="bi bi-backspace-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+								<path fill-rule="evenodd" d="M15.683 3a2 2 0 00-2-2h-7.08a2 2 0 00-1.519.698L.241 7.35a1 1 0 000 1.302l4.843 5.65A2 2 0 006.603 15h7.08a2 2 0 002-2V3zM5.829 5.854a.5.5 0 11.707-.708l2.147 2.147 2.146-2.147a.5.5 0 11.707.708L9.39 8l2.146 2.146a.5.5 0 01-.707.708L8.683 8.707l-2.147 2.147a.5.5 0 01-.707-.708L7.976 8 5.829 5.854z" clip-rule="evenodd"/>
+							</svg>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="img_wrap">
+							<a id="mdlLink" href="https://idougherty.github.io/supersuit">
+								<img id="mdlImg" class="img_img" src="img/supersuit.png"/>
+								<div id="mdlOverlay" class="img_description_layer">
+									<p class="img_description">Click to visit.</p>
+								</div>
+							</a>
+						</div>
+
+						<div class="modal-body-text">
+							<h5 id="mdlTitle" class="card-title">aaa</h5>
+							<p id="mdlText" class="card-text">The premise of the game is that time only moves when you move. You play as Frozone from the incredibles and travel from floor to floor dodging bullets and killing enemies. This was made at a CodeDay Chicago event in under 24 hours with a few of my friends. For such a small time frame I'm very happy with how it came out, the time slowing effect came out feeling pretty natural and we added a few tracing effects to emphasize it. What I wish we could have improved on was spending a little more time on art and instructions for players and maybe adding a few more levels to the mix.</p>
+						</div>
+					</div>
+					<div class="modal-footer bg-light-green">
+						<button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>		
+		</div>
 	</div>
+	
 	
 <footer class="page-footer font-small special-color-dark pt-4">
   <div class="footer-copyright text-center py-3">2019 - Ian Dougherty - ianedougherty01@gmail.com</div>
 </footer>
 	
+<script type="text/javascript" src="marble.js"></script>
 </body>
 </html>

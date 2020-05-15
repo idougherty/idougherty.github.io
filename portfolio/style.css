@@ -43,6 +43,24 @@ h2 {
   box-shadow: 0 0 10px #ccc;
 }
 
+.card-top {
+	cursor: pointer;
+	width: 100%;
+	background-color: #047d6e;
+}
+
+.card-top:hover {
+    background-color: #17a2b8;
+}
+
+.btn-info {
+	border-radius: 0%;
+	border: 0px;
+	letter-spacing: 2px;
+	background-color: inherit;
+	width: 100%;
+}
+
 .card-deck {
 	margin: 30px 0;
 }
@@ -85,19 +103,11 @@ li > .about-text:hover {
 	background-color: #024b42;
 }
 
-.btn-info {
-	border-radius: 0%;
-	border: 0px;
-	letter-spacing: 2px;
-	background-color: #047d6e;
-}
-
 .modal-header {
 	border-radius: 2px;
 }
 
 .modal-body-text {
-	/* position: relative; */
 	padding: 10px;
 	width: 47%;
 	float: right;

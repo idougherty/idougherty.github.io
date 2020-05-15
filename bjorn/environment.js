@@ -22,7 +22,7 @@ function Environment() {
   }
 
   this.spawnAnimal = function(x, y) {
-    let chance = Math.random() * 40 + Math.min(player.size * 5, 60);
+    let chance = Math.random() * 50 + Math.min(player.size * 5, 60);
     const limit = 40;
 
     if(this.animals.length > limit) {
@@ -51,7 +51,7 @@ function Environment() {
     } else if(80 < chance && chance < 95) {
       let b = new Buck(x, y);
       this.animals.push(b);
-    } else if(95 < chance) {
+    } else if(96 < chance) {
       count = 0;
       for(let i = 0; i < this.animals.length; i++) {
         if(this.animals[i] instanceof Bear) {

@@ -78,51 +78,17 @@ for(let i = 0; i < 100; i++) {
   environment.details.push(w);
 }
 
-document.body.addEventListener('keydown', function(e) {
-  switch(e.which) {
-    case 87:
-      player.keyDown.up = true;
-      break;
-    case 83:
-      player.keyDown.down = true;
-      break;
-    case 65:
-      player.keyDown.left = true;
-      break;
-    case 68:
-      player.keyDown.right = true;
-      break;
-    case 16:
-      player.keyDown.shift = true;
-      break;
-    default:
-  }
+document.addEventListener("mousedown", function(e) {
+  player.biting = true;
 });
 
-document.body.addEventListener('keyup', function(e) {
-  switch(e.which) {
-    case 87:
-      player.keyDown.up = false;
-      break;
-    case 83:
-      player.keyDown.down = false;
-      break;
-    case 65:
-      player.keyDown.left = false;
-      break;
-    case 68:
-      player.keyDown.right = false;
-      break;
-    case 16:
-      player.keyDown.shift = false;
-      break;
-    default:
-  }
+document.addEventListener('mouseup', function(e) {
+  player.biting = false;
 });
 
-canvas.addEventListener('mousedown', function(e) {
-  player.bite(e.layerX, e.layerY);
-  //tree1.push([e.layerX, e.layerY]);
+canvas.addEventListener('mousemove', function(e) {
+  player.targetX = e.layerX;
+  player.targetY = e.layerY;
 });
 
 setInterval(function() {

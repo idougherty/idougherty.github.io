@@ -8,6 +8,15 @@ function showModal(card) {
 			$('#mdlLink').attr("href", "https://idougherty.github.io/supersuit/");
 			$('#mdlOverlay').show();
 			break;
+	
+		case "bjorn":
+			$('#mdlTitle').text("Bjorn");
+			$('#mdlText').text("You play as an orb that gets bigger the more it consumes, the goal is to be the biggest creature in the forest and defeat the bear. I made this game for a small game jam I organized with a few friends to pass time during quarantine, our theme was 'start small'. I'm very happy with how the game came out visually, but I am planning on flipping a few of the animal assets to be more detailed. This project was made in about a week but I have made a few changes since the deadline passed to polish it a little more.");
+
+			$('#mdlImg').attr("src", "img/bjorn.png");
+			$('#mdlLink').attr("href", "https://idougherty.github.io/bjorn/");
+			$('#mdlOverlay').show();
+			break;
 		
 		case "sqyrm":
 			$('#mdlTitle').text("Sqyrm");
@@ -20,11 +29,29 @@ function showModal(card) {
 			
 		case "cruiser":
 			$('#mdlTitle').text("Wood Cruiser");
-			$('#mdlText').text("");
+			$('#mdlText').text("This was a small project I did with my dad to learn a bit how skateboard decks are made. It's made from four quarter inch sheets of maple that were laminated together. Afterwards we sanded and stained the deck to make it look a little nicer. I think it's pretty nice but I would make a more ambitious shape if I were to do it again.");
 
 			$('#mdlImg').attr("src", "img/cruiser.jpg");
 			$('#mdlLink').attr("href", "");
 			$('#mdlOverlay').hide();
+			break;
+
+		case "portfolio":
+			$('#mdlTitle').text("This Portfolio");
+			$('#mdlText').text("This page was made with JQuery and Bootstrap. It originally had a splash image of a polygonal lizard, which has now been replaced with the spinning globe animation. Since then, I've also added pop ups so I can fit in more information about each project without cluttering the screen. I liked the challenge of creating my own website without a template and it has an added bonus of feeling a little different than others.");
+
+			$('#mdlImg').attr("src", "img/portfolio.png");
+			$('#mdlLink').attr("href", "");
+			$('#mdlOverlay').show();
+			break;
+			
+		case "sculpture":
+			$('#mdlTitle').text("Kinetic Sculpture");
+			$('#mdlText').text("This project was made for my physical computing class in collaboration with a sculpture class over the course of a few weeks. I worked with two art students who designed the dioramas and constructed the base. I used a raspberry pi with a camera module and which reads the average color of the center of the capture. The color is mapped to either red, green, blue, or other and then a dc motor spins the diagram to the appropriate side.");
+
+			$('#mdlImg').attr("src", "img/sculpture.png");
+			$('#mdlLink').attr("href", "https://drive.google.com/open?id=13J4Tn3dVhy3EZkFnjoBzgf5clTty8iMc");
+			$('#mdlOverlay').show();
 			break;
 		default:
 	}

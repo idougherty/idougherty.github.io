@@ -10,22 +10,13 @@ function Player() {
   this.baseRadius = 20;
   this.staticSize = 3;
   this.biteTimer = 100;
-  this.biteCoolDown = 7;
+  this.targetX = 0;
+  this.targetY = 0;
+  this.biteCoolDown = 3;
   this.speed = 10;
   this.particles = [];
   this.win = false;
-  
-  this.keyDown = {
-    up: false,
-    down: false,
-    left: false,
-    right: false,
-    shift: false,
-  };
-
-  this.biting = function() {
-    return this.biteTimer < this.biteCoolDown;
-  }
+  this.biting = false;
 
   this.bite = function(x, y) {
     if(this.biteTimer > this.biteCoolDown) {
@@ -35,10 +26,10 @@ function Player() {
 
       this.kx *= 0.2;
       this.ky *= 0.2;
-      this.vx *= 0.9;
-      this.vy *= 0.9;
-      this.vy += Math.sin(theta) * 1 * this.speed;
-      this.vx += Math.cos(theta) * 1 * this.speed;
+      this.vx *= 0.8;
+      this.vy *= 0.8;
+      this.vy += Math.sin(theta) * .5 * this.speed;
+      this.vx += Math.cos(theta) * .5 * this.speed;
     }
   };
 
@@ -48,7 +39,7 @@ function Player() {
     } else if(this.size * 3 < target.size) {
       return false;
     } else {
-      return Math.sqrt(this.vx * this.vx + this.vy * this.vy)*this.size >= Math.sqrt(target.vx * target.vx + target.vy * target.vy)*target.size*target.mass;
+      return Math.sqrt(this.vx * this.vx + this.vy * this.vy)*this.size*1.5 >= Math.sqrt(target.vx * target.vx + target.vy * target.vy)*target.size*target.mass;
     }
   };
 
@@ -85,7 +76,7 @@ function Player() {
         }
 
         if(target.health <= 0) {
-          this.size += Math.max((3 * target.size-this.size)/7, 0);
+          this.size += Math.max((3 * target.size-this.size)/10, 0);
         }
       }
     }
@@ -95,7 +86,7 @@ function Player() {
     this.move();
     this.collision();
 
-    if(this.biting()) {
+    if(this.biting) {
       const color = Math.floor(Math.random()*360);
       let p = new Particle(this.x, this.y, -this.vx/4, -this.vy/4, this.size, "hsla("+color+", 50%, 80%, .5)", this.size/8, .9);
       this.particles.push(p);
@@ -125,24 +116,19 @@ function Player() {
   };
 
   this.move = function() {
-    let ay = 0;
-    let ax = 0;
+    if(this.biting) {
+      this.bite(this.targetX, this.targetY);
+    }
+
     this.speed = this.size * 2 / 3;
 
-    ay = this.keyDown.up ? ay - this.speed/4 : ay;
-    ay = this.keyDown.down ? ay + this.speed/4 : ay;
-    ax = this.keyDown.left ? ax - this.speed/4 : ax;
-    ax = this.keyDown.right ? ax + this.speed/4 : ax;
-
-    this.vx *= this.biting() ? .98 : .94;
-    this.vy *= this.biting() ? .98 : .94;
+    this.vx *= this.biting ? .98 : .94;
+    this.vy *= this.biting ? .98 : .94;
     
     this.kx *= .94;
     this.ky *= .94;
 
-    if(!this.biting() && Math.sqrt(this.kx * this.kx + this.ky * this.ky) < .5) {
-      this.vy += ay;
-      this.vx += ax;
+    if(!this.biting && Math.sqrt(this.kx * this.kx + this.ky * this.ky) < .5) {
 
       const theta = Math.atan2(this.vy, this.vx);
       if(Math.sqrt(this.vx * this.vx + this.vy * this.vy) > this.speed) {

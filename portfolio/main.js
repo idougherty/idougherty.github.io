@@ -38,15 +38,24 @@ function showModal(card) {
 		
 		case "lava":
 			$('#mdlTitle').text("Lava");
-			$('#mdlText').text("A game where you fight other circles to stay on top, if you touch the lava you die. This project also uses Node.js so five players can play remotely at once. It used to be hosted on a Raspberry Pi from my basement, however it is not currently hosted anywhere.");
+			$('#mdlText').text("Point and click to jump and try to hit other players into the lava. This project uses Node.js and supports up to five remote players. It used to be hosted on a Raspberry Pi from my basement, however it is not currently hosted anywhere. For now, I have a video of some gameplay uploaded to my drive to see.");
 
 			$('#mdlImg').attr("src", "img/lava.png");
-			$('#mdlLink').attr("href", "https://idougherty.github.io/lava/");
+			$('#mdlLink').attr("href", "");
+			$('#mdlOverlay').show();
+			break;
+
+		case "basketball":
+			$('#mdlTitle').text("NBA 3K");
+			$('#mdlText').text("Use WASD to move and hold shift to charge a shot, the ball will shoot on release. This was my first project to use Node.js to allow for multiple computers to play. Development was started 8th grade, and polishing continued into junior year due to it's popularity. It was temporarily hosted on a Raspberry Pi in my basement, but it is not currently running. There is a video of some gameplay on my drive to see.");
+
+			$('#mdlImg').attr("src", "img/basketball.png");
+			$('#mdlLink').attr("href", "");
 			$('#mdlOverlay').show();
 			break;
 
 		case "cruiser":
-			$('#mdlTitle').text("Wood Cruiser");
+			$('#mdlTitle').text("Custom Cruiser Deck");
 			$('#mdlText').text("This was a small project I did with my dad to learn a bit how skateboard decks are made. It's made from four quarter inch sheets of maple that were laminated together. Afterwards we sanded and stained the deck to make it look a little nicer. I think it's pretty nice but I would make a more ambitious shape if I were to do it again.");
 
 			$('#mdlImg').attr("src", "img/cruiser.jpg");
@@ -56,7 +65,7 @@ function showModal(card) {
 
 		case "heely":
 			$('#mdlTitle').text("Custom Heely's");
-			$('#mdlText').text("I found a pair of size 6 childrens heely's at a thrift store and dug out the wheel components then stuck them on a shoe my size. They rolled pretty well and the material cost was only $6.");
+			$('#mdlText').text("I found a pair of size 6 childrens heely's at a thrift store then dug out the wheel components and stuck them on a shoe my size. They function just as well as standard heely's do and the material cost was only $6.");
 
 			$('#mdlImg').attr("src", "img/heely.jpg");
 			$('#mdlLink').attr("href", "");
@@ -78,6 +87,33 @@ function showModal(card) {
 
 			$('#mdlImg').attr("src", "img/sculpture.png");
 			$('#mdlLink').attr("href", "https://drive.google.com/open?id=13J4Tn3dVhy3EZkFnjoBzgf5clTty8iMc");
+			$('#mdlOverlay').show();
+			break;
+		
+		case "checkers":
+			$('#mdlTitle').text("Checkers AI");
+			$('#mdlText').text("I made this for a final project in my Intro to AI class, it uses a minimax algorithm to find the optimal move for a certain depth. I would like to come back and test more heuristics for scoring the board and also add pruning to allow for the algorithm to read more moves in advance. It can still beat me in its current state, but I welcome challengers. The program was written in python so the link will download the file.");
+
+			$('#mdlImg').attr("src", "img/checkers.png");
+			$('#mdlLink').attr("href", "https://idougherty.github.io/checkers.py");
+			$('#mdlOverlay').show();
+			break;
+		
+		case "feudalism":
+			$('#mdlTitle').text("Feudalism");
+			$('#mdlText').text("Use WASD to move and space to attack, press enter to start. This game is unfinished but the premise is you are a knight protecting a castle, and in return for fighting waves of enemies you can buy upgrades and weapons. This project taught me a lot about managing the scope of a game, there were many features I wanted to add, but ultimately the project was too large for the little experience with game development I had. Despite this, I am happy with how a lot of the art and style turned out for this game.");
+
+			$('#mdlImg').attr("src", "img/feudalism.png");
+			$('#mdlLink').attr("href", "https://idougherty.github.io/feudalism");
+			$('#mdlOverlay').show();
+			break;
+		
+		case "airhockey":
+			$('#mdlTitle').text("Car Airhockey");
+			$('#mdlText').text("Use WASD to move and space to attack, press enter to start. This game is unfinished but the premise is you are a knight protecting a castle, and in return for fighting waves of enemies you can buy upgrades and weapons. This project taught me a lot about managing the scope of a game, there were many features I wanted to add, but ultimately the project was too large for the little experience with game development I had. Despite this, I am happy with how a lot of the art and style turned out for this game.");
+
+			$('#mdlImg').attr("src", "img/airhockey.png");
+			$('#mdlLink').attr("href", "https://idougherty.github.io/airhockey");
 			$('#mdlOverlay').show();
 			break;
 		default:

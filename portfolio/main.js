@@ -9,9 +9,18 @@ function showModal(card) {
 			$('#mdlOverlay').show();
 			break;
 	
+		case "kangarookiller":
+			$('#mdlTitle').text("Kangaroo Killer");
+			$('#mdlText').text("This was made by a small team of students in only 24 hours at CodeDay Chicago.");
+
+			$('#mdlImg').attr("src", "img/kangarookiller.png");
+			$('#mdlLink').attr("href", "https://idougherty.github.io/kangaroo-killer/");
+			$('#mdlOverlay').show();
+			break;
+			
 		case "bjorn":
 			$('#mdlTitle').text("Bjorn");
-			$('#mdlText').text("You play as an orb that gets bigger the more it consumes, the goal is to be the biggest creature in the forest and defeat the bear. I made this game for a small game jam I organized with a few friends to pass time during quarantine, our theme was 'start small'. I'm very happy with how the game came out visually, but I am planning on flipping a few of the animal assets to be more detailed. This project was made in about a week but I have made a few changes since the deadline passed to polish it a little more.");
+			$('#mdlText').text("Point and click to move, eat animals to grow, but watch out for larger animals that can still damage you. I made this game for a small game jam I organized with a few friends to pass time during quarantine, our theme was 'start small'. I'm very happy with how the game came out visually, but I am planning on flipping a few of the animal assets to be more detailed. This project was made in about a week but I have made a few changes since the deadline passed to polish it a little more.");
 
 			$('#mdlImg').attr("src", "img/bjorn.png");
 			$('#mdlLink').attr("href", "https://idougherty.github.io/bjorn/");
@@ -26,7 +35,16 @@ function showModal(card) {
 			$('#mdlLink').attr("href", "https://idougherty.github.io/sqyrm/");
 			$('#mdlOverlay').show();
 			break;
-			
+		
+		case "lava":
+			$('#mdlTitle').text("Lava");
+			$('#mdlText').text("A game where you fight other circles to stay on top, if you touch the lava you die. This project also uses Node.js so five players can play remotely at once. It used to be hosted on a Raspberry Pi from my basement, however it is not currently hosted anywhere.");
+
+			$('#mdlImg').attr("src", "img/lava.png");
+			$('#mdlLink').attr("href", "https://idougherty.github.io/lava/");
+			$('#mdlOverlay').show();
+			break;
+
 		case "cruiser":
 			$('#mdlTitle').text("Wood Cruiser");
 			$('#mdlText').text("This was a small project I did with my dad to learn a bit how skateboard decks are made. It's made from four quarter inch sheets of maple that were laminated together. Afterwards we sanded and stained the deck to make it look a little nicer. I think it's pretty nice but I would make a more ambitious shape if I were to do it again.");
@@ -36,6 +54,15 @@ function showModal(card) {
 			$('#mdlOverlay').hide();
 			break;
 
+		case "heely":
+			$('#mdlTitle').text("Custom Heely's");
+			$('#mdlText').text("I found a pair of size 6 childrens heely's at a thrift store and dug out the wheel components then stuck them on a shoe my size. They rolled pretty well and the material cost was only $6.");
+
+			$('#mdlImg').attr("src", "img/heely.jpg");
+			$('#mdlLink').attr("href", "");
+			$('#mdlOverlay').hide();
+			break;
+	
 		case "portfolio":
 			$('#mdlTitle').text("This Portfolio");
 			$('#mdlText').text("This page was made with JQuery and Bootstrap. It originally had a splash image of a polygonal lizard, which has now been replaced with the spinning globe animation. Since then, I've also added pop ups so I can fit in more information about each project without cluttering the screen. I liked the challenge of creating my own website without a template and it has an added bonus of feeling a little different than others.");

@@ -59,7 +59,7 @@ function showModal(card) {
 			$('#mdlText').text("This was a small project I did with my dad to learn a bit how skateboard decks are made. It's made from four quarter inch sheets of maple that were laminated together. Afterwards we sanded and stained the deck to make it look a little nicer. I think it's pretty nice but I would make a more ambitious shape if I were to do it again.");
 
 			$('#mdlImg').attr("src", "img/cruiser.jpg");
-			$('#mdlLink').attr("href", "");
+			$('#mdlLink').attr("href", "javascript:void(0)");
 			$('#mdlOverlay').hide();
 			break;
 
@@ -68,7 +68,7 @@ function showModal(card) {
 			$('#mdlText').text("I found a pair of size 6 childrens heely's at a thrift store then dug out the wheel components and stuck them on a shoe my size. They function just as well as standard heely's do and the material cost was only $6.");
 
 			$('#mdlImg').attr("src", "img/heely.jpg");
-			$('#mdlLink').attr("href", "");
+			$('#mdlLink').attr("href", "javascript:void(0)");
 			$('#mdlOverlay').hide();
 			break;
 	
@@ -110,11 +110,110 @@ function showModal(card) {
 		
 		case "airhockey":
 			$('#mdlTitle').text("Car Airhockey");
-			$('#mdlText').text("Use WASD to move and space to attack, press enter to start. This game is unfinished but the premise is you are a knight protecting a castle, and in return for fighting waves of enemies you can buy upgrades and weapons. This project taught me a lot about managing the scope of a game, there were many features I wanted to add, but ultimately the project was too large for the little experience with game development I had. Despite this, I am happy with how a lot of the art and style turned out for this game.");
+			$('#mdlText').text("A local multiplayer airhockey game where you play as cars. Player 1 uses WASD and player 2 uses arrow keys to move. This was my first project written in java, the ball collision is still a little buggy but it works for the most part. The link will download the class files.");
 
 			$('#mdlImg').attr("src", "img/airhockey.png");
-			$('#mdlLink').attr("href", "https://idougherty.github.io/airhockey");
+			$('#mdlLink').attr("href", "https://idougherty.github.io/airhockey.zip");
 			$('#mdlOverlay').show();
+			break;
+		
+		case "traffic":
+			$('#mdlTitle').text("Traffic Simulator");
+			$('#mdlText').text("A simulation of a single 4 way intersection with traffic lights. This was used for my freshman year science fair project where I varied the timing of red lights to find a system with the greatest volume of traffic flow.");
+
+			$('#mdlImg').attr("src", "img/traffic.png");
+			$('#mdlLink').attr("href", "https://idougherty.github.io/traffic");
+			$('#mdlOverlay').show();
+			break;
+		
+		case "genetic":
+			$('#mdlTitle').text("Genetic Learning Project");
+			$('#mdlText').text("I wanted to create a system of nodes that over generations of fighting would gradually get more efficient. The nodes can adjust how fast they shoot and how often they change direction along with some other variables that impact their behavior. The experiment was pretty interesting and later generations showed some more promise, but the matches were not set up in a scaleable form so simulating took a long time. I might attempt an evolution algorithm again with more complicated behaviors or different game.");
+			
+			$('#mdlImg').attr("src", "img/genetic.png");
+			$('#mdlLink').attr("href", "https://idougherty.github.io/geneticAI");
+			$('#mdlOverlay').show();
+			break;
+		
+		case "thesaurus":
+			$('#mdlTitle').text("Equivalent Word Optical Device App");
+			$('#mdlText').text("A web app I made for my final project in Programming 1. It loops through a string of words and fetches the longest synonym it can find in a thesaurus API. It doesn't have a lot of practical use but it can give some amusing translations.");
+
+			$('#mdlImg').attr("src", "img/thesaurus.png");
+			$('#mdlLink').attr("href", "https://idougherty.github.io/thesaurus");
+			$('#mdlOverlay').show();
+			break;
+	
+		case "simplegame":
+			$('#mdlTitle').text("UFO Side Scroller");
+			$('#mdlText').text("Use the up and down arrow keys to dodge the asteroids and pick up coins to boost your score. This is a small game I made for a web development project. The game is pretty simple itself, but I'm most happy with the damage animations for the character and scrolling background.");
+
+			$('#mdlImg').attr("src", "img/simplegame.png");
+			$('#mdlLink').attr("href", "https://idougherty.github.io/simplegame");
+			$('#mdlOverlay').show();
+			break;
+
+		case "dog":
+			$('#mdlTitle').text("Rainbow Dog Head");
+			$('#mdlText').text("I found this plaster dog head on sale and painted it. It is usually dressed appropriate to the season and has a pair of glasses or shades on.");
+
+			$('#mdlImg').attr("src", "img/dog.jpg");
+			$('#mdlLink').attr("href", "javascript:void(0)");
+			$('#mdlOverlay').hide();
+			break;
+
+		case "fireworks":
+			$('#mdlTitle').text("Particle Fireworks");
+			$('#mdlText').text("I saw the canvas globalCompositeOperation variable and thought that it might look cool in a fire simulation. I added a rising emitter that explodes at its peak and I got a little firework demo.")
+
+			$('#mdlImg').attr("src", "img/fireworks.png");
+			$('#mdlLink').attr("href", "https://idougherty.github.io/particles/fireworks.html");
+			$('#mdlOverlay').show();
+			break;
+	
+		case "library":
+			$('#mdlTitle').text("Library App");
+			$('#mdlText').text("A webapp I made for my web development class that uses the Chicago Library API to retrieve locations and info of libraries in Chicago. I also used the google maps API to add markers on a map with some information about each library.")
+
+			$('#mdlImg').attr("src", "img/library.png");
+			$('#mdlLink').attr("href", "https://idougherty.github.io/libapp");
+			$('#mdlOverlay').show();
+			break;
+
+		case "dodge":
+			$('#mdlTitle').text("Laser Dodging Game");
+			$('#mdlText').text("Use the arrow keys to go move through gaps in the lasers as they get faster and faster. I drew every new frame with a slightly transparent alpha value which added the tracing effect that I used in many future games.")
+
+			$('#mdlImg').attr("src", "img/dodge.png");
+			$('#mdlLink').attr("href", "https://idougherty.github.io/dodge");
+			$('#mdlOverlay').hide();
+			break;
+
+		case "school":
+			$('#mdlTitle').text("Student Initiative Project");
+			$('#mdlText').text("A website I made with bootstrap for an english project where we needed to design a school. This was my introduction to bootstrap and I used a lot of features from their tutorial pages and tweaked them to fit the design.")
+
+			$('#mdlImg').attr("src", "img/school.jpg");
+			$('#mdlLink').attr("href", "https://idougherty.github.io/studentinit");
+			$('#mdlOverlay').show();
+			break;
+	
+		case "tank":
+			$('#mdlTitle').text("Tank Shooter");
+			$('#mdlText').text("A demo I made using javascript and a canvas element for a turret that could shoot towards the mouse cursor. This was an introduction to mouse eventlisteners and drawing rotated shapes using canvas transformation functions.");
+
+			$('#mdlImg').attr("src", "img/tank.png");
+			$('#mdlLink').attr("href", "https://idougherty.github.io/tankthing.html");
+			$('#mdlOverlay').show();
+			break;
+
+		case "spook":
+			$('#mdlTitle').text("Spook.html");
+			$('#mdlText').text("A website that screams after 20 minutes - I also added a button to change the time for varying use cases. In 7th grade I would open this up on a school computer in minimized window and the next period's computer would start screaming. It was very simple but very effective.")
+
+			$('#mdlImg').attr("src", "img/spook.png");
+			$('#mdlLink').attr("href", "https://idougherty.github.io/spook.html");
+			$('#mdlOverlay').hide();
 			break;
 		default:
 	}
@@ -130,6 +229,7 @@ function Node(x, y, z) {
 	this.x = x;
 	this.y = y;
 	this.z = z;
+	this.offset = 0;
 	this.color = this.y * 18;
 	this.base = 30;
 
@@ -144,7 +244,9 @@ function Node(x, y, z) {
 	};
 
 	this.draw = function(distance, pitch, yaw, roll) {
-		const p1 = this.rotatePoint(pitch, this.z, this.y);
+		this.offset = this.color/720 - .5;
+
+		const p1 = this.rotatePoint(pitch, this.z, this.y + this.offset);
 		const p2 = this.rotatePoint(yaw, this.x, p1[0]);
 		const p3 = this.rotatePoint(roll, p2[0], p1[1]);
 
@@ -152,15 +254,16 @@ function Node(x, y, z) {
 		const ny = p3[1];
 		const nz = p2[1];
 
+
 		const size = 5 / (nz + distance);
 		var alpha = (7 - nz)/5;
 
-		imageX = nx * size * 200 + canvas.width/2;
+		imageX = nx * size * 200 + canvas.width*3/4;
 		imageY = ny * size * 200 + canvas.height/2;
 
 		this.color = this.color + 2 > 360 ? 0 : this.color + 2;
 		
-		c.fillStyle = "hsla("+this.color+", 75%, 50%, "+alpha+")";
+		c.fillStyle = "hsla("+this.color+", 75%, 20%, "+alpha+")";
 		c.beginPath();
 		c.arc(imageX, imageY, size * this.base, 0, 2 * Math.PI);
 		c.closePath();
@@ -221,29 +324,37 @@ function MarbleRunner() {
 var controller = new MarbleRunner();
 controller.setup();
 
-function resizeCanvas() {
-	canvas.width = window.innerWidth;
-	canvas.height = window.innerHeight/2;
+// function resizeCanvas() {
+// 	canvas.width = window.innerWidth;
+// 	canvas.height = window.innerWidth*.4;
 	
-	c.globalCompositeOperation = controller.blendMode;
-}
+// 	c.globalCompositeOperation = controller.blendMode;
+// }
 
-window.onresize = resizeCanvas;
-resizeCanvas();
+// window.onresize = resizeCanvas;
+// resizeCanvas();
+canvas.width = 1600;
+canvas.height = 640;
+
 
 setInterval(function() {	
-	c.globalCompositeOperation = "lighter";
-	c.clearRect(0, 0, canvas.width, canvas.height);
-	c.fillStyle = "black";
-	c.fillRect(0, 0, canvas.width, canvas.height);
-	
-    controller.update();
-    
     c.globalCompositeOperation = "source-over";
-    var grd = c.createRadialGradient(canvas.width/2, canvas.height/2, 0, canvas.width/2, canvas.height/2, canvas.width);
-    grd.addColorStop(0, "rgba(16, 64, 48, 0.3)");
-    grd.addColorStop(1, "rgba(0, 0, 0, 1)");
+    var grd = c.createRadialGradient(canvas.width * 3/4, canvas.height/2, 0, canvas.width/2, canvas.height/2, canvas.width*2);
+    grd.addColorStop(0, "rgba(16, 32, 24, 0.2)");
+	grd.addColorStop(1, "rgba(0, 0, 0, 1)");
 
     c.fillStyle = grd;
     c.fillRect(0, 0, canvas.width, canvas.height);
+	
+	c.globalCompositeOperation = "lighter";
+	
+    controller.update();
+    
+    // c.globalCompositeOperation = "source-over";
+    // var grd = c.createRadialGradient(canvas.width/2, canvas.height/2, 0, canvas.width/2, canvas.height/2, canvas.width);
+    // grd.addColorStop(0, "rgba(16, 64, 48, 0.1)");
+    // grd.addColorStop(1, "rgba(0, 0, 0, 1)");
+
+    // c.fillStyle = grd;
+    // c.fillRect(0, 0, canvas.width, canvas.height);
 }, 20);

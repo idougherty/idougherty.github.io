@@ -50,7 +50,7 @@
 	
 	<div class="container">
 		<div class="alert alert-warning" role="alert">
-			This page is still under construction!
+			This page is still under construction! Contact me at <b> ianedougherty01@gmail.com </b> if you have any issues or concerns.
 		</div>
 		
 		<div class="card-deck" id="2019">
@@ -72,7 +72,7 @@
 				</div>
 				<div class="card-body">
 					<h5 class="card-title">Sqyrm</h5>
-					<p class="card-text">A few javascript/canvas animations that I made with some transitions between them. Click to cycle through.</p>
+					<p class="card-text">A few javascript/canvas animations that I made with some transitions between them.</p>
 					<p class="card-text"><small class="text-muted">2017 - 2020</small></p>
 				</div>
 			</div>
@@ -210,18 +210,24 @@
 				</div>
 			</div>
 			<div class="card">
-				<img class="card-img-top" src="img/traffic.png" alt="Card image cap">
+				<div class="card-top">
+					<img class="card-img-top" src="img/traffic.png" alt="Card image cap" onclick="showModal('traffic')">
+					<button type="button" class="btn btn-info" onclick="showModal('traffic')"> - see more - </button>
+				</div>
 				<div class="card-body">
-					<h5 class="card-title">Traffic</h5>
-					<p class="card-text"></br></br></p>
+					<h5 class="card-title">Traffic Simulator</h5>
+					<p class="card-text">A traffic light simulation I made for freshman year science fair.</p>
 					<p class="card-text"><small class="text-muted">2017</small></p>
 				</div>
 			</div>
 			<div class="card">
-				<img class="card-img-top" src="img/genetic.png" alt="Card image cap">
+				<div class="card-top">
+					<img class="card-img-top" src="img/genetic.png" alt="Card image cap" onclick="showModal('genetic')">
+					<button type="button" class="btn btn-info" onclick="showModal('genetic')"> - see more - </button>
+				</div>
 				<div class="card-body">
 					<h5 class="card-title">Genetic Learning Project</h5>
-					<p class="card-text"></p>
+					<p class="card-text">An attempt at making bots that would evolve to be better at combat.</p>
 					<p class="card-text"><small class="text-muted">2017</small></p>
 				</div>
 			</div>
@@ -229,15 +235,21 @@
 		
 		<div class="card-deck" id="2017">
 			<div class="card">
-				<img class="card-img-top" src="img/thesaurus.png" alt="Card image cap">
+				<div class="card-top">
+					<img class="card-img-top" src="img/thesaurus.png" alt="Card image cap" onclick="showModal('thesaurus')">
+					<button type="button" class="btn btn-info" onclick="showModal('thesaurus')"> - see more - </button>
+				</div>
 				<div class="card-body">
-					<h5 class="card-title">Thesaurus</h5>
-					<p class="card-text">This is a project I made for my final for Programming 1. It takes a string of words, and replaces each word with it's longest synonym using a thesaurus API.</p>
+					<h5 class="card-title">Thesaurus App</h5>
+					<p class="card-text">An app that replaces each word with it's longest synonym using a thesaurus API.</p>
 					<p class="card-text"><small class="text-muted">2016</small></p>
 				</div>
 			</div>
 			<div class="card">
-				<img class="card-img-top" src="img/simplegame.PNG" alt="Card image cap">
+				<div class="card-top">
+					<img class="card-img-top" src="img/simplegame.png" alt="Card image cap" onclick="showModal('simplegame')">
+					<button type="button" class="btn btn-info" onclick="showModal('simplegame')"> - see more - </button>
+				</div>
 				<div class="card-body">
 					<h5 class="card-title">UFO Side Scroller</h5>
 					<p class="card-text">A simple game where the objective is to avoid all the asteroids and pick up as many coins as you can. </br></br></p>
@@ -245,7 +257,10 @@
 				</div>
 			</div>
 			<div class="card">
-				<img class="card-img-top" src="img/dog.jpg" alt="Card image cap">
+				<div class="card-top">
+					<img class="card-img-top" src="img/dog.jpg" alt="Card image cap" onclick="showModal('dog')">
+					<button type="button" class="btn btn-info" onclick="showModal('dog')"> - see more - </button>
+				</div>
 				<div class="card-body">
 					<h5 class="card-title">Rainbow Dog Head</h5>
 					<p class="card-text">A painted plaster dog head. I occasionally put glasses and hats on it.</p>
@@ -256,26 +271,35 @@
 
 		<div class="card-deck" id="2015">
 			<div class="card">
-				<img class="card-img-top" src="img/fireworks.png" alt="Card image cap">
+				<div class="card-top">
+					<img class="card-img-top" src="img/fireworks.png" alt="Card image cap" onclick="showModal('fireworks')">
+					<button type="button" class="btn btn-info" onclick="showModal('fireworks')"> - see more - </button>
+				</div>
 				<div class="card-body">
 					<h5 class="card-title">Fireworks</h5>
-					<p class="card-text">A small particle simulation of fireworks rising and exploding. I did this as a test for a fire effect idea I had for javascript canvases.</p>
+					<p class="card-text">A small particle simulation of fireworks rising and exploding.</p>
 					<p class="card-text"><small class="text-muted">2015</small></p>
 				</div>
 			</div>
 			<div class="card">
-				<img class="card-img-top" src="img/library.png" alt="Card image cap">
+				<div class="card-top">
+					<img class="card-img-top" src="img/library.png" alt="Card image cap" onclick="showModal('library')">
+					<button type="button" class="btn btn-info" onclick="showModal('library')"> - see more - </button>
+				</div>
 				<div class="card-body">
 					<h5 class="card-title">Library App</h5>
-					<p class="card-text">A small webpage that maps libraries in Chicago using the Chicago Library API and the Google Maps API. This was made for my Web Development class in 8th grade.</p>
+					<p class="card-text">A small webpage that maps libraries in Chicago using the Chicago Library API and the Google Maps API.</p>
 					<p class="card-text"><small class="text-muted">2015</small></p>
 				</div>
 			</div>
 			<div class="card">
-				<img class="card-img-top" src="img/dodge.png" alt="Card image cap">
+				<div class="card-top">
+					<img class="card-img-top" src="img/dodge.png" alt="Card image cap" onclick="showModal('dodge')">
+					<button type="button" class="btn btn-info" onclick="showModal('dodge')"> - see more - </button>
+				</div>
 				<div class="card-body">
 					<h5 class="card-title">Dodge</h5>
-					<p class="card-text">This was one of the first games I made, the player is a square that must jump through gaps in lazers to survive.</p>
+					<p class="card-text">Play as a square that must jump through gaps in lazers to survive.</p>
 					<p class="card-text"><small class="text-muted">2015</small></p>
 				</div>
 			</div>
@@ -283,43 +307,37 @@
 		
 		<div class="card-deck">
 			<div class="card">
-				<img class="card-img-top" src="img/school.jpg" alt="Card image cap">
+				<div class="card-top">
+					<img class="card-img-top" src="img/school.jpg" alt="Card image cap" onclick="showModal('school')">
+					<button type="button" class="btn btn-info" onclick="showModal('school')"> - see more - </button>
+				</div>
 				<div class="card-body">
 					<h5 class="card-title">Student Initiative Project</h5>
-					<p class="card-text"></p>
+					<p class="card-text">A website I made to go along with a presentation for a project in my english class.</p>
 					<p class="card-text"><small class="text-muted">2014</small></p>
 				</div>
 			</div>
 			<div class="card">
-				<img class="card-img-top" src="img/dice.png" alt="Card image cap">
-				<div class="card-body">
-					<h5 class="card-title">DND Dice Roller</h5>
-					<p class="card-text"></p>
-					<p class="card-text"><small class="text-muted">2014</small></p>
+				<div class="card-top">
+					<img class="card-img-top" src="img/tank.png" alt="Card image cap" onclick="showModal('tank')">
+					<button type="button" class="btn btn-info" onclick="showModal('tank')"> - see more - </button>
 				</div>
-			</div>
-			<div class="card">
-				<img class="card-img-top" src="img/tank.png" alt="Card image cap">
 				<div class="card-body">
 					<h5 class="card-title">Tank Shooter</h5>
-					<p class="card-text"></p>
+					<p class="card-text">A demo I made to test shooting a bullet in different directions.</p>
 					<p class="card-text"><small class="text-muted">2014</small></p>
 				</div>
 			</div>
-		</div>
-
-		<div class="card-deck">
 			<div class="card">
-				<img class="card-img-top" src="img/spook.png" alt="Card image cap">
+				<div class="card-top">
+					<img class="card-img-top" src="img/spook.png" alt="Card image cap" onclick="showModal('spook')">
+					<button type="button" class="btn btn-info" onclick="showModal('spook')"> - see more - </button>
+				</div>
 				<div class="card-body">
 					<h5 class="card-title">Spook.html</h5>
-					<p class="card-text">This is a website I made in 8th grade to prank one of my friends that used the same computer as me. After a 20 minute timer a goat scream plays.</p>
+					<p class="card-text">A website that plays a goat scream after a 20 minute timer.</p>
 					<p class="card-text"><small class="text-muted">2014</small></p>
 				</div>
-			</div>
-			<div class="card" style="visibility: hidden">
-			</div>
-			<div class="card" style="visibility: hidden">
 			</div>
 		</div>
 

@@ -22,22 +22,26 @@ h2 {
 }
 
 .splash {
-	height: 50%; 
+	height: 40vw; 
 	width: 100%; 
 	z-index: -2;
+	position: relative;
 }
 
 .splash-bgd { 
-	width: 100%; 
+	width: 100%;
+	height: 100%;
 }
 
 .splash-section {
 	position: absolute;
-	top: 20vh;
-	width: 100%;
-	text-align: center;
+	width: 60%;
+	top: 50%;
+	transform: translate(0, -50%);
+	padding: 10vw;
+	text-align: left;
 	z-index: 1;
-	font-size: 1.5vh;
+	font-size: 1vw;
 	color: #fff;
 }
 
@@ -55,7 +59,7 @@ h2 {
 	background-color: #047d6e;
 }
 
-.card-top:hover {
+.card-top:hover, .btn-info:hover {
     background-color: #17a2b8;
 }
 
@@ -113,10 +117,15 @@ li > .about-text:hover {
 	border-radius: 2px;
 }
 
+.modal-footer {
+	border-radius: 2px;
+}
+
 .modal-body-text {
 	padding: 10px;
 	width: 47%;
 	float: right;
+	color: #454;
 }
 
 .img_wrap {

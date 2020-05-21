@@ -26,7 +26,7 @@
                 bg_colour = Math.floor(Math.random() * 16777215).toString(16);
                 bg_colour = "#" + ("000000" + bg_colour).slice(-6);
                 document.bgColor = bg_colour;
-            }, 1);
+            }, 500);
         }
         
         function getRandomColor() {
@@ -44,7 +44,7 @@
             seizure();
             setInterval(function() {
                 spook.play();
-                //$("#spooky").append("<p style='position: absolute; top: "+Math.random()*90+"%; left: "+Math.random()*90+"%; -webkit-transform: rotate("+Math.random() * 180+"deg); color: "+getRandomColor()+"; font-size: "+(Math.random()*10 + 10)+"px;'>get spooked on.</p>");
+                $("#spooky").append("<p style='position: absolute; top: "+Math.random()*90+"%; left: "+Math.random()*90+"%; -webkit-transform: rotate("+Math.random() * 180+"deg); color: "+getRandomColor()+"; font-size: "+(Math.random()*10 + 10)+"px;'>get spooked on.</p>");
             }, 100);
         }
         

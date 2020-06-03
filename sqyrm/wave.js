@@ -18,7 +18,7 @@ function Wave(color, age, modifiers) {
 
         for(var i = 0; i < this.points.length; i++) {
             const x = this.points[i][0];
-            const pNoise = noise.simplex2((x + 10)/8 * this.modifiers.stretch, this.age/100 * this.modifiers.stretch);
+            const pNoise = noise.simplex2((x + 10)/8 * this.modifiers.stretch, this.age/100);
             const pHeight = this.modifiers.amplitude * pNoise + this.modifiers.concavity * Math.cos(x/6) + 3;
             
             this.points[i][1] = pHeight;
@@ -56,7 +56,7 @@ function Wave(color, age, modifiers) {
 		this.distance -= .03;
 		this.size = 200/this.distance;
 		
-		if(this.distance <= 0) {
+		if(this.distance <= 0.2) {
 			return "kill";
 		}
 	};
@@ -65,14 +65,14 @@ function Wave(color, age, modifiers) {
 function WaveRunner() {
     this.clock = 0;
 	this.timer = 0;
-	this.frequency = 6;
+	this.frequency = 8;
 	this.spawnHue = 0;
 	this.blendMode = "lighter";
     this.waves = [];
 
     this.modifiers = {
-        amplitude: Math.random() + .5,
-        stretch: Math.random() + .5,
+        amplitude: Math.random() / 2 + .5,
+        stretch: Math.random() / 2 + .5,
         concavity: Math.random() * 6,
     };
 	
@@ -82,9 +82,9 @@ function WaveRunner() {
         noise.seed(Math.random());
     };
     
-    this.modifyModifier = function(value, min, max) {
+    this.modifyModifier = function(value, min, max, denom) {
         const range = max - min;
-        value += (Math.random() - .5) * range / 10;
+        value += (Math.random() - .5) * range / denom;
         
         return Math.min(Math.max(value, min), max);
     };
@@ -93,9 +93,9 @@ function WaveRunner() {
         this.timer++;
         this.clock++;
 
-        this.modifiers.amplitude = this.modifyModifier(this.modifiers.amplitude, .5, 1.5);
-        this.modifiers.stretch = this.modifyModifier(this.modifiers.stretch, .5, 1);
-        this.modifiers.concavity = this.modifyModifier(this.modifiers.concavity, 0, 6);
+        this.modifiers.amplitude = this.modifyModifier(this.modifiers.amplitude, .5, 1, 10);
+        this.modifiers.stretch = this.modifyModifier(this.modifiers.stretch, .5, 1, 30);
+        this.modifiers.concavity = this.modifyModifier(this.modifiers.concavity, 2, 6, 10);
 		
 		//spawn lines
 		if(this.timer >= this.frequency) {

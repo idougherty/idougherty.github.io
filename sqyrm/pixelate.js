@@ -47,10 +47,10 @@ function Pixelate() {
 				i += canvas.width * 4;
 			}
 
-			if(data[i] > 10 || data[i+1] > 10 || data[i+2] > 10) {
+			if(data[i] > 50 || data[i+1] > 50 || data[i+2] > 50) {
 				var x = (i/4)%canvas.width;
 				var y = Math.floor((i/4)/canvas.width);
-				var color = "rgb("+data[i]+", "+data[i+1]+", "+data[i+2]+")";
+				var color = "rgb("+data[i]+", "+data[i+1]+", "+data[i+2]+", .2)";
 				
 				this.pixels.push(new Pixel(x, y, color, 10));
 			}

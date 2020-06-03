@@ -2,8 +2,10 @@ function Node(x, y, z) {
 	this.x = x;
 	this.y = y;
 	this.z = z;
-	this.color = this.y * 18;
+	this.offset = 0;
+	this.color = (this.y + 10) * 18;
 	this.base = 30;
+	this.opacity = 0;
 
 	this.rotatePoint = function(angle, x, y) {
 		const sin = Math.sin(angle);
@@ -16,7 +18,12 @@ function Node(x, y, z) {
 	};
 
 	this.draw = function(distance, pitch, yaw, roll) {
-		const p1 = this.rotatePoint(pitch, this.z, this.y);
+		this.offset = this.color/720 - .5;
+		if(this.color == 0) {
+			this.opacity = 1;
+		}
+
+		const p1 = this.rotatePoint(pitch, this.z, this.y + this.offset);
 		const p2 = this.rotatePoint(yaw, this.x, p1[0]);
 		const p3 = this.rotatePoint(roll, p2[0], p1[1]);
 
@@ -24,15 +31,16 @@ function Node(x, y, z) {
 		const ny = p3[1];
 		const nz = p2[1];
 
+
 		const size = 5 / (nz + distance);
-		var alpha = (7 - nz)/5;
+		var alpha = (7 - nz)/6 * this.opacity;
 
 		imageX = nx * size * 200 + canvas.width/2;
 		imageY = ny * size * 200 + canvas.height/2;
 
 		this.color = this.color + 2 > 360 ? 0 : this.color + 2;
 		
-		c.fillStyle = "hsla("+this.color+", 75%, 50%, "+alpha+")";
+		c.fillStyle = "hsla("+this.color+", 75%, 10%, "+alpha+")";
 		c.beginPath();
 		c.arc(imageX, imageY, size * this.base, 0, 2 * Math.PI);
 		c.closePath();
@@ -75,8 +83,8 @@ function MarbleRunner() {
 	this.update = function() {
 		this.timer++;
 		this.yaw = 2 * Math.PI * Math.sin(this.timer/800);
-		this.pitch = Math.PI / 8 * Math.sin(this.timer/500);
-		this.roll = Math.PI / 8 * Math.sin(this.timer/100);
+		this.pitch = Math.PI / 16 * Math.sin(this.timer/500);
+		this.roll = Math.PI / 16 * Math.sin(this.timer/100);
 		
 		// this.nodes.sort(function(a, b) {
 		// 	return a.z - b.z;

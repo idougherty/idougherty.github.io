@@ -41,9 +41,9 @@ function Sqyrm(color, angle, dda) {
 		
 		var alpha = (19-this.distance)/20;
 		
-		c.strokeStyle = "hsla("+this.color+", 75%, 50%, "+alpha+")";
+		c.strokeStyle = "hsla("+this.color+", 75%, 10%, "+alpha+")";
 		c.lineCap = "round";
-		c.lineWidth = 5/this.distance;
+		c.lineWidth = 7/this.distance;
 		c.stroke();
 		
 		this.timer++;

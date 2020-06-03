@@ -1,4 +1,3 @@
-
 canvas = document.getElementById("canvas");
 c = canvas.getContext("2d");
 
@@ -31,7 +30,7 @@ function Controller() {
 	}
 	
 	this.pickTransition = function() {
-		this.transitionIDX = Math.floor(Math.random()*this.transitions.length);
+		this.transitionIDX = 1;//Math.floor(Math.random()*this.transitions.length);
 
 		switch(this.transitions[this.transitionIDX]) {
 			case "pixelate":
@@ -72,18 +71,19 @@ function triggerTransition() {
 document.addEventListener("click", triggerTransition);
 
 setInterval(function() {	
-	// c.globalCompositeOperation = "source-over";
-	c.clearRect(0, 0, canvas.width, canvas.height);
-	c.fillStyle = "black";//"rgba(0, 0, 0, .02)";
-	c.fillRect(0, 0, canvas.width, canvas.height);
+    c.globalCompositeOperation = "source-over";
+
+    c.fillStyle = "rgba(0, 0, 0, .2)";
+    c.fillRect(0, 0, canvas.width, canvas.height);
+	
+	c.globalCompositeOperation = "lighter";
+	
 	
 	controller.display.update();
 
-	if(controller.transition) {
-		if(!controller.display.working) {
-			controller.transition = false;
-			controller.pickDisplay();
-			controller.display.setup();
-		}
+	if(controller.display.working != undefined && !controller.display.working) {
+		controller.transition = false;
+		controller.pickDisplay();
+		controller.display.setup();
 	}
 }, 20);

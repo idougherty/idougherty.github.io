@@ -324,15 +324,6 @@ function MarbleRunner() {
 var controller = new MarbleRunner();
 controller.setup();
 
-// function resizeCanvas() {
-// 	canvas.width = window.innerWidth;
-// 	canvas.height = window.innerWidth*.4;
-	
-// 	c.globalCompositeOperation = controller.blendMode;
-// }
-
-// window.onresize = resizeCanvas;
-// resizeCanvas();
 canvas.width = 1600;
 canvas.height = 640;
 
@@ -349,12 +340,4 @@ setInterval(function() {
 	c.globalCompositeOperation = "lighter";
 	
     controller.update();
-    
-    // c.globalCompositeOperation = "source-over";
-    // var grd = c.createRadialGradient(canvas.width/2, canvas.height/2, 0, canvas.width/2, canvas.height/2, canvas.width);
-    // grd.addColorStop(0, "rgba(16, 64, 48, 0.1)");
-    // grd.addColorStop(1, "rgba(0, 0, 0, 1)");
-
-    // c.fillStyle = grd;
-    // c.fillRect(0, 0, canvas.width, canvas.height);
 }, 20);

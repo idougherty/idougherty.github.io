@@ -85,6 +85,7 @@ function MarbleRunner() {
 		this.yaw = 2 * Math.PI * Math.sin(this.timer/800);
 		this.pitch = Math.PI / 16 * Math.sin(this.timer/500);
 		this.roll = Math.PI / 16 * Math.sin(this.timer/100);
+		const d = this.distance + 2 * Math.sin(this.timer/1000);
 		
 		// this.nodes.sort(function(a, b) {
 		// 	return a.z - b.z;
@@ -92,7 +93,7 @@ function MarbleRunner() {
 
 		for(var i = this.nodes.length-1; i >= 0; i--) {
 			if(!earthPixels[i]) {
-				this.nodes[i].draw(this.distance, this.pitch, this.yaw, this.roll);
+				this.nodes[i].draw(d, this.pitch, this.yaw, this.roll);
 			}
 		}
 	};

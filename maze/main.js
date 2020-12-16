@@ -9,32 +9,108 @@ function resizeCanvas() {
 window.onresize = resizeCanvas;
 resizeCanvas();
 
-function Point(x, y, z) {
+function Node(val, key = function (k) {return k}) {
+	this.key = key;
+	this.val = val;
+	this.left = null;
+	this.right = null;
+
+	this.insert = function(node) {
+		if(node.key > this.key) {
+			if(this.right) {
+				this.right.insert(node);
+			} else {
+				this.right = node;
+			}
+		} else {
+			if(this.left) {
+				this.left.insert(node);
+			} else {
+				this.left = node;
+			}
+		}
+	};
+
+	this.toString = function() {
+		return this.val;
+	};
+
+	this.iter = function*() {
+		if(this.left) {
+			yield* this.left.iter();
+		}
+
+		yield this.val;
+
+		if(this.right) {
+			yield* this.right.iter();
+		}
+	}
+}
+
+function SortedBinaryTree() {
+	this.root = null;
+
+	this.insert = function(key, val) {
+		let node = new Node(key, val);
+
+		if(!this.root) {
+			this.root = node;
+			return;
+		}
+		
+		if(key > this.root.key) {
+			if(this.root.right) {
+				this.root.right.insert(node);
+			} else {
+				this.root.right = node;
+			}
+		} else {
+			if(this.root.left) {
+				this.root.left.insert(node);
+			} else {
+				this.root.left = node;
+			}
+		}
+	};
+
+	this.iter = function*() {
+		yield* this.root.iter();
+	}
+}
+
+function Point(x, y, z, nx, ny, nz) {
 	this.x = x;
 	this.y = y;
 	this.z = z;
+	this.nx = nx;
+	this.ny = ny;
+	this.nz = nz;
+	this.visible = true;
 	this.imageX = 0;
 	this.imageY = 0;
+	this.camDist = 0;
 }
 
-function Plane(points, color, middle) {
+function Plane(points, color) {
 	this.points = points;
 	this.color = color;
-	this.middle = middle;
+	this.zIndex = 0;
 }
 
 function Camera() {
     this.x = 0;
     this.y = 0;
-	this.z = 2;
+	this.z = 3;
 
-    this.fov = 600; //not really "fov" but serves the same function 
+	this.fov = 600; //not really "fov" but serves the same function 
 
     this.pitch = 0;
-    this.yaw = 0;
+    this.yaw = 3.14;
     this.roll = 0;
 
-    this.speed = .1;
+	this.speed = .1;
+	this.focalPlane = .001;
 
     this.keydown = {
         up: false,
@@ -56,17 +132,17 @@ function Camera() {
 	};
 
     this.move = function() {
-		// if(this.keydown.up && !this.keydown.down) {
-		// 	this.pitch += .05;
-		// } else if(this.keydown.down && !this.keydown.up) {
-		// 	this.pitch -= .05;
-		// }
+		if(this.keydown.up && !this.keydown.down) {
+			this.pitch += .05;
+		} else if(this.keydown.down && !this.keydown.up) {
+			this.pitch -= .05;
+		}
 
-		// if(this.keydown.left && !this.keydown.right) {
-		// 	this.yaw -= .05;
-		// } else if(this.keydown.right && !this.keydown.left) {
-		// 	this.yaw += .05;
-		// }
+		if(this.keydown.left && !this.keydown.right) {
+			this.yaw -= .05;
+		} else if(this.keydown.right && !this.keydown.left) {
+			this.yaw += .05;
+		}
 
 		if(this.yaw <= -Math.PI) {
 			this.yaw += Math.PI*2;
@@ -81,27 +157,27 @@ function Camera() {
 		}
 
 		if(this.keydown.w && !this.keydown.s) {
-			this.z -= Math.cos(this.yaw) * Math.cos(this.pitch) * this.speed;
-			this.x -= Math.sin(this.yaw) * Math.cos(this.pitch) * this.speed;
-			this.y += Math.sin(this.pitch) * this.speed;
-		} else if(this.keydown.s && !this.keydown.w) {
 			this.z += Math.cos(this.yaw) * Math.cos(this.pitch) * this.speed;
 			this.x += Math.sin(this.yaw) * Math.cos(this.pitch) * this.speed;
 			this.y -= Math.sin(this.pitch) * this.speed;
+		} else if(this.keydown.s && !this.keydown.w) {
+			this.z -= Math.cos(this.yaw) * Math.cos(this.pitch) * this.speed;
+			this.x -= Math.sin(this.yaw) * Math.cos(this.pitch) * this.speed;
+			this.y += Math.sin(this.pitch) * this.speed;
 		}
 
 		if(this.keydown.a && !this.keydown.d) {
-			this.z += Math.cos(this.yaw + Math.PI/2) * this.speed;
-			this.x += Math.sin(this.yaw + Math.PI/2) * this.speed;
-		} else if(this.keydown.d && !this.keydown.a) {
 			this.z -= Math.cos(this.yaw + Math.PI/2) * this.speed;
 			this.x -= Math.sin(this.yaw + Math.PI/2) * this.speed;
+		} else if(this.keydown.d && !this.keydown.a) {
+			this.z += Math.cos(this.yaw + Math.PI/2) * this.speed;
+			this.x += Math.sin(this.yaw + Math.PI/2) * this.speed;
 		}
 
 		if(this.keydown.space && !this.keydown.shift) {
-			this.y += this.speed;
-		} else if(this.keydown.shift && !this.keydown.space) {
 			this.y -= this.speed;
+		} else if(this.keydown.shift && !this.keydown.space) {
+			this.y += this.speed;
 		}
 	}
 
@@ -115,23 +191,10 @@ function Camera() {
 		return [nx, ny];
 	};
 
-	this.findZIntercept = function(p1, p2) {
-		dydx = (p1.y - p2.y) / (p1.x - p2.x); 
-		dydz = (p1.y - p2.y) / (p1.z - p2.z);
-
-		const nz = 0.01;
-		const ny = dydz * (nz - p1.z) + p1.y;
-		const nx = (ny - p1.y) / dydx + p1.x;
-
-		console.log(ny, nx);
-
-		return new Point(nx, ny, nz);
-	};
-
-	this.alignToFrame = function (p) {
-        let nx = this.x - p.x;
-        let ny = this.y - p.y;
-		let nz = this.z - p.z;
+	this.alignToFrame = function(p) {
+        let nx = p.x - this.x;
+        let ny = p.y - this.y;
+		let nz = p.z - this.z;
 		
 		const p1 = this.rotatePoint(this.yaw, nx, nz);
 		const p2 = this.rotatePoint(this.pitch, p1[1], ny);
@@ -140,44 +203,59 @@ function Camera() {
 		nx = p3[0];
 	    ny = p3[1];
 		nz = p2[0];
-
-		return new Point(nx, ny, nz);
+		
+		p.nx = nx;
+		p.ny = ny;
+		p.nz = nz;
+		p.visible = nz > this.focalPlane;
 	};
 
-    this.renderPoint = function(p, p2) {
-		let np = this.alignToFrame(p);
-		
-		const vis = (np.z > 0.01);
+	this.projectToPlane = function(p) {
+		let size = this.fov / p.nz;
 
-		if(!vis) {
-			const np2 = this.alignToFrame(p2);
-			np = this.findZIntercept(np, np2);
-		}
+		p.imageX = p.nx * size + canvas.width/2;
+		p.imageY = p.ny * size + canvas.height/2;
+	}
 
-		let size = Math.abs(this.fov / np.z);
-		
-		imageX = np.x * size + canvas.width/2;
-		imageY = np.y * size + canvas.height/2;
+	this.findZIntercept = function(p1, p2) {
+		dxdz = (p1.nx - p2.nx) / (p1.nz - p2.nz); 
+		dydz = (p1.ny - p2.ny) / (p1.nz - p2.nz);
 
-		return {x: imageX, y: imageY, vis: vis};
+		const nz = this.focalPlane;
+		let nx = (nz - p1.nz) * dxdz + p1.nx;
+		let ny = (nz - p1.nz) * dydz + p1.ny;
+
+		return new Point(0, 0, 0, nx, ny, nz);
 	};
-	
+
+    this.clipPlane = function(i, points) {
+		const prevPoint = i <= 0 ? points[points.length - 1] : points[i - 1];
+		const nextPoint = i >= points.length - 1 ? points[0] : points[i + 1];
+		const curPoint = points[i];
+
+		let p1 = this.findZIntercept(e.points[curPoint], e.points[prevPoint]);
+		let p2 = this.findZIntercept(e.points[curPoint], e.points[nextPoint]);
+		this.projectToPlane(p1);
+		this.projectToPlane(p2);
+		
+		c.lineTo(p1.imageX, p1.imageY);
+		c.lineTo(p2.imageX, p2.imageY);
+	};
+
 	this.renderPlane = function(p) {
 		c.beginPath();
 
 		let visible = false;
 
 		for(let i = 0; i < p.points.length; i++) {
-			const prevIDX = i <= 0 ? p.points.length - 1 : i - 1;
-			const image = this.renderPoint(p.points[i], p.points[prevIDX]);
+			const pointIDX = p.points[i];
+			let point = e.points[pointIDX];
 			
-			c.lineTo(image.x, image.y);
-			if(image.vis == true) {
-				visible = true; 
+			if(point.visible) {
+				visible = true;
+				c.lineTo(point.imageX, point.imageY);
 			} else {
-				const nextIDX = i >= p.points.length - 1 ? 0 : i + 1;
-				const image2 = this.renderPoint(p.points[i], p.points[nextIDX]);
-				c.lineTo(image2.x, image2.y);
+				this.clipPlane(i, p.points);
 			}
 		}
 
@@ -192,7 +270,7 @@ function Camera() {
 }
 
 function Environment() {
-	// this.points = [];
+	this.points = [];
 	this.planes = [];
 
 	this.findCenter = function(points) {
@@ -221,72 +299,66 @@ function Environment() {
 	}
     
     this.setup = function() {
-		let points = [];
-		points.push( new Point(-1, -1, -1) );
-		points.push( new Point(-1, -1, 1) );
-		points.push( new Point(-1, 1, 1) );
-		points.push( new Point(-1, 1, -1) );
-		let middle = this.findCenter(points);
-		this.planes.push(new Plane(points, "red", middle));
+		this.points.push( new Point(10, 1, 1) );
+		this.points.push( new Point(-1, 1, 1) );
+		this.points.push( new Point(10, -1, 1) );
+		this.points.push( new Point(-1, -1, 1) );
+		this.points.push( new Point(10, 1, -1) );
+		this.points.push( new Point(-1, 1, -1) );
+		this.points.push( new Point(10, -1, -1) );
+		this.points.push( new Point(-1, -1, -1) );
 
-		points = [];
-		points.push( new Point(1, -1, -1) );
-		points.push( new Point(1, -1, 1) );
-		points.push( new Point(1, 1, 1) );
-		points.push( new Point(1, 1, -1) );
-		middle = this.findCenter(points);
-		this.planes.push(new Plane(points, "orange", middle));
+		let points = [0, 2, 3, 1];
+		this.planes.push(new Plane(points, "red"));
 
-		points = [];
-		points.push( new Point(-1, -1, -1) );
-		points.push( new Point(-1, -1, 1) );
-		points.push( new Point(1, -1, 1) );
-		points.push( new Point(1, -1, -1) );
-		middle = this.findCenter(points);
-		this.planes.push(new Plane(points, "white", middle));
+		points = [4, 6, 7, 5];
+		this.planes.push(new Plane(points, "orange"));
 
-		points = [];
-		points.push( new Point(-1, 1, -1) );
-		points.push( new Point(-1, 1, 1) );
-		points.push( new Point(1, 1, 1) );
-		points.push( new Point(1, 1, -1) );
-		middle = this.findCenter(points);
-		this.planes.push(new Plane(points, "yellow", middle));
+		points = [2, 6, 7, 3];
+		this.planes.push(new Plane(points, "white"));
 
-		points = [];
-		points.push( new Point(-1, -1, 1) );
-		points.push( new Point(-1, 1, 1) );
-		points.push( new Point(1, 1, 1) );
-		points.push( new Point(1, -1, 1) );
-		middle = this.findCenter(points);
-		this.planes.push(new Plane(points, "green", middle));
+		points = [0, 1, 5, 4];
+		this.planes.push(new Plane(points, "yellow"));
 
+		points = [0, 4, 6, 2];
+		this.planes.push(new Plane(points, "green"));
 		
-		points = [];
-		points.push( new Point(-1, -1, -1) );
-		points.push( new Point(-1, 1, -1) );
-		points.push( new Point(1, 1, -1) );
-		points.push( new Point(1, -1, -1) );
-		middle = this.findCenter(points);
-		this.planes.push(new Plane(points, "blue", middle));
-
-    };
+		points = [3, 1, 5, 7];
+		this.planes.push(new Plane(points, "blue"));
+	};
+	
+	this.calculatePoints = function() {
+		for(point of this.points) {
+			camera.alignToFrame(point);
+			camera.projectToPlane(point);
+		}
+	}
 
     this.draw = function () {
+		c.clearRect(0, 0, canvas.width, canvas.height);
         c.fillStyle = "black";
-        c.fillRect(0, 0, canvas.width, canvas.height);
+		c.fillRect(0, 0, canvas.width, canvas.height);
+		
+		this.calculatePoints();
 
+		for(point of e.points) {
+			point.camDist = this.findDistance(point, camera);
+		}
+
+        for(plane of e.planes) {
+			let farthest = plane.points[0];
+			for(let i = 1; i < plane.points.length; i++) {
+				const IDX = plane.points[i]; 
+
+				if(e.points[IDX].camDist > e.points[farthest].camDist) {
+					farthest = IDX;
+				}
+			}
+			plane.farthest = farthest;
+		}
+		
 		this.planes.sort(function(a, b) {
-			const aDist = environment.findDistance(a.middle, camera);
-			const bDist = environment.findDistance(b.middle, camera);
-
-			// const acolor = Math.min(80 / (aDist/2), 50);
-			// const bcolor = Math.min(80 / (bDist/2), 50);
-
-			// a.color = "hsl(0, "+acolor+"%, "+acolor+"%)";
-			// b.color = "hsl(0, "+bcolor+"%, "+bcolor+"%)";
-
-			return bDist - aDist;
+			return e.points[b.farthest].camDist - e.points[a.farthest].camDist;
 		});
 
         for(plane of this.planes) {
@@ -300,8 +372,8 @@ function Environment() {
     };
 }
 
-let environment = new Environment();
-environment.setup();
+let e = new Environment();
+e.setup();
 
 let camera = new Camera();
 
@@ -394,6 +466,7 @@ document.addEventListener("mouseup", function(e) {
 	camera.mouse.down = false;
 });
 
+// c.globalCompositeOperation = "source-over";
 setInterval(function() {
-    environment.update();
+    e.update();
 }, 20);

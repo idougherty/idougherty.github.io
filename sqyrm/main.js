@@ -73,7 +73,7 @@ document.addEventListener("click", triggerTransition);
 setInterval(function() {	
     c.globalCompositeOperation = "source-over";
 
-    c.fillStyle = "rgba(0, 0, 0, .2)";
+    c.fillStyle = "rgba(0, 0, 0, .04)";
     c.fillRect(0, 0, canvas.width, canvas.height);
 	
 	c.globalCompositeOperation = "lighter";

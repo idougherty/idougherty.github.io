@@ -1,5 +1,50 @@
 function showModal(card) {
 	switch(card) {
+		case "trackgen":
+			$('#mdlTitle').text("trackgen");
+			$('#mdlText').text("A procedural track generator from the f1 racing simulator. Tracks will be generated for daily and weekly races. It is formed by generating random points on a circle, distorting them with perlin noise, using separation forces to spread them out, and fitting curves between them.");
+
+			$('#mdlImg').attr("src", "img/trackgen.png");
+			$('#mdlLink').attr("href", "https://idougherty.github.io/f1-minigames/trackgen");
+			$('#mdlOverlay').show();
+			break;
+
+		case "lavarun":
+			$('#mdlTitle').text("SuperSuit");
+			$('#mdlText').text("A minigame from the f1 racing simulator, these minigames will be part of a weekly race with special events. This minigame will be a driving event. If the player wins they will get a boost, if they fail their car will be damaged.");
+
+			$('#mdlImg').attr("src", "img/lavarun.png");
+			$('#mdlLink').attr("href", "https://idougherty.github.io/f1-minigames/lavarunner");
+			$('#mdlOverlay').show();
+			break;
+	
+		case "cupgame":
+			$('#mdlTitle').text("Cup Game");
+			$('#mdlText').text("A minigame from the f1 racing simulator, these minigames will be part of a weekly race with special events. The cup game will be a pit minigame that rewards or punishes your tires depending on the outcome of the game.");
+
+			$('#mdlImg').attr("src", "img/cupgame.png");
+			$('#mdlLink').attr("href", "https://idougherty.github.io/f1-minigames/cupgame");
+			$('#mdlOverlay').show();
+			break;
+	
+		case "flyswatter":
+			$('#mdlTitle').text("Fly Swatter");
+			$('#mdlText').text("A minigame from the f1 racing simulator, these minigames will be part of a weekly race with special events. This minigame will be a driving event. Depending on the players performance they will either lose some control over their car or gain speed.");
+
+			$('#mdlImg').attr("src", "img/flyswatter.png");
+			$('#mdlLink').attr("href", "https://idougherty.github.io/f1-minigames/cupgame");
+			$('#mdlOverlay').show();
+			break;
+	
+		case "mixer":
+			$('#mdlTitle').text("Paint Mixer");
+			$('#mdlText').text("A minigame from the f1 racing simulator, these minigames will be part of a weekly race with special events. The fuel mixing game will be a pit minigame that rewards or punishes your fuel/engine depending on the outcome of the game.");
+
+			$('#mdlImg').attr("src", "img/mixer.png");
+			$('#mdlLink').attr("href", "https://idougherty.github.io/f1-minigames/fuelmixer");
+			$('#mdlOverlay').show();
+			break;
+
 		case "supersuit":
 			$('#mdlTitle').text("SuperSuit");
 			$('#mdlText').text("The premise of the game is that time only moves when you move. You play as Frozone from the incredibles and travel from floor to floor dodging bullets and killing enemies. This was made at a CodeDay Chicago event in under 24 hours with a few of my friends. For such a small time frame I'm very happy with how it came out, the time slowing effect came out feeling pretty natural and we added a few tracing effects to emphasize it. What I wish we could have improved on was spending a little more time on art and instructions for players and maybe adding a few more levels to the mix.");
@@ -331,7 +376,7 @@ canvas.height = 640;
 setInterval(function() {	
     c.globalCompositeOperation = "source-over";
     var grd = c.createRadialGradient(canvas.width * 3/4, canvas.height/2, 0, canvas.width/2, canvas.height/2, canvas.width*2);
-    grd.addColorStop(0, "rgba(16, 32, 24, 0.2)");
+    grd.addColorStop(0, "rgba(24, 16, 24, 0.2)");
 	grd.addColorStop(1, "rgba(0, 0, 0, 1)");
 
     c.fillStyle = grd;

@@ -16,7 +16,7 @@ function Node(val, key = function (k) {return k}) {
 	this.right = null;
 
 	this.insert = function(node) {
-		if(node.key > this.key) {
+		if(Plane.planePrecedesPlane(this.val, node.val)) {
 			if(this.right) {
 				this.right.insert(node);
 			} else {
@@ -51,15 +51,15 @@ function Node(val, key = function (k) {return k}) {
 function SortedBinaryTree() {
 	this.root = null;
 
-	this.insert = function(key, val) {
+	this.add = function(key, val) {
 		let node = new Node(key, val);
 
-		if(!this.root) {
+		if(this.root == null) {
 			this.root = node;
 			return;
 		}
 		
-		if(key > this.root.key) {
+		if(Plane.planePrecedesPlane(this.root.val, node.val)) {
 			if(this.root.right) {
 				this.root.right.insert(node);
 			} else {
@@ -92,16 +92,72 @@ function Point(x, y, z, nx, ny, nz) {
 	this.camDist = 0;
 }
 
-function Plane(points, color) {
-	this.points = points;
-	this.color = color;
-	this.zIndex = 0;
+class Plane {
+	constructor(points, color) {
+		this.points = points;
+		this.baseColor = color;
+		this.color = null;
+		this.zIndex = 0;
+	}
+	
+	static calculateShading(plane) {
+		return plane.baseColor;
+	}
+
+	// static clipPlane(clip_plane, cut_plane) {
+	// 	clip_plane;
+
+	// 	return [clip_1, clip_2];
+	// }
+
+	static pointPrecedesPlane(point, plane) {
+		const a = [e.points[plane.points[0]].x - e.points[plane.points[1]].x, e.points[plane.points[0]].y - e.points[plane.points[1]].y, e.points[plane.points[0]].z - e.points[plane.points[1]].z];
+		const b = [e.points[plane.points[0]].x - e.points[plane.points[2]].x, e.points[plane.points[0]].y - e.points[plane.points[2]].y, e.points[plane.points[0]].z - e.points[plane.points[2]].z];
+
+		const term_i = a[1] * b[2] - a[2] * b[1];
+		const term_j = a[0] * b[2] - a[2] * b[0];
+		const term_k = a[0] * b[1] - a[1] * b[0];
+
+		const c = [point.x - e.points[plane.points[0]].x, point.y - e.points[plane.points[0]].y, point.z - e.points[plane.points[0]].z];
+		const d = [camera.x - e.points[plane.points[0]].x, camera.y - e.points[plane.points[0]].y, camera.z - e.points[plane.points[0]].z];
+
+		const w = term_i * c[0] - term_j * c[1] + term_k * c[2];
+		const v = term_i * d[0] - term_j * d[1] + term_k * d[2];
+
+		if(w == 0) return null;
+		return w > 0 == v > 0;
+	}
+
+	static planePrecedesPlane(p1, p2) {
+		// let isPreceding = this.pointPrecedesPlane(p1.points[0], p2);
+		let front_points = [];
+		let back_points = [];
+		let last_side_front = null;
+
+		for(let i = 0; i < p1.points.length; i++) {
+			const res = this.pointPrecedesPlane(e.points[p1.points[i]], p2);
+			if(res == null) continue;
+			if(res) {
+				front_points.append(p1.points[i]);
+				// last_side_front = true;
+			} else {
+				back_points.append(p1.points[i]);
+				// last_side_front = false;
+			}
+		}
+
+		// if(p1.color == "red" && p2.color == "coral" || p2.color == "red" && p1.color == "coral" ) {
+		// 	console.log(p1.color + ": " + frontTotal, p2.color + ": " + backTotal)
+		// }
+
+		return front_points.length < back_points.length;
+	}
 }
 
 function Camera() {
     this.x = 0;
     this.y = 0;
-	this.z = 3;
+	this.z = 5;
 
 	this.fov = 600; //not really "fov" but serves the same function 
 
@@ -299,32 +355,49 @@ function Environment() {
 	}
     
     this.setup = function() {
-		this.points.push( new Point(10, 1, 1) );
-		this.points.push( new Point(-1, 1, 1) );
-		this.points.push( new Point(10, -1, 1) );
-		this.points.push( new Point(-1, -1, 1) );
-		this.points.push( new Point(10, 1, -1) );
-		this.points.push( new Point(-1, 1, -1) );
-		this.points.push( new Point(10, -1, -1) );
-		this.points.push( new Point(-1, -1, -1) );
+		this.points.push( new Point(1, 1, -1) );
+		this.points.push( new Point(1, 1, 1) );
+		this.points.push( new Point(2.73, 1, 0) );
+		this.points.push( new Point(1.5, -.73, 0) );
+		
+		let points = [0, 1, 2];
+		this.planes.push(new Plane(points, "brown"));
+		
+		points = [0, 1, 3];
+		this.planes.push(new Plane(points, "coral"));
+		
+		points = [1, 2, 3];
+		this.planes.push(new Plane(points, "cyan"));
+		
+		points = [2, 3, 0];
+		this.planes.push(new Plane(points, "grey"));		
 
-		let points = [0, 2, 3, 1];
+		this.points.push( new Point(-1, -1, -1) );
+		this.points.push( new Point(-1, -1, 1) );
+		this.points.push( new Point(-1, 1, -1) );
+		this.points.push( new Point(-1, 1, 1) );
+		this.points.push( new Point(-3, -1, -1) );
+		this.points.push( new Point(-3, -1, 1) );
+		this.points.push( new Point(-3, 1, -1) );
+		this.points.push( new Point(-3, 1, 1) );
+
+		points = [4, 5, 7, 6];
 		this.planes.push(new Plane(points, "red"));
 
-		points = [4, 6, 7, 5];
+		points = [4, 5, 9, 8];
 		this.planes.push(new Plane(points, "orange"));
 
-		points = [2, 6, 7, 3];
+		points = [8, 9, 11, 10];
 		this.planes.push(new Plane(points, "white"));
 
-		points = [0, 1, 5, 4];
+		points = [11, 9, 5, 7];
 		this.planes.push(new Plane(points, "yellow"));
 
-		points = [0, 4, 6, 2];
-		this.planes.push(new Plane(points, "green"));
-		
-		points = [3, 1, 5, 7];
+		points = [8, 4, 6, 10];
 		this.planes.push(new Plane(points, "blue"));
+
+		points = [7, 6, 10, 11];
+		this.planes.push(new Plane(points, "green"));
 	};
 	
 	this.calculatePoints = function() {
@@ -332,36 +405,29 @@ function Environment() {
 			camera.alignToFrame(point);
 			camera.projectToPlane(point);
 		}
-	}
+	};
 
     this.draw = function () {
 		c.clearRect(0, 0, canvas.width, canvas.height);
         c.fillStyle = "black";
 		c.fillRect(0, 0, canvas.width, canvas.height);
-		
+
 		this.calculatePoints();
 
-		for(point of e.points) {
-			point.camDist = this.findDistance(point, camera);
-		}
-
-        for(plane of e.planes) {
-			let farthest = plane.points[0];
-			for(let i = 1; i < plane.points.length; i++) {
-				const IDX = plane.points[i]; 
-
-				if(e.points[IDX].camDist > e.points[farthest].camDist) {
-					farthest = IDX;
-				}
-			}
-			plane.farthest = farthest;
+		let bst = new SortedBinaryTree();
+		for(plane of this.planes) {
+			bst.add(plane);
 		}
 		
-		this.planes.sort(function(a, b) {
-			return e.points[b.farthest].camDist - e.points[a.farthest].camDist;
-		});
+		if(camera.keydown.up) {
+			console.log(bst);
+		}
 
-        for(plane of this.planes) {
+        for(plane of bst.iter()) {
+			plane.color = Plane.calculateShading(plane);
+			if(camera.keydown.up) {
+				console.log(plane.color);
+			}
             camera.renderPlane(plane);
         }
     };

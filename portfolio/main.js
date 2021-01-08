@@ -32,7 +32,7 @@ function showModal(card) {
 			$('#mdlText').text("A minigame from the f1 racing simulator, these minigames will be part of a weekly race with special events. This minigame will be a driving event. Depending on the players performance they will either lose some control over their car or gain speed.");
 
 			$('#mdlImg').attr("src", "img/flyswatter.png");
-			$('#mdlLink').attr("href", "https://idougherty.github.io/f1-minigames/cupgame");
+			$('#mdlLink').attr("href", "https://idougherty.github.io/f1-minigames/flyswatter");
 			$('#mdlOverlay').show();
 			break;
 	

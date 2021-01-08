@@ -173,4 +173,4 @@ setInterval(function() {
 
     gameRunner.update();
     gameRunner.draw();
-}, 105);
+}, 15);

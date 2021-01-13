@@ -48,8 +48,9 @@ function BSTNode(val, key = function (k) {return k}) {
 function SortedBinaryTree() {
 	this.root = null;
 
-	this.add = function(key, val) {
-		let node = new BSTNode(key, val);
+	this.add = function(val, key) {
+
+		let node = new BSTNode(val, key);
 
 		if(this.root == null) {
 			this.root = node;
@@ -84,22 +85,33 @@ class Point3D {
         let ny = p1.y - p2.y;
 		let nz = p1.z - p2.z;
 		
-		const hDist = Math.sqrt(nx*nx + nz*nz);
-		const totalDist = Math.sqrt(hDist*hDist + ny*ny);
+		const d = Math.sqrt(nx*nx + nz*nz + ny*ny);
 
-		return totalDist;
+		return d;
+	}
+
+	static normalize(vector) {
+		const d = Point3D.findDistance(vector, new Point3D(0, 0, 0));
+		
+		vector.x = vector.x / d;
+		vector.y /= d;
+		vector.z /= d;		
+
+		return vector;
 	}
 }
 
 class Plane {
-	constructor(points, color) {
+	constructor(points, color = null) {
 		this.points = points;
 		this.baseColor = color;
 		this.color = null;
+
 		this.normal = {
 			i: null,
 			j: null,
 			k: null,
+			unit: null,
 		};
 	}
 	
@@ -107,14 +119,17 @@ class Plane {
 		const a = [this.points[0].x - this.points[1].x, this.points[0].y - this.points[1].y, this.points[0].z - this.points[1].z];
 		const b = [this.points[0].x - this.points[2].x, this.points[0].y - this.points[2].y, this.points[0].z - this.points[2].z];
 
-		this.normal.i = a[1] * b[2] - a[2] * b[1];
-		this.normal.j = a[0] * b[2] - a[2] * b[0];
-		this.normal.k = a[0] * b[1] - a[1] * b[0];
-		this.normal.d = this.points[0].x * this.normal.i - this.points[0].y * this.normal.j + this.points[0].z * this.normal.k;
+		const i = a[1] * b[2] - a[2] * b[1];
+		const j = a[0] * b[2] - a[2] * b[0];
+		const k = a[0] * b[1] - a[1] * b[0];
 
-		// if(this.normal.d == 0) {
-		// 	console.log("!");
-		// }
+		const normal = Point3D.normalize(new Point3D(i, j, k));
+
+		this.normal.i = normal.x;
+		this.normal.j = normal.y;
+		this.normal.k = normal.z;
+
+		this.normal.d = this.points[0].x * this.normal.i - this.points[0].y * this.normal.j + this.points[0].z * this.normal.k;
 	}
 
 	
@@ -132,22 +147,49 @@ class Plane {
 		return new Point3D(x, y, z);
 	}
 
-	static calculateShading(plane, camera) {
-		const p = Plane.findCenter(plane);
-		const d = Point3D.findDistance(p, camera);
+	static calculateShading(plane, camera, lights) {
+		let r = plane.baseColor.r;
+		let g = plane.baseColor.g;
+		let b = plane.baseColor.b;
 
-		const fade = 1 - (d / 10);
+		for(const light of lights) {
+			if(light instanceof DirectionalLight) {
+				let a = new Point3D(plane.points[0].x - camera.x, plane.points[0].y - camera.y, plane.points[0].z - camera.z);
+				a = Point3D.normalize(a);
 
-		let r = plane.baseColor.r * fade;
-		let g = plane.baseColor.g * fade;
-		let b = plane.baseColor.b * fade;
+				const v = plane.normal.i * a.x - plane.normal.j * a.y + plane.normal.k * a.z;
 
-		if(plane.normal.d == 0) {
-			r = 255;
-			g = 0;
-			b = 0;
-			// console.log(r);
+				const ndotl =  (plane.normal.i * light.vec.x - plane.normal.j * light.vec.y + plane.normal.k * light.vec.z);
+
+				//base shading
+				r += ndotl * 50 * Math.sign(v);
+				g += ndotl * 50 * Math.sign(v);
+				b += ndotl * 50 * Math.sign(v);
+				
+				const n = [ndotl * plane.normal.i, ndotl * plane.normal.j, ndotl * plane.normal.k];
+
+				let h = new Point3D(2 * n[0] - light.vec.x, 2 * n[1] - light.vec.y, 2 * n[2] - light.vec.z);
+				h = Point3D.normalize(h);
+
+				const ndoth = (a.x * h.x - a.y * h.y + a.z * h.z);
+				const m = 3;
+				
+				//highlights
+				r += Math.pow(ndoth, m) * 80;
+				g += Math.pow(ndoth, m) * 80;
+				b += Math.pow(ndoth, m) * 80;
+
+				if(camera.keydown.up) {
+					console.log(h);
+				}
+			}
 		}
+
+		// if(plane.normal.d == 0) {
+		// 	r = 255;
+		// 	g = 0;
+		// 	b = 0;
+		// }
 
 		return {r: r, g: g, b: b};
 	}
@@ -162,15 +204,15 @@ class Plane {
 
 		let t = (plane.normal.d - num) / den;
 
-		t = t < .00001 ? 0 : t;
+		if(t < .00001 || (t >= .99999 && t <= 1.00001)) return;
 
-		const x = p1.x + dx * t;
-		const y = p1.y + dy * t;
-		const z = p1.z + dz * t;
+		let nx = dx * t;
+		let ny = dy * t;
+		let nz = dz * t;
 
-		// if(plane.normal.d == -Infinity) {
-		// 	console.log()
-		// }
+		const x = p1.x + nx;
+		const y = p1.y + ny;
+		const z = p1.z + nz;
 
 		const point = new Point3D(x, y, z);
 
@@ -183,8 +225,8 @@ class Plane {
 
 		const w = plane.normal.i * a[0] - plane.normal.j * a[1] + plane.normal.k * a[2];
 		const v = plane.normal.i * b[0] - plane.normal.j * b[1] + plane.normal.k * b[2];
-		
-		if(w == 0) return null;
+
+		if(Math.abs(w) < .00001) return null;
 		return w > 0 == v > 0;
 	}
 
@@ -205,6 +247,7 @@ class Plane {
 			const res = this.pointPrecedesPlane(p2.points[i], p1);
 			
 			if(i == 0) first_side = res; 
+
 			if(res == null) {
 				front_points.push(p2.points[i]);
 				back_points.push(p2.points[i]);
@@ -214,8 +257,10 @@ class Plane {
 			if(res != last_side && last_side != null) {
 				const last_idx = (i - 1) % p2.points.length; 
 				const new_point = this.findLinePlaneIntercept(p1, p2.points[i], p2.points[last_idx]);
-				front_points.push(new_point);
-				back_points.push(new_point);
+				if(new_point) {
+					front_points.push(new_point);
+					back_points.push(new_point);
+				}
 			}
 			
 			if(res) {
@@ -232,29 +277,29 @@ class Plane {
 		if(last_side != first_side && last_side != null && first_side != null) {
 			const last_idx = p2.points.length - 1; 
 			const new_point = this.findLinePlaneIntercept(p1, p2.points[0], p2.points[last_idx]);
-			front_points.push(new_point);
-			back_points.push(new_point);
+	
+			if(new_point) {
+				front_points.push(new_point);
+				back_points.push(new_point);
+			}
 		}
 
-		// if(front_point_counter == 0 && back_point_counter == 0) {
-		// 	console.log("!")
-		// }  
 		if(back_point_counter == 0) {
 			front_plane = p2;
 		} else if(front_point_counter == 0) {
 			back_plane = p2;
 		} else {
-			front_plane = new Plane(front_points, p2.baseColor);
+			front_plane = new Plane(front_points);
+			front_plane.color = p2.color;
+			front_plane.side = p2.side;
 			front_plane.updateNormalVector();
-			back_plane = new Plane(back_points, p2.baseColor);
+
+			back_plane = new Plane(back_points);
+			back_plane.color = p2.color;
+			back_plane.side = p2.side;
 			back_plane.updateNormalVector();
 		}
-		// 
-		// if(front_point_counter > back_point_counter) {
-		// 	front_plane = p2;
-		// } else {
-		// 	back_plane = p2;
-		// }
+
 		return [front_plane, back_plane];
 	}
 }
@@ -389,7 +434,7 @@ function Camera(x, y, z, pitch = 0, yaw = 0, roll = 0) {
 		return new Point3D(0, 0, 0, nx, ny, nz);
 	};
 
-    this.clipPlane = function(curPoint, prevPoint, nextPoint) {
+    this.clipPath = function(curPoint, prevPoint, nextPoint) {
 		let p1 = this.findZIntercept(curPoint, prevPoint);
 		let p2 = this.findZIntercept(curPoint, nextPoint);
 		this.projectToPlane(p1);
@@ -400,9 +445,9 @@ function Camera(x, y, z, pitch = 0, yaw = 0, roll = 0) {
 	};
 
 	this.renderPlane = function(p) {
-		c.beginPath();
-
 		let visible = false;
+		
+		c.beginPath();
 
 		for(let i = 0; i < p.points.length; i++) {
 			let point = p.points[i];
@@ -414,18 +459,23 @@ function Camera(x, y, z, pitch = 0, yaw = 0, roll = 0) {
 				const prevPoint = i <= 0 ? p.points[p.points.length - 1] : p.points[i - 1];
 				const nextPoint = i >= p.points.length - 1 ? p.points[0] : p.points[i + 1];
 				const curPoint = p.points[i];
-				this.clipPlane(curPoint, prevPoint, nextPoint);
+				this.clipPath(curPoint, prevPoint, nextPoint);
 			}
 		}
 
 		c.closePath();
 
 		if(!visible) return;
+		
+		
+		if(p.color != null) {
+			let color = "rgb("+p.color.r+", "+p.color.g+", "+p.color.b+")";
 
-		c.fillStyle = "rgb("+p.color.r+", "+p.color.g+", "+p.color.b+")";
-		c.fill();
-		c.strokeStyle = "rgb("+p.color.r+", "+p.color.g+", "+p.color.b+")";
-		c.stroke();
+			c.fillStyle = color;
+			c.fill();
+			c.strokeStyle = color;
+			c.stroke();
+		}
 	}
 
 	this.renderEnvironment = function (env) {
@@ -437,8 +487,10 @@ function Camera(x, y, z, pitch = 0, yaw = 0, roll = 0) {
 		}
 
 		let bst = new SortedBinaryTree();
-		for(const plane of env.planes) {
+		for(let plane of env.planes) {
 			plane.updateNormalVector();
+			plane.color = Plane.calculateShading(plane, this, env.lights);
+
 			bst.add(plane);
 		}
 
@@ -450,17 +502,37 @@ function Camera(x, y, z, pitch = 0, yaw = 0, roll = 0) {
 				}
 			}
 
-			plane.color = Plane.calculateShading(plane, this);
 			this.renderPlane(plane);
 		}
+	}
+}
+
+class DirectionalLight {
+	constructor(vector, color, intensity) {
+		this.vec = vector;
+		this.color = color;
+		this.intensity = intensity;
+	}
+}
+
+class Light {
+	constructor(position, color, intensity) {
+		this.pos = position;
+		this.color = color;
+		this.intensity = intensity;
 	}
 }
 
 function Environment() {
 	this.points = [];
 	this.planes = [];
-    
+	this.lights = [];
+	
     this.setup = function() {
+		let vec = new Point3D(.5, 1, -.5);
+		vec  = Point3D.normalize(vec);
+		this.lights.push(new DirectionalLight(vec, {r: 255, g: 255, b: 255}, 1));
+
 		let utahVerticies = [[  0.2000,  0.0000, 2.70000 ], [  0.2000, -0.1120, 2.70000 ],
 							[  0.1120, -0.2000, 2.70000 ], [  0.0000, -0.2000, 2.70000 ],
 							[  1.3375,  0.0000, 2.53125 ], [  1.3375, -0.7490, 2.53125 ],
@@ -509,7 +581,7 @@ function Environment() {
 							[  3.4500, -0.1500, 2.51250 ], [  3.4500,  0.0000, 2.51250 ],
 							[  2.8000,  0.0000, 2.40000 ], [  2.8000, -0.1500, 2.40000 ],
 							[  3.2000, -0.1500, 2.40000 ], [  3.2000,  0.0000, 2.40000 ],
-							[  0.0000,  0.0000, 3.15000 ], [  0.8000,  0.0000, 3.15000 ],
+							[  0.0000,  0.0000, 3.25000 ], [  0.8000,  0.0000, 3.15000 ],
 							[  0.8000, -0.4500, 3.15000 ], [  0.4500, -0.8000, 3.15000 ],
 							[  0.0000, -0.8000, 3.15000 ], [  0.0000,  0.0000, 2.85000 ],
 							[  1.4000,  0.0000, 2.40000 ], [  1.4000, -0.7840, 2.40000 ],
@@ -519,7 +591,12 @@ function Environment() {
 							[  1.3000,  0.0000, 2.55000 ], [  1.3000, -0.7280, 2.55000 ],
 							[  0.7280, -1.3000, 2.55000 ], [  0.0000, -1.3000, 2.55000 ],
 							[  1.3000,  0.0000, 2.40000 ], [  1.3000, -0.7280, 2.40000 ],
-							[  0.7280, -1.3000, 2.40000 ], [  0.0000, -1.3000, 2.40000 ]];
+							[  0.7280, -1.3000, 2.40000 ], [  0.0000, -1.3000, 2.40000 ], 
+							[  0.0000,  0.0000, 0.00000 ], [  1.4250, -0.7980, 0.00000 ],
+							[  1.5000,  0.0000, 0.07500 ], [  1.4250,  0.0000, 0.00000 ],
+							[  0.7980, -1.4250, 0.00000 ], [  0.0000, -1.5000, 0.07500 ],
+							[  0.0000, -1.4250, 0.00000 ], [  1.5000, -0.8400, 0.07500 ],
+							[  0.8400, -1.5000, 0.07500 ]];
 		
 		for(const point of utahVerticies) {
 			this.points.push(new Point3D(point[1], -point[2], point[0]));
@@ -533,6 +610,8 @@ function Environment() {
 							33,  34,  35,  36,  37,  38,  39,  40 ],
 						[  	96,  96,  96,  96,  97,  98,  99,  100,
 							101, 101, 101, 101,  0,   1,   2,   3 ],
+						[ 118, 118, 118, 118, 124, 122, 119, 121,
+							123, 126, 125, 120,  40,  39,  38,  37 ],
 						[   0,   1,   2,   3,   106, 107, 108, 109,
 							110, 111, 112, 113, 114, 115, 116, 117 ],
 						[  	41,  42,  43,  44,  45,  46,  47,  48,
@@ -545,9 +624,11 @@ function Environment() {
 							88,  89,  90,  91,  92,  93,  94,  95 ]];
 
 		for(const [idx, part] of parts.entries()) {
+			// if(idx != 3) continue;
+
 			let ref = 0;
 
-			if(idx <= 4) {
+			if(idx <= 5) {
 				ref = 3;
 			} else {
 				ref = 1;
@@ -570,10 +651,18 @@ function Environment() {
 					for(let [idx, point] of points.entries()) {
 						points[idx] = new Point3D(point.x * sx, point.y, point.z * sz);
 					}
+
+					for(let j = points.length - 1; j > 0; j--) {
+						for(let k = j - 1; k >= 0; k--) {
+							if(points[j].x == points[k].x && points[j].y == points[k].y && points[j].z == points[k].z) {
+								points.splice(j, 1);
+							}
+						}
+					}
 	
-					const red = 0;
-					const green = 255;
-					const blue = 255;
+					const red = 100;
+					const green = 150;
+					const blue = 150;
 					this.planes.push(new Plane(points, {r: red, g: green, b: blue}));
 				}
 

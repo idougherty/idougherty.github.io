@@ -175,13 +175,9 @@ class Plane {
 				const m = 3;
 				
 				//highlights
-				r += Math.pow(ndoth, m) * 80;
-				g += Math.pow(ndoth, m) * 80;
-				b += Math.pow(ndoth, m) * 80;
-
-				if(camera.keydown.up) {
-					console.log(h);
-				}
+				r += Math.max(Math.pow(ndoth, m) * 40, 0);
+				g += Math.max(Math.pow(ndoth, m) * 40, 0);
+				b += Math.max(Math.pow(ndoth, m) * 40, 0);
 			}
 		}
 

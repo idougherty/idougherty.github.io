@@ -162,9 +162,9 @@ class Plane {
 				const ndotl =  (plane.normal.i * light.vec.x - plane.normal.j * light.vec.y + plane.normal.k * light.vec.z);
 
 				//base shading
-				r += ndotl * 50 * Math.sign(v);
-				g += ndotl * 50 * Math.sign(v);
-				b += ndotl * 50 * Math.sign(v);
+				r += ndotl * 60 * Math.sign(v);
+				g += ndotl * 60 * Math.sign(v);
+				b += ndotl * 60 * Math.sign(v);
 				
 				const n = [ndotl * plane.normal.i, ndotl * plane.normal.j, ndotl * plane.normal.k];
 
@@ -656,9 +656,23 @@ function Environment() {
 						}
 					}
 	
-					const red = 100;
-					const green = 150;
-					const blue = 150;
+					let red = 180;
+					let green = 180;
+					let blue = 180;
+
+					switch(idx) {
+						case 0:
+						case 3:
+						case 4:
+						case 6:
+						case 7:
+						case 9:
+							red = 80;
+							green = 80;
+							blue = 120;
+							break;
+					}
+
 					this.planes.push(new Plane(points, {r: red, g: green, b: blue}));
 				}
 

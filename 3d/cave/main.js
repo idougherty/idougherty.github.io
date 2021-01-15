@@ -9,20 +9,30 @@ function resizeCanvas() {
 window.onresize = resizeCanvas;
 resizeCanvas();
 
-let cave = new Cave(100, 20);
+let cave = new Cave(100, 27);
 let mesh = cave.createMesh();
 
-const scale = .4;
+const scale = .6;
 
 let e = new Environment();
 let camera = new Camera(cave.start.x * scale, -1, cave.start.y * scale);
 
+let vec = new Point3D(.2, 1, -.3);
+vec  = Point3D.normalize(vec);
+e.lights.push(new DirectionalLight(vec, {r: 255, g: 255, b: 255}, 1));
+
 for(const line of mesh) {
     const p1 = new Point3D(line.p1.x * scale, 0, line.p1.y * scale);
-    const p2 = new Point3D(line.p1.x * scale, scale * -6, line.p1.y * scale);
+    const p2 = new Point3D(line.p1.x * scale, scale * -7, line.p1.y * scale);
     const p3 = new Point3D(line.p2.x * scale, 0, line.p2.y * scale);
-    const p4 = new Point3D(line.p2.x * scale, scale * -6, line.p2.y * scale);
-    const plane = new Plane([p1, p3, p4, p2], {r: 100, g: 100, b: 100});
+	const p4 = new Point3D(line.p2.x * scale, scale * -7, line.p2.y * scale);
+	
+	// constr
+	const r = 70;
+	const g = 70;
+	const b = 70;
+
+	const plane = new Plane([p1, p3, p4, p2], {r: r, g: g, b: b});
     e.planes.push(plane);
     
     // const plane1 = new Plane([p1, p2, p3], "hsl("+Math.floor((line.p1.x + line.p1.y)/20 * 360)+", 50%, 50%)");

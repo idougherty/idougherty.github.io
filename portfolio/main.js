@@ -1,7 +1,34 @@
 function showModal(card) {
 	switch(card) {
+		case "cave3d":
+			$('#mdlTitle').text("3d Cave");
+			$('#mdlText').text("This mesh is generated from the cave generator, and rendered with the self built 3d engine. Eventually, I would like to make this into a procedural doom style game, but for now it can just be explored from room to room.");
+
+			$('#mdlImg').attr("src", "img/cave3d.png");
+			$('#mdlLink').attr("href", "https://idougherty.github.io/3d/cave");
+			$('#mdlOverlay').show();
+			break;
+
+		case "3dteapot":
+			$('#mdlTitle').text("3d Engine");
+			$('#mdlText').text("This is a 3d engine I built in javascript, it took me a few months and a lot of new math. The model in the picture is my high polygon render of the Utah Teapot. In the actual demo the resolution is lessened to run in real time. Hold down the mouse to look around and use WASD to move.");
+
+			$('#mdlImg').attr("src", "img/3dteapot.png");
+			$('#mdlLink').attr("href", "https://idougherty.github.io/3d");
+			$('#mdlOverlay').show();
+			break;
+
+		case "cavegen":
+			$('#mdlTitle').text("cavegen");
+			$('#mdlText').text("A procedural cave generator. It uses binary space partitioning to create rooms, random noise and cellular automata to add features to those rooms, and minimum spanning trees to connect the rooms.");
+
+			$('#mdlImg').attr("src", "img/cavegen.png");
+			$('#mdlLink').attr("href", "https://idougherty.github.io/cavegen");
+			$('#mdlOverlay').show();
+			break;
+
 		case "trackgen":
-			$('#mdlTitle').text("trackgen");
+			$('#mdlTitle').text("Track Generator");
 			$('#mdlText').text("A procedural track generator from the f1 racing simulator. Tracks will be generated for daily and weekly races. It is formed by generating random points on a circle, distorting them with perlin noise, using separation forces to spread them out, and fitting curves between them.");
 
 			$('#mdlImg').attr("src", "img/trackgen.png");

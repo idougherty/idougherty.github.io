@@ -15,6 +15,10 @@ function Frog(x, y) {
   this.target = Math.random() * Math.PI * 2;
   this.timer = 0;
   this.particles = [];
+  this.sprite1 = new Image();
+  this.sprite1.src = "art/frog1.png";
+  this.sprite2 = new Image();
+  this.sprite2.src = "art/frog2.png";
 
   this.update = function() {
     if(this.health > 0) {
@@ -104,11 +108,9 @@ function Frog(x, y) {
       this.particles[i].draw(camX, camY, camHeight);
     }
     
-    let img = new Image();
+    let img = this.sprite1;
     if(this.jumping()) {
-      img.src = "art/frog2.png";
-    } else {
-      img.src = "art/frog1.png"
+      img = this.sprite2;
     }
 
     const width = img.width / camHeight * this.size / 6;

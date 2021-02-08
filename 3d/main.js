@@ -130,7 +130,7 @@ const parts =  	[[ 	102, 103, 104, 105, 4,   5,   6,   7,
 				[  	80,  81,  82,  83,  84,  85,  86,  87,
 					88,  89,  90,  91,  92,  93,  94,  95 ]];
 
-const subdivisions = 4;
+const subdivisions = 3;
 
 for(const [idx, part] of parts.entries()) {
 	let ref = 0;
@@ -224,16 +224,54 @@ for(const [idx, part] of parts.entries()) {
 	}
 }
 
+this.rotatePoint = function(angle, x, y) {
+	const sin = Math.sin(angle);
+	const cos = Math.cos(angle);
+	
+	const nx = x*cos - y*sin;
+	const ny = y*cos + x*sin;
+	
+	return [nx, ny];
+};
+
+function cameraTransform(timer, d) {
+	yaw = .01 * timer;
+	pitch = Math.PI / 16 * Math.sin(timer/100);
+	roll = Math.PI / 16 * Math.sin(timer/200);
+
+	const p1 = this.rotatePoint(yaw, -5, 0);
+	const p2 = this.rotatePoint(pitch, 5, 0);
+	// const p3 = this.rotatePoint(roll, p1[0], p2[1]);
+
+	camera.x = p1[0] * d;
+	camera.y = -p2[1] * d - 2;
+	camera.z = p1[1] * d;
+
+	camera.pitch = -pitch;
+	camera.yaw = -yaw + Math.PI/2;
+	camera.roll = roll;
+}
+
+let timer = 0;
+let cameraLock = true;
+
 setInterval(function() {
 	c.clearRect(0, 0, canvas.width, canvas.height);
 	c.fillStyle = "black";
 	c.fillRect(0, 0, canvas.width, canvas.height);
+	
+	if(cameraLock) {
+		cameraTransform(timer, 1.5);
+	}
 
+	timer+= 2;
 	camera.move();
 	camera.renderEnvironment(e);
 }, 20);
 
 document.addEventListener("keydown", function(e) {
+	let disableLock = true;
+
 	switch(e.keyCode) {
 		case 37:
 			camera.keydown.left = true;
@@ -266,6 +304,12 @@ document.addEventListener("keydown", function(e) {
 			camera.keydown.shift = true;
 			break;
 		default:
+			disableLock = false;
+	}
+
+	if(cameraLock && disableLock) {
+		cameraLock = false;
+		camera.roll = 0;
 	}
 });
 
@@ -321,82 +365,3 @@ document.addEventListener("mouseup", function(e) {
 	document.exitPointerLock();
 	camera.mouse.down = false;
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const subdivisions = 2;
-
-// for(const [idx, part] of parts.entries()) {
-// 	if(idx != 3) continue;
-
-// 	let ref = 0;
-
-// 	if(idx <= 5) {
-// 		ref = 3;
-// 	} else {
-// 		ref = 1;
-// 	}
-
-// 	while(ref >= 0) {
-// 		const sx = (ref == 1 || ref == 3) ? -1 : 1;
-// 		const sz = (ref == 2 || ref == 3) ? -1 : 1;
-
-// 		for(let i = 0; i < part.length - 5; i++) {
-// 			if((i+1) % 4 == 0) i++;
-
-// 			const idx1 = part[i];
-// 			const idx2 = part[i + 1];
-// 			const idx3 = part[i + 4];
-// 			const idx4 = part[i + 5];
-
-// 			for(let z = 0; z < subdivisions; z++) 
-
-// 			let points = [e.points[idx1], e.points[idx3], e.points[idx4], e.points[idx2]];
-
-// 			for(let [idx, point] of points.entries()) {
-// 				points[idx] = new Point3D(point.x * sx, point.y, point.z * sz);
-// 			}
-
-// 			for(let j = points.length - 1; j > 0; j--) {
-// 				for(let k = j - 1; k >= 0; k--) {
-// 					if(points[j].x == points[k].x && points[j].y == points[k].y && points[j].z == points[k].z) {
-// 						points.splice(j, 1);
-// 					}
-// 				}
-// 			}
-
-// 			let red = 180;
-// 			let green = 180;
-// 			let blue = 180;
-
-// 			switch(idx) {
-// 				case 0:
-// 				case 3:
-// 				case 4:
-// 				case 6:
-// 				case 7:
-// 				case 9:
-// 					red = 80;
-// 					green = 80;
-// 					blue = 120;
-// 					break;
-// 			}
-
-// 			e.planes.push(new Plane(points, {r: red, g: green, b: blue}));
-// 		}
-
-// 		ref--;
-// 	}
-// }

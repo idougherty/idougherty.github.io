@@ -14,6 +14,8 @@ function Raccoon(x, y) {
   this.maxHealth = this.health;
   this.opacity = 1;
   this.particles = [];
+  this.sprite = new Image();
+  this.sprite.src = "art/raccoon.png";
 
   this.update = function() {
     if(this.health > 0) {
@@ -31,7 +33,7 @@ function Raccoon(x, y) {
     this.vd += (Math.random()-.5)/20;
     this.vd = Math.max(-.05, Math.min(this.vd, .05));
 
-    if(Math.sqrt(xDif * xDif + yDif * yDif) - player.size < 100 && this.size < player.size * 2 && !player.win) {
+    if(Math.sqrt(xDif * xDif + yDif * yDif) - player.size < 70 && this.size < player.size * 2 && !player.win) {
       const theta = player.size < this.size * 3 ? Math.PI : 0;
       this.d += Math.sin(angleDif(theta + Math.atan2(yDif, xDif), this.d)) * .1;
     } else {
@@ -41,9 +43,8 @@ function Raccoon(x, y) {
     this.kx *= .92;
     this.ky *= .92;
 
-    this.vx = Math.cos(this.d) * 3.5 + this.kx;
-    this.vy = Math.sin(this.d) * 3.5 + this.ky;
-    
+    this.vx = Math.cos(this.d) * 2.5 + this.kx;
+    this.vy = Math.sin(this.d) * 2.5 + this.ky;
 
     this.x += this.vx;
     this.y += this.vy;
@@ -92,8 +93,8 @@ function Raccoon(x, y) {
     let img = new Image();
     img.src = "art/raccoon.png";
 
-    const width = img.width / camHeight * this.size / 4;
-    const height = img.height / camHeight * this.size / 4;
+    const width = this.sprite.width / camHeight * this.size / 4;
+    const height = this.sprite.height / camHeight * this.size / 4;
 
     const nx = (this.x - camX - canvas.width/2 ) / camHeight * 12 + canvas.width/2 + width/2;
     const ny = (this.y - camY - canvas.height/2 ) / camHeight * 12 + canvas.height/2 + height/2;
@@ -101,7 +102,7 @@ function Raccoon(x, y) {
     c.translate(nx - width/2, ny - height/2);
     c.rotate(this.d + Math.PI/2);
     c.globalAlpha = this.opacity;
-    c.drawImage(img, -width/2, -height/2, width, height);
+    c.drawImage(this.sprite, -width/2, -height/2, width, height);
     c.globalAlpha = 1;
     c.rotate(-this.d - Math.PI/2);
     c.translate(-nx + width/2, -ny + height/2);

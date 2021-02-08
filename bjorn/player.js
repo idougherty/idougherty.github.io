@@ -34,7 +34,7 @@ function Player() {
   };
 
   this.resolveCollision = function(target) {
-    if(this.size > target.size * 3) {
+    if(this.size * .9 > target.size) {
       return true;
     } else if(this.size * 3 < target.size) {
       return false;
@@ -56,16 +56,28 @@ function Player() {
         
         const sizeDif = Math.min(this.size/target.size, 1.5);
         const theta = Math.atan2(yDif, xDif);
-
+        let noise = null;
+        
         if(this.resolveCollision(target)) {
+          noise = environment.noises["enemy_hit"];
+
           target.health -= sizeDif * this.size / 4;
 
           target.x += Math.cos(theta) * dist;
           target.y += Math.sin(theta) * dist;
           target.kx = Math.cos(theta + Math.PI) + this.vx * sizeDif;
           target.ky = Math.sin(theta + Math.PI) + this.vy * sizeDif;
+
+          if(target.health < 0) {
+            noise = environment.noises["enemy_death"];
+            if(target instanceof Bear) {
+              noise = environment.noises["bjorn_death"];
+            }
+          }
         } else {
           if(Math.sqrt(this.kx * this.kx + this.ky * this.ky) < .2) {
+            noise = environment.noises["player_hit"];
+
             this.size *= .9;
 
             this.x += Math.cos(theta) * dist;
@@ -77,6 +89,11 @@ function Player() {
 
         if(target.health <= 0) {
           this.size += Math.max((3 * target.size-this.size)/10, 0);
+        }
+
+        if(noise) {
+          noise.volume = .5 * Math.min(target.size/this.size, 1);
+          noise.play();
         }
       }
     }

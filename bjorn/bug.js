@@ -13,6 +13,8 @@ function Bug(x, y) {
   this.maxHealth = this.health;
   this.opacity = 1;
   this.particles = [];
+  this.sprite = new Image();
+  this.sprite.src = "art/bug.png";
 
   this.update = function() {
     if(this.health > 0) {
@@ -85,12 +87,9 @@ function Bug(x, y) {
     for(let i = 0; i < this.particles.length; i++) {
       this.particles[i].draw(camX, camY, camHeight);
     }
-    
-    let img = new Image();
-    img.src = "art/bug.png";
 
-    const width = img.width / camHeight * this.size / 2;
-    const height = img.height / camHeight * this.size / 2;
+    const width = this.sprite.width / camHeight * this.size / 2;
+    const height = this.sprite.height / camHeight * this.size / 2;
 
     const nx = (this.x - camX - canvas.width/2 ) / camHeight * 12 + canvas.width/2 + width/2;
     const ny = (this.y - camY - canvas.height/2 ) / camHeight * 12 + canvas.height/2 + height/2;
@@ -98,8 +97,10 @@ function Bug(x, y) {
     c.translate(nx - width/2, ny - height/2);
     c.rotate(this.d + Math.PI/2);
     c.globalAlpha = this.opacity;
-    c.drawImage(img, -width/2, -height/2, width, height);
+
+    c.drawImage(this.sprite, -width/2, -height/2, width, height);
     c.globalAlpha = 1;
+
     c.rotate(-this.d - Math.PI/2);
     c.translate(-nx + width/2, -ny + height/2);
 

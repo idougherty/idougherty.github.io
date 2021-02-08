@@ -393,8 +393,8 @@ class Cave {
 // c.fillStyle = "grey";
 // c.fillRect(0, 0, canvas.width, canvas.height);
 
-let cave = new Cave(100, 27);
+let cave = new Cave(100, 25);
 
 cave.drawCells();
 // cave.drawRooms();
-cave.drawEdges();
+// cave.drawEdges();

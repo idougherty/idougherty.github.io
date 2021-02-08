@@ -4,6 +4,12 @@ function Environment() {
   this.trees = [];
   this.details = [];
   this.animals = [];
+  this.noises = {
+    "enemy_hit": new Audio('sounds/enemy_hit.wav'),
+    "player_hit": new Audio('sounds/player_hit.wav'),
+    "enemy_death": new Audio('sounds/enemy_death.wav'),
+    "bjorn_death": new Audio('sounds/bjorn_death.wav'),
+  };
 
   this.drawElements = function(elements) {
     for(let i = 0; i < elements.length; i++) {

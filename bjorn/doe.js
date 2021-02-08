@@ -9,12 +9,16 @@ function Doe(x, y) {
   this.size = 3 + Math.random()*2;
   this.base = 4;
   this.mass = 3;
-  this.health = this.size * this.base / 4;
+  this.health = this.size * this.base / 2;
   this.maxHealth = this.health;
   this.opacity = 1;
   this.target = Math.random() * Math.PI * 2;
   this.timer = 0;
   this.particles = [];
+  this.sprite1 = new Image();
+  this.sprite1.src = "art/doe1.png";
+  this.sprite2 = new Image();
+  this.sprite2.src = "art/doe2.png";
 
   this.update = function() {
     if(this.health > 0) {
@@ -26,7 +30,7 @@ function Doe(x, y) {
   };
 
   this.jumping = function() {
-    if(Math.sqrt(this.vx * this.vx + this.vy * this.vy) > 2) {
+    if(Math.sqrt(this.vx * this.vx + this.vy * this.vy) > 2.5) {
       return true;
     } else {
       return false;
@@ -48,19 +52,19 @@ function Doe(x, y) {
 
     if(this.jumping()) {
     } else {
-      const xDif = this.x - player.x;
-      const yDif = this.y - player.y;
+      // const xDif = this.x - player.x;
+      // const yDif = this.y - player.y;
 
-      if(Math.sqrt(xDif * xDif + yDif * yDif) - player.size < 150 && this.size < player.size * 2 && !player.win) {
-        const theta = player.size < this.size * 2 ? Math.PI : 0;
-        this.target = theta + Math.atan2(yDif, xDif);
-      }
+      // if(Math.sqrt(xDif * xDif + yDif * yDif) - player.size < 150 && this.size < player.size * 2 && !player.win) {
+      //   const theta = player.size < this.size * 2 ? Math.PI : 0;
+      //   this.target = theta + Math.atan2(yDif, xDif);
+      // }
 
       this.d += Math.sin(angleDif(this.target, this.d)) * .2;
 
       if(this.timer > 20) {
-        this.vx = Math.cos(this.d) * 12;
-        this.vy = Math.sin(this.d) * 12;
+        this.vx = Math.cos(this.d) * 10;
+        this.vy = Math.sin(this.d) * 10;
         this.timer = 0;
         this.target += Math.random() * 2 - 1;
       }
@@ -105,11 +109,9 @@ function Doe(x, y) {
       this.particles[i].draw(camX, camY, camHeight);
     }
   
-    let img = new Image();
-    if(Math.sqrt(this.vx * this.vx + this.vy * this.vy) > 4) {
-      img.src = "art/doe2.png";
-    } else {
-      img.src = "art/doe1.png"
+    let img = this.sprite1;
+    if(this.jumping()) {
+      img = this.sprite2;
     }
 
     const width = img.width / camHeight * this.size / 1;

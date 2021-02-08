@@ -307,7 +307,7 @@ function Camera(x, y, z, pitch = 0, yaw = 0, roll = 0) {
     this.y = y;
 	this.z = z;
 
-	this.fov = 600; //not really "fov" but serves the same function 
+	this.fov = 800; //not really "fov" but serves the same function 
 
     this.pitch = pitch;
     this.yaw = yaw;

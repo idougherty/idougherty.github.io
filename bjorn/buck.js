@@ -7,7 +7,7 @@ function Buck(x, y) {
   this.ky = 0;
   this.d = 0;
   this.size = 5 + Math.random();
-  this.base = 5;
+  this.base = 7;
   this.mass = 2;
   this.health = this.size * this.base / 2;
   this.maxHealth = this.health;
@@ -15,6 +15,10 @@ function Buck(x, y) {
   this.target = Math.random() * Math.PI;
   this.timer = 0;
   this.particles = [];
+  this.sprite1 = new Image();
+  this.sprite1.src = "art/buck1.png";
+  this.sprite2 = new Image();
+  this.sprite2.src = "art/buck2.png";
 
   this.update = function() {
     if(this.health > 0) {
@@ -109,11 +113,9 @@ function Buck(x, y) {
       this.particles[i].draw(camX, camY, camHeight);
     }
     
-    let img = new Image();
-    if(Math.sqrt(this.vx * this.vx + this.vy * this.vy) > 4) {
-      img.src = "art/buck2.png";
-    } else {
-      img.src = "art/buck1.png"
+    let img = this.sprite1;
+    if(this.jumping()) {
+      img = this.sprite2;
     }
 
     const width = img.width / camHeight * this.size;

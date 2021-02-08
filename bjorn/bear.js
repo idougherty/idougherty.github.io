@@ -6,7 +6,7 @@ function Bear(x, y) {
   this.kx = 0;
   this.ky = 0;
   this.d = 0;
-  this.size = 10;
+  this.size = 12;
   this.base = 40;
   this.mass = 2;
   this.health = this.size * this.base * 1.5;
@@ -15,6 +15,10 @@ function Bear(x, y) {
   this.target = Math.random() * Math.PI;
   this.timer = 0;
   this.particles = [];
+  this.sprite1 = new Image();
+  this.sprite1.src = "art/bear1.png";
+  this.sprite2 = new Image();
+  this.sprite2.src = "art/bear2.png";
 
   this.update = function() {
     if(this.health > 0) {
@@ -88,7 +92,6 @@ function Bear(x, y) {
 
   this.die = function() {
     this.opacity *= .995;
-
     this.size *= .995;
   
     if(this.opacity > .1) {
@@ -113,11 +116,9 @@ function Bear(x, y) {
       this.particles[i].draw(camX, camY, camHeight);
     }
     
-    let img = new Image();
-    if(Math.sqrt(this.vx * this.vx + this.vy * this.vy) > 4) {
-      img.src = "art/bear2.png";
-    } else {
-      img.src = "art/bear1.png"
+    let img = this.sprite1;
+    if(this.jumping()) {
+      img = this.sprite2;
     }
 
     const width = img.width / camHeight * this.size * 3 / 4;

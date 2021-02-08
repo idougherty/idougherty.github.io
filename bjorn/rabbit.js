@@ -15,6 +15,10 @@ function Rabbit(x, y) {
   this.target = Math.random() * Math.PI * 2;
   this.timer = 0;
   this.particles = [];
+  this.sprite1 = new Image();
+  this.sprite1.src = "art/rabbit1.png";
+  this.sprite2 = new Image();
+  this.sprite2.src = "art/rabbit2.png";
 
   this.update = function() {
     if(this.health > 0) {
@@ -53,7 +57,6 @@ function Rabbit(x, y) {
 
       if(Math.sqrt(xDif * xDif + yDif * yDif) - player.size < 80 && this.size < player.size * 2 && !player.win) {
         const theta = player.size < this.size * 3 ? Math.PI : 0;
-        this.target = theta + Math.atan2(yDif, xDif);
       }
 
       this.d += Math.sin(angleDif(this.target, this.d)) * .08;
@@ -104,11 +107,9 @@ function Rabbit(x, y) {
       this.particles[i].draw(camX, camY, camHeight);
     }
     
-    let img = new Image();
+    let img = this.sprite1;
     if(this.jumping()) {
-      img.src = "art/rabbit2.png";
-    } else {
-      img.src = "art/rabbit1.png"
+      img = this.sprite2;
     }
 
     const width = img.width / camHeight * this.size / 1;

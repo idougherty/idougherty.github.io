@@ -4,6 +4,8 @@
 	<title>Ian's Portfolio</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link rel="stylesheet" href="style.css">
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Julius+Sans+One&display=swap" rel="stylesheet">
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script></head>
@@ -52,7 +54,44 @@
 		<!-- <div class="alert alert-warning" role="alert">
 			This page is still under construction! Contact me at <b> ianedougherty01@gmail.com </b> if you have any issues or concerns.
 		</div> -->
-		<div class="card-deck" id="2019">
+
+		<div class="card-deck" id="2021">
+			<div class="card">
+				<div class="card-top">
+					<img class="card-img-top" src="img/cave3d.png" alt="Card image cap" onclick="showModal('cave3d')">
+					<button type="button" class="btn btn-info" onclick="showModal('cave3d')"> - see more - </button>
+				</div>
+				<div class="card-body">
+					<h5 class="card-title">3d Cave</h5>
+					<p class="card-text">An explorable cave built with tools from other projects.</p>
+					<p class="card-text"><small class="text-mute">2021</small></p>
+				</div>
+			</div>
+			<div class="card">
+				<div class="card-top">
+					<img class="card-img-top" src="img/3dteapot.png" alt="Card image cap" onclick="showModal('3dteapot')">
+					<button type="button" class="btn btn-info" onclick="showModal('3dteapot')"> - see more - </button>
+				</div>
+				<div class="card-body">
+					<h5 class="card-title">3d Engine</h5>
+					<p class="card-text">A browser based 3d engine written in javascript.</p>
+					<p class="card-text"><small class="text-mute">2021</small></p>
+				</div>
+			</div>
+			<div class="card">
+				<div class="card-top">
+					<img class="card-img-top" src="img/cavegen.png" alt="Card image cap" onclick="showModal('cavegen')">
+					<button type="button" class="btn btn-info" onclick="showModal('cavegen')"> - see more - </button>
+				</div>
+				<div class="card-body">
+					<h5 class="card-title">Cave Generator</h5>
+					<p class="card-text">A procedural cellular automota cave generator.</p>
+					<p class="card-text"><small class="text-mute">2021</small></p>
+				</div>
+			</div>
+		</div>
+
+		<div class="card-deck" id="2021">
 			<div class="card">
 				<div class="card-top">
 					<img class="card-img-top" src="img/trackgen.png" alt="Card image cap" onclick="showModal('trackgen')">

@@ -29,12 +29,7 @@ function Bug(x, y) {
     const xDif = this.x - player.x;
     const yDif = this.y - player.y;
 
-    if(Math.sqrt(xDif * xDif + yDif * yDif) - player.size < 25 && !player.win) {
-      const theta = player.size < this.size * 3 ? Math.PI : 0;
-      this.d += Math.sin(angleDif(theta + Math.atan2(yDif, xDif), this.d)) * .1;
-    } else {
-      this.d += Math.random()/5 - .1;
-    }
+    this.d += Math.random()/5 - .1;
 
     this.kx *= .92;
     this.ky *= .92;

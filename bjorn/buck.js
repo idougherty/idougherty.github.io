@@ -6,8 +6,8 @@ function Buck(x, y) {
   this.kx = 0;
   this.ky = 0;
   this.d = 0;
-  this.size = 5 + Math.random();
-  this.base = 7;
+  this.size = 8 + Math.random();
+  this.base = 5;
   this.mass = 2;
   this.health = this.size * this.base / 2;
   this.maxHealth = this.health;
@@ -60,7 +60,7 @@ function Buck(x, y) {
       const xDif = this.x - player.x;
       const yDif = this.y - player.y;
 
-      if(Math.sqrt(xDif * xDif + yDif * yDif) - player.size < 400 && this.size < player.size * 2 && !player.win) {
+      if(Math.sqrt(xDif * xDif + yDif * yDif) - player.size < 400 && this.size > player.size && !player.win) {
         const theta = player.size < this.size * 3 ? Math.PI : 0;
         this.target = theta + Math.atan2(yDif, xDif);
       }
@@ -108,6 +108,7 @@ function Buck(x, y) {
       return true;
     }
   }
+
   this.draw = function(camX, camY, camHeight) {
     for(let i = 0; i < this.particles.length; i++) {
       this.particles[i].draw(camX, camY, camHeight);
@@ -118,8 +119,8 @@ function Buck(x, y) {
       img = this.sprite2;
     }
 
-    const width = img.width / camHeight * this.size;
-    const height = img.height / camHeight * this.size;
+    const width = img.width / camHeight * this.size * .6;
+    const height = img.height / camHeight * this.size * .6;
 
     const nx = (this.x - camX - canvas.width/2 ) / camHeight * 12 + canvas.width/2 + width/2;
     const ny = (this.y - camY - canvas.height/2 ) / camHeight * 12 + canvas.height/2 + height/2;

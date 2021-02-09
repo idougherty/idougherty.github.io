@@ -9,7 +9,7 @@ function Bear(x, y) {
   this.size = 12;
   this.base = 40;
   this.mass = 2;
-  this.health = this.size * this.base * 1.5;
+  this.health = this.size * this.base;
   this.maxHealth = this.health;
   this.opacity = 1;
   this.target = Math.random() * Math.PI;

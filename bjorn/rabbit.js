@@ -55,7 +55,7 @@ function Rabbit(x, y) {
       const xDif = this.x - player.x;
       const yDif = this.y - player.y;
 
-      if(Math.sqrt(xDif * xDif + yDif * yDif) - player.size < 80 && this.size < player.size * 2 && !player.win) {
+      if(Math.sqrt(xDif * xDif + yDif * yDif) - player.size < 80 && this.size > player.size && !player.win) {
         const theta = player.size < this.size * 3 ? Math.PI : 0;
       }
 

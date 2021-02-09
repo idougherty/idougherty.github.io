@@ -34,7 +34,7 @@ function Player() {
   };
 
   this.resolveCollision = function(target) {
-    if(this.size * .9 > target.size) {
+    if(this.size * .85 > target.size) {
       return true;
     } else if(this.size * 3 < target.size) {
       return false;
@@ -65,8 +65,12 @@ function Player() {
 
           target.x += Math.cos(theta) * dist;
           target.y += Math.sin(theta) * dist;
-          target.kx = Math.cos(theta + Math.PI) + this.vx * sizeDif;
-          target.ky = Math.sin(theta + Math.PI) + this.vy * sizeDif;
+
+          target.vx = 0;
+          target.vy = 0;
+
+          target.kx = Math.cos(theta + Math.PI) + (this.vx + 1) * 1.2;
+          target.ky = Math.sin(theta + Math.PI) + (this.vy + 1) * 1.2;
 
           if(target.health < 0) {
             noise = environment.noises["enemy_death"];

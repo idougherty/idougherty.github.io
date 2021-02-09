@@ -33,7 +33,7 @@ function Raccoon(x, y) {
     this.vd += (Math.random()-.5)/20;
     this.vd = Math.max(-.05, Math.min(this.vd, .05));
 
-    if(Math.sqrt(xDif * xDif + yDif * yDif) - player.size < 70 && this.size < player.size * 2 && !player.win) {
+    if(Math.sqrt(xDif * xDif + yDif * yDif) - player.size < 50 && this.size > player.size && !player.win) {
       const theta = player.size < this.size * 3 ? Math.PI : 0;
       this.d += Math.sin(angleDif(theta + Math.atan2(yDif, xDif), this.d)) * .1;
     } else {

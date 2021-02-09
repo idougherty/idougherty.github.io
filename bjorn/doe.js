@@ -7,7 +7,7 @@ function Doe(x, y) {
   this.ky = 0;
   this.d = 0;
   this.size = 3 + Math.random()*2;
-  this.base = 4;
+  this.base = 8;
   this.mass = 3;
   this.health = this.size * this.base / 2;
   this.maxHealth = this.health;

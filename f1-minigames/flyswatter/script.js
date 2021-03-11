@@ -266,15 +266,20 @@ class FlyRunner {
         this.decals = [];
         this.swatter = new FlySwatter();
         this.gameOver = false;
-        this.win = null;
+        this.timer = 15000;
+        this.winState = false;
 
         for(let i = 0; i < 20; i++) {
             this.flies.push(new Fly(Math.random() * canvas.width, Math.random() * canvas.height));
         }
     }
 
-    update() {
-        this.swatter.update();
+    update(dt) {
+        this.timer -= dt;
+
+        if(!this.gameOver) {
+            this.swatter.update();
+        }
         for(let i = this.flies.length - 1; i >= 0; i--) {
             this.flies[i].update();
             
@@ -294,11 +299,25 @@ class FlyRunner {
 
         if(this.flies.length == 0) {
             this.gameOver = true;
-            this.win = true;
+            this.winState = true;
+        }
+
+        if(this.timer < 0) {
+            this.gameOver = true;
+            this.winState = false;
         }
     }
     
     draw() {
+        if(!this.gameOver) {
+            c.textAlign = "center";
+            c.textBaseline = "middle";
+            c.fillStyle = "#D0AF75";
+            c.font = "200px Courier New";
+
+            c.fillText(parseFloat(this.timer/1000).toFixed(2), canvas.width/2, canvas.height/2);
+        }
+
         for(const decal of this.decals) {
             decal.draw();
         }
@@ -308,22 +327,42 @@ class FlyRunner {
         if(!this.gameOver) {
             this.swatter.draw();
         } else {
+            c.globalCompositeOperation = "difference";
             c.textAlign = "center";
             c.textBaseline = "middle";
             c.fillStyle = "white";
             c.font = "30px Courier New";
-            c.fillText("you done did it", canvas.width/2, canvas.height/2);
+
+            if(this.winState) {
+                c.fillText("you done did it", canvas.width/2, canvas.height/2);
+            } else {
+                c.fillText("you didn't do it dude", canvas.width/2, canvas.height/2);
+            }
+            c.globalCompositeOperation = "source-over";
         }
     }
 }
 
 let gameRunner = new FlyRunner();
 
+get_time = function() {
+    let d = new Date();
+    let t = d.getTime();
+    return t;
+}
+
+let last_time = get_time();
+let current_time = get_time();
+
 setInterval(function() {
     c.clearRect(0, 0, canvas.width, canvas.height);
     c.fillStyle = "#F0CF85";
     c.fillRect(0, 0, canvas.width, canvas.height);
 
-    gameRunner.update();
+    current_time = get_time();
+
+    gameRunner.update(current_time - last_time);
     gameRunner.draw();
+
+    last_time = current_time;
 }, 15);

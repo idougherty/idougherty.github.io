@@ -3,8 +3,8 @@ function Node(x, y, z) {
 	this.y = y;
 	this.z = z;
 	this.offset = 0;
-	this.color = (this.y + 10) * 18;
-	this.base = 30;
+	this.color = -this.y * 18 + 90 + Math.random()*30;
+	this.base = 0;
 	this.opacity = 0;
 
 	this.rotatePoint = function(angle, x, y) {
@@ -18,10 +18,6 @@ function Node(x, y, z) {
 	};
 
 	this.draw = function(distance, pitch, yaw, roll) {
-		this.offset = this.color/720 - .5;
-		if(this.color == 0) {
-			this.opacity = 1;
-		}
 
 		const p1 = this.rotatePoint(pitch, this.z, this.y + this.offset);
 		const p2 = this.rotatePoint(yaw, this.x, p1[0]);
@@ -31,16 +27,23 @@ function Node(x, y, z) {
 		const ny = p3[1];
 		const nz = p2[1];
 
-
 		const size = 5 / (nz + distance);
-		var alpha = (7 - nz)/6 * this.opacity;
+		var alpha = (7 - nz)/5;
 
 		imageX = nx * size * 200 + canvas.width/2;
 		imageY = ny * size * 200 + canvas.height/2;
 
-		this.color = this.color + 2 > 360 ? 0 : this.color + 2;
+		this.color -= 2;
+		this.offset = -this.color/720 + .25;
+		if(this.color < 0) {
+			this.color = 360;
+			this.base = 30;
+		} else {
+			if(this.base > 20) this.base-=.1;
+		}
+		// this.color = this.color + 2 > 360 ? 0 : this.color + 2;
 		
-		c.fillStyle = "hsla("+this.color+", 75%, 10%, "+alpha+")";
+		c.fillStyle = "hsla("+this.color+", 75%, 15%, "+alpha+")";
 		c.beginPath();
 		c.arc(imageX, imageY, size * this.base, 0, 2 * Math.PI);
 		c.closePath();

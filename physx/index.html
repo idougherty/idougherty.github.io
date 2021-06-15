@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Cutive+Mono&amp;display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;1,100&amp;display=swap" rel="stylesheet">
+
+    <title>Ian's Physics Sim</title>
+
+	<style>
+		body {
+			background-color: #443a57;
+		}
+
+		@media (min-width: 10px) {
+			.canvas-container {
+				margin: 10px auto;
+				width: 100%;
+			}
+		}
+
+		@media (min-width: 1000px) {
+			.canvas-container {
+				margin: 100px auto;
+				width: 1000px;
+			}
+		}
+
+		.page-header {
+			color: #E5C7A7;
+    		font-family: "Cutive Mono",monospace;
+			font-size: 2.5em;
+		}
+
+		#paper {
+			float: left;
+			box-shadow: 0px 0px 10px black;
+			width: 80%
+		}
+
+		.side-bar {
+			width: 18%;
+			float: right;
+			margin-left: 2%;
+		}
+
+		.btn-container {
+			display: flex;
+			flex-direction: column;
+		}
+
+		.display-header {
+			text-align: center;
+			margin: 5px 0;
+			color: #E5C7A7;
+    		font-family: "Cutive Mono",monospace;
+			font-size: 1.5em;
+		}
+
+		.canvas-btns {
+			box-shadow: 0px 0px 10px black;
+			width: 100%;
+			padding: 10px;
+			margin: 10px 0;
+			background-color: #9B5F72;
+    		font-family: "Cutive Mono",monospace;
+			font-size: 1.2em;
+			border: none;
+			border-radius: 3px;
+			color: #26222c;
+		}
+
+		.canvas-btns:hover {
+			background-color: #C28E84;
+		}
+	</style>
+</head>
+<body>
+	<div class="canvas-container">
+		<h1 class="page-header">Ian's Physics Sim</h1>
+		<canvas id="paper" width="800px" height="600px"></canvas>
+		<div class="side-bar">
+			<h2 class="display-header">Displays:</h2>
+			<div class="btn-container">
+				<button class="canvas-btns" onclick="resetScene('funnel')">Funnel</button>
+				<button class="canvas-btns" onclick="resetScene('orbits')">Orbits</button>
+				<button class="canvas-btns" onclick="resetScene('boxes')">Boxes</button>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="physx.js"></script>
+	<script type="text/javascript" src="phys-drivers.js"></script>
+</body>

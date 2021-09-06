@@ -25,12 +25,12 @@ class Point {
         return dist;
     }
 
-    draw(c) {
-        c.fillStyle = "#444";
-        c.beginPath();
-        c.arc(this.x + center.x, this.y + center.y, 3, 0, 2 * Math.PI);
-        c.closePath();
-        c.stroke();
+    draw(ctx) {
+        ctx.fillStyle = "#444";
+        ctx.beginPath();
+        ctx.arc(this.x + center.x, this.y + center.y, 3, 0, 2 * Math.PI);
+        ctx.closePath();
+        ctx.stroke();
     }
 }
 
@@ -41,9 +41,9 @@ class Straightaway {
         this.length = Point.distance(this.p1, this.p2);
     }
 
-    draw(c) {
-        c.moveTo(this.p1.x, this.p1.y);
-        c.lineTo(this.p2.x, this.p2.y);
+    draw(ctx) {
+        ctx.moveTo(this.p1.x, this.p1.y);
+        ctx.lineTo(this.p2.x, this.p2.y);
     }
 }
 
@@ -62,8 +62,8 @@ class Corner {
         this.counterClockwise = Math.sign(this.theta) < 0;
     }
 
-    draw(c) {
-        c.arc(this.focus.x, this.focus.y, this.radius, this.startAngle, this.endAngle, this.counterClockwise);
+    draw(ctx) {
+        ctx.arc(this.focus.x, this.focus.y, this.radius, this.startAngle, this.endAngle, this.counterClockwise);
     }
 }
 
@@ -194,6 +194,7 @@ class Track {
 
     static cleanTrack(points) {
         let straight = false;
+        const sharpest = 1;
 
         while(!straight) {
             straight = true;
@@ -204,9 +205,10 @@ class Track {
                 
                 const theta = Math.abs(getAngle(vertex, p1, p2));
 
-                if(theta > Math.PI * .9 || theta < .8) {
+                if(theta > Math.PI * .9 || theta < sharpest) {
                     points.splice(i, 1);
                     straight = false;
+                    i--;
                 }
             }
         }
@@ -298,49 +300,117 @@ class Track {
     
     static genMesh(track) {
         const offset = track.width / 2;
-        track.innerShape = [];
-        track.outerShape = [];
+        const wallThickness = 4;
+        let innerShape = [[], []];
+        let outerShape = [[], []];
     
         for(const part of track.parts) {
             if(part instanceof Corner) {
-                track.innerShape.push(...Track.genMeshCorner(part, -offset));
-                track.outerShape.push(...Track.genMeshCorner(part, offset));
+                innerShape[0].push(...Track.genMeshCorner(part, -offset));
+                innerShape[1].push(...Track.genMeshCorner(part, -offset - wallThickness));
+
+                outerShape[0].push(...Track.genMeshCorner(part, offset));
+                outerShape[1].push(...Track.genMeshCorner(part, offset + wallThickness));
             }
         }
+
+        let innerWallPts = [];
+        let outerWallPts = [];
+        
+        const length = innerShape[0].length;
+        for(let cur = 0; cur < length; cur++) {
+            let next = cur + 1 < length ? cur + 1 : 0;
+            innerWallPts[cur] = [innerShape[0][cur],
+                                 innerShape[1][cur],
+                                 innerShape[1][next],
+                                 innerShape[0][next]];
+        }
+        
+        for(let cur = 0; cur < length; cur++) {
+            let next = cur + 1 < length ? cur + 1 : 0;
+            outerWallPts[cur] = [outerShape[0][cur],
+                                 outerShape[1][cur],
+                                 outerShape[1][next],
+                                 outerShape[0][next]];
+        }
+
+        track.innerWall = innerWallPts;
+        track.outerWall = outerWallPts;
     }
 
-    draw(c) {
-        c.strokeStyle = "#080F0F";
-        c.lineWidth = this.width;
+    draw(ctx) {
+        ctx.strokeStyle = "#080F0F";
+        ctx.lineWidth = this.width;
 
         let h = 0;
         for(const part of this.parts) {
             h += 360 / this.parts.length;
-            c.strokeStyle = "hsl("+h+", 50%, 50%)";
-            c.beginPath();
-            part.draw(c);
-            c.stroke();
+            ctx.strokeStyle = "hsl("+h+", 50%, 50%)";
+            ctx.beginPath();
+            part.draw(ctx);
+            ctx.stroke();
         }
 
-        if(this.outerShape.length > 0) {
-            c.strokeStyle = "#fff";
-            c.lineWidth = 2;
+        // if(this.innerShape.length > 0) {
+        //     ctx.strokeStyle = "#fff";
+        //     ctx.lineWidth = 2;
         
-            c.beginPath();
-            for(const point of this.innerShape) {
-                c.lineTo(point.x, point.y);
-            }
-            c.closePath();
-            c.stroke();
+        //     ctx.beginPath();
+        //     for(const point of this.innerShape[0]) {
+        //         ctx.lineTo(point.x, point.y);
+        //     }
+        //     ctx.closePath();
+        //     ctx.stroke();
+
+        //     ctx.beginPath();
+        //     for(const point of this.innerShape[1]) {
+        //         ctx.lineTo(point.x, point.y);
+        //     }
+        //     ctx.closePath();
+        //     ctx.stroke();
         
-            c.beginPath();
-            for(const point of this.outerShape) {
-                c.lineTo(point.x, point.y);
+        //     ctx.beginPath();
+        //     for(const point of this.outerShape[0]) {
+        //         ctx.lineTo(point.x, point.y);
+        //     }
+        //     ctx.closePath();
+        //     ctx.stroke();
+
+        //     ctx.beginPath();
+        //     for(const point of this.outerShape[1]) {
+        //         ctx.lineTo(point.x, point.y);
+        //     }
+        //     ctx.closePath();
+        //     ctx.stroke();
+        // }
+    }
+
+    drawMesh(ctx) {
+        ctx.lineWidth = 1;
+
+        for(const pts of this.innerWall) {
+            ctx.strokeStyle = "cyan";
+        
+            ctx.beginPath();
+            for(const point of pts) {
+                ctx.lineTo(point.x, point.y);
             }
-            c.closePath();
-            c.stroke();
+            ctx.closePath();
+            ctx.stroke();
+        }
+        
+        for(const pts of this.outerWall) {
+            ctx.strokeStyle = "cyan";
+        
+            ctx.beginPath();
+            for(const point of pts) {
+                ctx.lineTo(point.x, point.y);
+            }
+            ctx.closePath();
+            ctx.stroke();
         }
     }
 }
 
-export {Track};
+// exports.Track = Track;
+// export {Track};

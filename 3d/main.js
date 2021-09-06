@@ -34,15 +34,15 @@ function bezier3D(p1, p2, p3, p4, t) {
 	const fy = p1y + (p2y - p1y) * t;
 	const fz = p1z + (p2z - p1z) * t;
 
-	return new Point3D(fx, -fy, fz);
+	return new Vec3D(fx, -fy, fz);
 }
 
 let e = new Environment();
-let camera = new Camera(-7, -2, 0, 0, Math.PI/2);
+let camera = new Camera(new Vec3D(-7, -2, 0), 0, Math.PI/2);
 
-let vec = new Point3D(.5, 1, -.5);
-vec  = Point3D.normalize(vec);
-e.lights.push(new DirectionalLight(vec, {r: 255, g: 255, b: 255}, 1));
+let vec = new Vec3D(.5, 1, -.5);
+vec  = Vec3D.normalize(vec);
+e.lights.push(new DirectionalLight(vec, {r: 105, g: 95, b: 85}));
 
 let utahVerticies = [[  0.2000,  0.0000, 2.70000 ], [  0.2000, -0.1120, 2.70000 ],
 					[  0.1120, -0.2000, 2.70000 ], [  0.0000, -0.2000, 2.70000 ],
@@ -130,7 +130,7 @@ const parts =  	[[ 	102, 103, 104, 105, 4,   5,   6,   7,
 				[  	80,  81,  82,  83,  84,  85,  86,  87,
 					88,  89,  90,  91,  92,  93,  94,  95 ]];
 
-const subdivisions = 3;
+const subdivisions = 5;
 
 for(const [idx, part] of parts.entries()) {
 	let ref = 0;
@@ -157,17 +157,17 @@ for(const [idx, part] of parts.entries()) {
 			let points = [];
 
 			for(let j = 0; j <= subdivisions; j++) {
-				const p1 = new Point3D(utahVerticies[idx1][1], -utahVerticies[idx1][2], utahVerticies[idx1][0]);
-				const p2 = new Point3D(utahVerticies[idx2][1], -utahVerticies[idx2][2], utahVerticies[idx2][0]);
-				const p3 = new Point3D(utahVerticies[idx3][1], -utahVerticies[idx3][2], utahVerticies[idx3][0]);
-				const p4 = new Point3D(utahVerticies[idx4][1], -utahVerticies[idx4][2], utahVerticies[idx4][0]);
+				const p1 = new Vec3D(utahVerticies[idx1][1], -utahVerticies[idx1][2], utahVerticies[idx1][0]);
+				const p2 = new Vec3D(utahVerticies[idx2][1], -utahVerticies[idx2][2], utahVerticies[idx2][0]);
+				const p3 = new Vec3D(utahVerticies[idx3][1], -utahVerticies[idx3][2], utahVerticies[idx3][0]);
+				const p4 = new Vec3D(utahVerticies[idx4][1], -utahVerticies[idx4][2], utahVerticies[idx4][0]);
 
 				points.push(bezier3D(p1, p2, p3, p4, j / subdivisions))
 			}
 
 
 			for(let [idx, point] of points.entries()) {
-				points[idx] = new Point3D(point.x * sx, point.y, point.z * sz);
+				points[idx] = new Vec3D(point.x * sx, point.y, point.z * sz);
 			}
 
 			columns.push(points);
@@ -224,7 +224,7 @@ for(const [idx, part] of parts.entries()) {
 	}
 }
 
-this.rotatePoint = function(angle, x, y) {
+rotatePoint = function(angle, x, y) {
 	const sin = Math.sin(angle);
 	const cos = Math.cos(angle);
 	
@@ -237,18 +237,18 @@ this.rotatePoint = function(angle, x, y) {
 function cameraTransform(timer, d) {
 	yaw = .01 * timer;
 	pitch = Math.PI / 16 * Math.sin(timer/100);
-	roll = Math.PI / 16 * Math.sin(timer/200);
+	roll = 0;//Math.PI / 16 * Math.sin(timer/200);
 
-	const p1 = this.rotatePoint(yaw, -5, 0);
-	const p2 = this.rotatePoint(pitch, 5, 0);
+	const p1 = rotatePoint(yaw, 5, 0);
+	const p2 = rotatePoint(pitch, -5, 0);
 	// const p3 = this.rotatePoint(roll, p1[0], p2[1]);
 
-	camera.x = p1[0] * d;
-	camera.y = -p2[1] * d - 2;
-	camera.z = p1[1] * d;
+	camera.pos.x = p1[0] * d;
+	camera.pos.y = -p2[1] * d - 2;
+	camera.pos.z = p1[1] * d;
 
 	camera.pitch = -pitch;
-	camera.yaw = -yaw + Math.PI/2;
+	camera.yaw = yaw + Math.PI/2;
 	camera.roll = roll;
 }
 
@@ -309,7 +309,6 @@ document.addEventListener("keydown", function(e) {
 
 	if(cameraLock && disableLock) {
 		cameraLock = false;
-		camera.roll = 0;
 	}
 });
 
@@ -351,14 +350,18 @@ document.addEventListener("keyup", function(e) {
 
 document.addEventListener("mousemove", function(e) {
 	if(camera.mouse.down) {
-		camera.pitch -= (e.movementY)/400;
-		camera.yaw += (e.movementX)/400;
+		camera.pitch += (e.movementY)/400;
+		camera.yaw -= (e.movementX)/400;
 	}
 });
 
 document.addEventListener("mousedown", function(e) {
 	canvas.requestPointerLock()
 	camera.mouse.down = true;
+
+	if(cameraLock) {
+		cameraLock = false;
+	}
 });
 
 document.addEventListener("mouseup", function(e) {

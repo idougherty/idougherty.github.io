@@ -1,125 +1,339 @@
 var earthPixels = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,0,0,0,0,1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,1,1,0,0,1,1,1,1,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,1,1,1,0,0,0,0,0,0,0,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,1,1,0,0,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,1,1,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,0,1,1,1,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,1,1,1,0,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,1,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];
 
-canvas = document.getElementById("paper");
-c = canvas.getContext("2d");
-
-function Node(x, y, z) {
-	this.x = x;
-	this.y = y;
-	this.z = z;
-	this.offset = 0;
-	this.color = -this.y * 18 + 90 + Math.random()*30;
-	this.base = 0;
-
-	this.rotatePoint = function(angle, x, y) {
-		const sin = Math.sin(angle);
-		const cos = Math.cos(angle);
-		
-		const nx = x*cos - y*sin;
-		const ny = y*cos + x*sin;
-		
-		return [nx, ny];
-	};
-
-	this.draw = function(distance, pitch, yaw, roll) {
-
-		const p1 = this.rotatePoint(pitch, this.z, this.y + this.offset);
-		const p2 = this.rotatePoint(yaw, this.x, p1[0]);
-		const p3 = this.rotatePoint(roll, p2[0], p1[1]);
-
-		const nx = p3[0];
-		const ny = p3[1];
-		const nz = p2[1];
-
-		const size = 8 / (nz + distance);
-		var alpha = (7 - nz)/5;
-
-		imageX = nx * size * 200 + canvas.width * .7;
-		imageY = ny * size * 200 + canvas.height/2;
-
-		this.color -= 2;
-		this.offset = -this.color/720 + .25;
-		if(this.color < 0) {
-			this.color = 360;
-			this.base = 30;
-		} else {
-			if(this.base > 20) this.base-=.1;
-		}
-		// this.color = this.color + 2 > 360 ? 0 : this.color + 2;
-		
-		c.fillStyle = "hsla("+this.color+", 75%, 15%, "+alpha+")";
-		c.beginPath();
-		c.arc(imageX, imageY, size * this.base, 0, 2 * Math.PI);
-		c.closePath();
-		c.fill();
-	}
-}
-
-function MarbleRunner() {
-	this.distance = 20;
-	this.timer = 0;
-	this.resolution = 30;
-	this.size = 10;
-	this.blendMode = "lighter";
-	this.nodes = [];
-	this.pitch = 0;
-	this.yaw = 0;
-	this.roll = 0;
-
-	this.createLayer = function(offset, nodeAmt) {
-		for(var i = 0; i < nodeAmt; i++) {
-			const layerSize = Math.sqrt(this.size/2 * this.size/2 - offset * offset);
-			const angle = i * Math.PI * 2 / nodeAmt; 
-			const x = layerSize * Math.cos(angle); 
-			const z = layerSize * Math.sin(angle);
-
-			this.nodes.push(new Node(x, offset, z));
-		}
-	}
-
-	this.setup = function() {
-		c.globalCompositeOperation = this.blendMode;
-
-		for(var i = 0; i < this.resolution; i++) {
-			const layerHeight = this.size / this.resolution;
-			const offset = i * layerHeight - this.size/2 + layerHeight/2;
-			this.createLayer(offset, this.resolution * 2);
-		}
-	};
-	
-	this.update = function() {
-		this.timer++;
-		this.yaw = 2 * Math.PI * Math.sin(this.timer/800);
-		this.pitch = Math.PI / 16 * Math.sin(this.timer/500);
-		this.roll = Math.PI / 16 * Math.sin(this.timer/100);
-
-		for(var i = this.nodes.length-1; i >= 0; i--) {
-			if(!earthPixels[i]) {
-				this.nodes[i].draw(this.distance, this.pitch, this.yaw, this.roll);
-			}
-		}
-	};
-}
-
-var controller = new MarbleRunner();
-controller.setup();
-
-canvas.width = 2400;
-canvas.height = 1200;
-
-
-setInterval(function() {	
-    c.globalCompositeOperation = "source-over";
+let canvas = document.getElementById("bg-anim");
+let ctx = canvas.getContext("2d", {alpha: false});
     
-	var grd = c.createRadialGradient(canvas.width * .7, canvas.height/2, 0, canvas.width * .7, canvas.height/2, canvas.width*.19);
-    grd.addColorStop(0,  "rgba(18, 18, 18, 0.2)");
-	grd.addColorStop(.9, "rgba(18, 18, 18, 0.2)");
-	grd.addColorStop(1,  "rgba(18, 18, 18, 1)");
+let SPLASH_HEIGHT;
+let C_HEIGHT;
+let C_WIDTH;
+let C_SCALE = 1.5;
+let parallax = 1.5;
+let SCREEN_TYPE;
 
-    c.fillStyle = grd;
-    c.fillRect(0, 0, canvas.width, canvas.height);
+const MAX_DIST = 100;
+let MAX_POINTS = 150;
 
-	c.globalCompositeOperation = "lighter";
+function resizeCanvas() {
+    canvas.height = window.innerHeight;
+	canvas.width = window.innerWidth;
+
+    if(window.innerWidth < 768) {
+		C_SCALE = 1.5;
+    } else if(window.innerWidth >= 768 && window.innerWidth < 1024) {
+		C_SCALE = 1.5;
+    } else if(window.innerWidth >= 1024) {
+		C_SCALE = 1.8;
+    }
+    
+	SPLASH_HEIGHT = document.getElementsByClassName("splash-container")[0].clientHeight / C_SCALE; 
+    C_HEIGHT = document.getElementsByClassName("content-container")[0].clientHeight / C_SCALE;
+    C_WIDTH = canvas.width / C_SCALE;
+
+    ctx.scale(C_SCALE, C_SCALE);
+    ctx.globalCompositeOperation = "lighter";
+	ctx.lineCap = "butt";
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+window.onresize = resizeCanvas;
+resizeCanvas();
+
+const lorenz = {
+    center: new Vec3D(.13, .13, 25.87),
+    trail: 1000,
+    scale: 1,
+    particles: [[], [], []],
+    leaders:   [new Vec3D(-4.7834, -6.4119, 19.2778), 
+                new Vec3D(-4.8834, -6.4119, 19.2778), 
+                new Vec3D(-4.9834, -6.4119, 19.2778)],
+
+    func: (v, dt) => {
+        const P = 10;
+        const R = 28;
+        const B = 8/3;
+    
+        const dx = P * (v.y - v.x) * dt;
+        const dy = (R * v.x - v.y - v.x * v.z) * dt;
+        const dz = (v.x * v.y - B * v.z) * dt;    
+    
+        v.x += dx * .5;
+        v.y += dy * .5;
+        v.z += dz * .5;
+    },
+};
+
+const aizawa = {
+    center: new Vec3D(1, 0, 5.2),
+    trail: 1000,
+    scale: 15,
+    particles: [[], [], [], [], []],
+    leaders:   [new Vec3D(0.0589, 0.0318, 0.3323),
+                new Vec3D(0.0689, 0.0318, 0.3323),
+                new Vec3D(0.0789, 0.0318, 0.3323),
+                new Vec3D(0.0889, 0.0318, 0.3323),
+                new Vec3D(0.0989, 0.0318, 0.3323),],
+
+    func: (v, dt) => {
+        const e = .25;
+        const a = .95;
+        const c = .6;
+        const d = 3.5;
+        const b = .7;
+        const f = .1;
+    
+        const dx = (v.z - b) * v.x - d * v.y;
+        const dy = d * v.x + (v.z - b) * v.y;
+        const dz = c + a * v.z - v.z * v.z * v.z / 3 - 
+                    (v.x * v.x + v.y * v.y) * (1 + e * v.z)
+                    + f * v.z * v.x * v.x * v.x;
+    
+        v.x += dx * dt;
+        v.y += dy * dt;
+        v.z += dz * dt;
+    },
+};
+
+const rossler = {
+    center: new Vec3D(1, -26, 5.2),
+    trail: 1000,
+    scale: 1.5,
+    particles: [[], [], [], [], [],],
+    leaders:   [new Vec3D(0.04, 1.95, 3.19),
+                new Vec3D(0.14, 2.45, 3.29),
+                new Vec3D(0.24, 2.95, 3.39),
+                new Vec3D(0.34, 3.45, 3.49),
+                new Vec3D(0.44, 3.95, 3.59),],
+
+    func: (v, dt) => {
+        const a = .2;
+        const b = .2;
+        const c = 5.7;
+    
+        const dx = v.z + a * v.x;
+        const dy = b + -v.y * (v.z - c);
+        const dz = -(-v.y + v.x);
+    
+        v.x += dx * dt * 2;
+        v.y -= dy * dt * 2;
+        v.z += dz * dt * 2;
+    },
+};
+
+const lorenzMod2 = {
+    center: new Vec3D(0, 0, 0),
+    trail: 1000,
+    scale: 2,
+    particles: [[], [], [],],
+    leaders:   [new Vec3D(-2.58, 5.13, -0.65),
+                new Vec3D(-2.58, 5.15, -0.65),
+                new Vec3D(-2.58, 5.17, -0.65),],
+
+    func: (v, dt) => {
+        const a = .9;
+        const b = 5;
+        const c = 9.9;
+        const d = 1;
+    
+        const dx = -a * v.x + v.y * v.y - v.z * v.z + a * c;
+        const dy = v.x * (v.y - b * v.z) + d;
+        const dz = -v.z + v.x * (b * v.y + v.z);
+    
+        v.x += dx * dt * .34;
+        v.y += dy * dt * .34;
+        v.z += dz * dt * .34;
+    },
+};
+
+// currently unstable
+// const dequanLi = {
+//     center: new Vec3D(0, 0, 0),
+//     trail: 10000,
+//     scale: .3,
+//     particles: [[], [], [],],
+//     leaders:   [new Vec3D(1.5, 3.2, 0.4),
+//                 new Vec3D(3.0, 5.2, 1.4),
+//                 new Vec3D(4.5, 7.2, 2.4),],
+
+//     func: (v, dt) => {
+//         const a = 40;
+//         const c = 11.0/6.0;
+//         const d = 0.16;
+//         const e = 0.65;
+//         const k = 55;
+//         const f = 20;
+    
+//         const dx = a * (v.y - v.x) + d * v.x * v.z;
+//         const dy = k * v.x + f * v.y - v.x * v.z;
+//         const dz = c * v.z + v.x * v.y - e * v.x * v.x;
+    
+//         v.x += dx * dt * .03;
+//         v.y += dy * dt * .03;
+//         v.z += dz * dt * .03;
+//     },
+// };
+
+function project(cam, vec) {
+    const dif = Vec3D.dif(cam.pos, vec);
+
+    const rotY = qRotate(dif, cam.UP, cam.yaw);
+    const rotP = qRotate(rotY, cam.FWD, cam.pitch);
+    const rotR = qRotate(rotP, cam.DIR, cam.roll);
+
+    if(rotR.z < 0) return;
+
+    let x = rotR.x * cam.f_plane / rotR.z;
+    let y = rotR.y * cam.f_plane / rotR.z;
+    
+    return {x: x, y: y};
+}
+
+function qMult(A, B) {
+    let C = {
+        w: A.w * B.w - A.i * B.i - A.j * B.j - A.k * B.k,
+        i: A.w * B.i + A.i * B.w + A.j * B.k - A.k * B.j,
+        j: A.w * B.j - A.i * B.k + A.j * B.w + A.k * B.i,
+        k: A.w * B.k + A.i * B.j - A.j * B.i + A.k * B.w,
+    };
+    
+    return C;
+}
+
+function qRotate(vec, axis, angle) {
+    let V = {
+        w: 0,
+        i: vec.x,
+        j: vec.y,
+        k: vec.z,
+    };
+
+    const cosA = Math.cos(angle/2);
+    const sinA = Math.sin(angle/2);
+
+    let R = {
+        w: cosA,
+        i: axis.x * sinA,
+        j: axis.y * sinA,
+        k: axis.z * sinA,
+    };
+
+    let R1 = {
+        w: R.w,
+        i: -R.i,
+        j: -R.j,
+        k: -R.k,
+    };
+
+    let W = qMult(qMult(R, V), R1);
+
+    return new Vec3D(W.i, W.j, W.k);
+}
+
+function updateCamera(cam, curTime) {
+    cam.yaw = 6 * Math.cos(curTime * .000013);
+    cam.pitch = .2 * Math.cos(curTime * .000019);
+    cam.roll = .2 * Math.cos(curTime * .00002);
+
+    const dist = 200;
+
+    cam.pos.x = -Math.sin(-camera.yaw) * Math.cos(camera.pitch) * dist + attractor.center.x;
+    cam.pos.z = -Math.cos(-camera.yaw) * Math.cos(camera.pitch) * dist + attractor.center.z;
+    cam.pos.y = Math.sin(-camera.pitch) * dist + attractor.center.y;
+}
+
+let camera = {
+    pos: new Vec3D(0, 0, -50),
+    dir: new Vec3D(0, 0, 1),
+    f_plane: 1000,
+    pitch: 0,
+    yaw: 0,
+    roll: 0,
+    UP: new Vec3D(0, 1, 0),
+    FWD: new Vec3D(1, 0, 0),
+    DIR: new Vec3D(0, 0, 1),
+}
+
+function attractorAnim(dt) {
+	updateCamera(camera, curTime);
+
+    for(const [idx, leader] of attractor.leaders.entries()) {
+        attractor.func(leader, dt);
+        attractor.particles[idx].push(new Vec3D(leader.x * attractor.scale, leader.y * attractor.scale, leader.z * attractor.scale));
+
+        if(attractor.particles[idx].length > attractor.trail)
+            attractor.particles[idx].splice(0, 1);
+    }
+
+    for(const particles of attractor.particles) {
+        let prev = null;
+        let cur = null;
+
+        for(const [idx, particle] of particles.entries()) {
+            cur = project(camera, particle);
+    
+            const offsetX = C_WIDTH * .75;
+            const offsetY = SPLASH_HEIGHT / 2 - scrollTop / C_HEIGHT * 100;
+
+            cur.x *= C_SCALE;
+            cur.y *= C_SCALE;
+
+            cur.x += offsetX;
+            cur.y += offsetY;
+
+            if(prev && cur) {
+                const interp = idx / particles.length;
+                const h = .015 * curTime + 140 * interp;
+                ctx.strokeStyle = "hsl("+Math.floor(h)+", 100%, 60%)";
+                ctx.lineWidth = 3.5 * interp * interp + .5;
+
+                if(ctx.lineWidth > .5) {
+                    ctx.beginPath();
+                    ctx.moveTo(prev.x, prev.y);
+                    ctx.lineTo(cur.x, cur.y);
+                    ctx.stroke();
+                }
+            }
+    
+            prev = cur;
+
+            if(cur.x < bounds.left) bounds.left = cur.x;
+            if(cur.x > bounds.right) bounds.right = cur.x;
+            if(cur.y < bounds.top) bounds.top = cur.y;
+            if(cur.y > bounds.bottom) bounds.bottom = cur.y;
+        }
+    }
+}
+
+let lastTime = 0;
+let curTime = new Date().getTime();
+function getDT() {
+    lastTime = curTime;
+    curTime = new Date().getTime();
+    return curTime - lastTime;
+} 
+
+let attractors = [aizawa, lorenz, lorenzMod2];
+let attractor = attractors[Math.floor(Math.random() * attractors.length)];
+
+let dt = 0;
+let scrollTop;
+let bounds;
+function anim() {
+	dt = getDT();
+	scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
+
+    if(bounds)
+        ctx.clearRect(bounds.left - 10, bounds.top - 10, bounds.right - bounds.left + 20, bounds.bottom - bounds.top + 20);
+    
+    bounds = {
+        left: Infinity,
+        right: -Infinity,
+        top: Infinity,
+        bottom: -Infinity,
+    };
+
+	attractorAnim(Math.min(dt, 20) / 1500);
 	
-    controller.update();
-}, 20);
+	window.requestAnimationFrame(anim);
+}
+anim();

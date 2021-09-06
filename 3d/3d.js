@@ -66,40 +66,39 @@ function SortedBinaryTree() {
 	}
 }
 
-class Point3D {
-	constructor(x, y, z, nx = null, ny = null, nz = null) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
-		this.nx = nx;
-		this.ny = ny;
-		this.nz = nz;
-		this.visible = true;
-		this.imageX = 0;
-		this.imageY = 0;
-		this.camDist = 0;
-	}
+// class Point3D {
+// 	constructor(x, y, z, nx = null, ny = null, nz = null) {
+// 		this.x = x;
+// 		this.y = y;
+// 		this.z = z;
+// 		this.nx = nx;
+// 		this.ny = ny;
+// 		this.nz = nz;
+// 		this.visible = true;
+// 		this.imageX = 0;
+// 		this.imageY = 0;
+// 	}
 
-	static findDistance(p1, p2) {
-		let nx = p1.x - p2.x;
-        let ny = p1.y - p2.y;
-		let nz = p1.z - p2.z;
+// 	static findDistance(p1, p2) {
+// 		let nx = p1.x - p2.x;
+//         let ny = p1.y - p2.y;
+// 		let nz = p1.z - p2.z;
 		
-		const d = Math.sqrt(nx*nx + nz*nz + ny*ny);
+// 		const d = Math.sqrt(nx*nx + nz*nz + ny*ny);
 
-		return d;
-	}
+// 		return d;
+// 	}
 
-	static normalize(vector) {
-		const d = Point3D.findDistance(vector, new Point3D(0, 0, 0));
+// 	static normalize(vector) {
+// 		const d = Point3D.findDistance(vector, new Point3D(0, 0, 0));
 		
-		vector.x = vector.x / d;
-		vector.y /= d;
-		vector.z /= d;		
+// 		vector.x = vector.x / d;
+// 		vector.y /= d;
+// 		vector.z /= d;		
 
-		return vector;
-	}
-}
+// 		return vector;
+// 	}
+// }
 
 class Plane {
 	constructor(points, color = null) {
@@ -123,7 +122,7 @@ class Plane {
 		const j = a[0] * b[2] - a[2] * b[0];
 		const k = a[0] * b[1] - a[1] * b[0];
 
-		const normal = Point3D.normalize(new Point3D(i, j, k));
+		const normal = Vec3D.normalize(new Vec3D(i, j, k));
 
 		this.normal.i = normal.x;
 		this.normal.j = normal.y;
@@ -144,7 +143,7 @@ class Plane {
 			z += point.z / plane.points.length;
 		}
 
-		return new Point3D(x, y, z);
+		return new Vec3D(x, y, z);
 	}
 
 	static calculateShading(plane, camera, lights) {
@@ -156,30 +155,30 @@ class Plane {
 			if(light instanceof DirectionalLight) {
 				let middle = this.findCenter(plane); 
 
-				let a = new Point3D(middle.x - camera.x, middle.y - camera.y, middle.z - camera.z);
-				a = Point3D.normalize(a);
+				let a = new Vec3D(middle.x - camera.pos.x, middle.y - camera.pos.y, middle.z - camera.pos.z);
+				a = Vec3D.normalize(a);
 
 				const v = plane.normal.i * a.x - plane.normal.j * a.y + plane.normal.k * a.z;
 
 				const ndotl =  (plane.normal.i * light.vec.x - plane.normal.j * light.vec.y + plane.normal.k * light.vec.z);
 
 				//base shading
-				r += ndotl * 80 * Math.sign(v);
-				g += ndotl * 80 * Math.sign(v);
-				b += ndotl * 80 * Math.sign(v);
+				r += ndotl * light.color.r * Math.sign(v);
+				g += ndotl * light.color.g * Math.sign(v);
+				b += ndotl * light.color.b * Math.sign(v);
 				
 				const n = [ndotl * plane.normal.i, ndotl * plane.normal.j, ndotl * plane.normal.k];
 
-				let h = new Point3D(2 * n[0] - light.vec.x, 2 * n[1] - light.vec.y, 2 * n[2] - light.vec.z);
-				h = Point3D.normalize(h);
+				let h = new Vec3D(2 * n[0] - light.vec.x, 2 * n[1] - light.vec.y, 2 * n[2] - light.vec.z);
+				h = Vec3D.normalize(h);
 
 				const ndoth = (a.x * h.x - a.y * h.y + a.z * h.z);
-				const m = 5;
+				const m = 17;
 				
 				//specular highlights
-				r += Math.max(Math.pow(ndoth, m) * 50, 0);
-				g += Math.max(Math.pow(ndoth, m) * 50, 0);
-				b += Math.max(Math.pow(ndoth, m) * 50, 0);
+				r += Math.max(Math.pow(ndoth, m) * 60, 0);
+				g += Math.max(Math.pow(ndoth, m) * 60, 0);
+				b += Math.max(Math.pow(ndoth, m) * 60, 0);
 			}
 		}
 
@@ -212,14 +211,14 @@ class Plane {
 		const y = p1.y + ny;
 		const z = p1.z + nz;
 
-		const point = new Point3D(x, y, z);
+		const point = new Vec3D(x, y, z);
 
 		return point;
 	}
 
 	static pointPrecedesPlane(point, plane) {
 		const a = [point.x - plane.points[0].x, point.y - plane.points[0].y, point.z - plane.points[0].z];
-		const b = [camera.x - plane.points[0].x, camera.y - plane.points[0].y, camera.z - plane.points[0].z];
+		const b = [camera.pos.x - plane.points[0].x, camera.pos.y - plane.points[0].y, camera.pos.z - plane.points[0].z];
 
 		const w = plane.normal.i * a[0] - plane.normal.j * a[1] + plane.normal.k * a[2];
 		const v = plane.normal.i * b[0] - plane.normal.j * b[1] + plane.normal.k * b[2];
@@ -302,12 +301,14 @@ class Plane {
 	}
 }
 
-function Camera(x, y, z, pitch = 0, yaw = 0, roll = 0) {
-    this.x = x;
-    this.y = y;
-	this.z = z;
+function Camera(pos, pitch = 0, yaw = 0, roll = 0) {
+    this.pos = pos;
 
-	this.fov = 800; //not really "fov" but serves the same function 
+    this.UP = new Vec3D(0, 1, 0);
+    this.FWD = new Vec3D(1, 0, 0);
+    this.DIR = new Vec3D(0, 0, 1);
+
+	this.f_plane = 800; //not really "fov" but serves the same function 
 
     this.pitch = pitch;
     this.yaw = yaw;
@@ -337,15 +338,15 @@ function Camera(x, y, z, pitch = 0, yaw = 0, roll = 0) {
 
     this.move = function() {
 		if(this.keydown.up && !this.keydown.down) {
-			this.pitch += .05;
-		} else if(this.keydown.down && !this.keydown.up) {
 			this.pitch -= .05;
+		} else if(this.keydown.down && !this.keydown.up) {
+			this.pitch += .05;
 		}
 
 		if(this.keydown.left && !this.keydown.right) {
-			this.yaw -= .05;
-		} else if(this.keydown.right && !this.keydown.left) {
 			this.yaw += .05;
+		} else if(this.keydown.right && !this.keydown.left) {
+			this.yaw -= .05;
 		}
 
 		if(this.yaw <= -Math.PI) {
@@ -361,64 +362,43 @@ function Camera(x, y, z, pitch = 0, yaw = 0, roll = 0) {
 		}
 
 		if(this.keydown.w && !this.keydown.s) {
-			this.z += Math.cos(this.yaw) * Math.cos(this.pitch) * this.speed;
-			this.x += Math.sin(this.yaw) * Math.cos(this.pitch) * this.speed;
-			this.y -= Math.sin(this.pitch) * this.speed;
+			this.pos.z += Math.cos(this.yaw) * Math.cos(this.pitch) * this.speed;
+			this.pos.x -= Math.sin(this.yaw) * Math.cos(this.pitch) * this.speed;
+			this.pos.y += Math.sin(this.pitch) * this.speed;
 		} else if(this.keydown.s && !this.keydown.w) {
-			this.z -= Math.cos(this.yaw) * Math.cos(this.pitch) * this.speed;
-			this.x -= Math.sin(this.yaw) * Math.cos(this.pitch) * this.speed;
-			this.y += Math.sin(this.pitch) * this.speed;
+			this.pos.z -= Math.cos(this.yaw) * Math.cos(this.pitch) * this.speed;
+			this.pos.x += Math.sin(this.yaw) * Math.cos(this.pitch) * this.speed;
+			this.pos.y -= Math.sin(this.pitch) * this.speed;
 		}
 
 		if(this.keydown.a && !this.keydown.d) {
-			this.z -= Math.cos(this.yaw + Math.PI/2) * this.speed;
-			this.x -= Math.sin(this.yaw + Math.PI/2) * this.speed;
+			this.pos.z += Math.cos(this.yaw + Math.PI/2) * this.speed;
+			this.pos.x -= Math.sin(this.yaw + Math.PI/2) * this.speed;
 		} else if(this.keydown.d && !this.keydown.a) {
-			this.z += Math.cos(this.yaw + Math.PI/2) * this.speed;
-			this.x += Math.sin(this.yaw + Math.PI/2) * this.speed;
+			this.pos.z -= Math.cos(this.yaw + Math.PI/2) * this.speed;
+			this.pos.x += Math.sin(this.yaw + Math.PI/2) * this.speed;
 		}
 
 		if(this.keydown.space && !this.keydown.shift) {
-			this.y -= this.speed;
+			this.pos.y -= this.speed;
 		} else if(this.keydown.shift && !this.keydown.space) {
-			this.y += this.speed;
+			this.pos.y += this.speed;
 		}
 	}
 
-    this.rotatePoint = function(angle, x, y) {
-		const sin = Math.sin(angle);
-		const cos = Math.cos(angle);
-		
-		const nx = x*cos - y*sin;
-		const ny = y*cos + x*sin;
-		
-		return [nx, ny];
-	};
+	this.project = function(vec) {
+		const dif = Vec3D.dif(camera.pos, vec);
+	
+		const rotY = Vec3D.qRotate(dif, camera.UP, camera.yaw);
+		const rotP = Vec3D.qRotate(rotY, camera.FWD, camera.pitch);
+		const rotR = Vec3D.qRotate(rotP, camera.DIR, camera.roll);
+	
+		if(rotR.z < 0) return null;
+	
+		let x = rotR.x * camera.f_plane / rotR.z + canvas.width / 2;
+		let y = rotR.y * camera.f_plane / rotR.z + canvas.width / 2;
 
-	this.alignToFrame = function(p) {
-        let nx = p.x - this.x;
-        let ny = p.y - this.y;
-		let nz = p.z - this.z;
-		
-		const p1 = this.rotatePoint(this.yaw, nx, nz);
-		const p2 = this.rotatePoint(this.pitch, p1[1], ny);
-		const p3 = this.rotatePoint(this.roll, p1[0], p2[1]);
-
-		nx = p3[0];
-	    ny = p3[1];
-		nz = p2[0];
-		
-		p.nx = nx;
-		p.ny = ny;
-		p.nz = nz;
-		p.visible = nz > this.focalPlane;
-	};
-
-	this.projectToPlane = function(p) {
-		let size = this.fov / p.nz;
-
-		p.imageX = p.nx * size + canvas.width/2;
-		p.imageY = p.ny * size + canvas.height/2;
+		return {x: x, y: y};
 	}
 
 	this.findZIntercept = function(p1, p2) {
@@ -429,7 +409,7 @@ function Camera(x, y, z, pitch = 0, yaw = 0, roll = 0) {
 		let nx = (nz - p1.nz) * dxdz + p1.nx;
 		let ny = (nz - p1.nz) * dydz + p1.ny;
 
-		return new Point3D(0, 0, 0, nx, ny, nz);
+		return new Vec3D(0, 0, 0, nx, ny, nz);
 	};
 
     this.clipPath = function(curPoint, prevPoint, nextPoint) {
@@ -447,24 +427,25 @@ function Camera(x, y, z, pitch = 0, yaw = 0, roll = 0) {
 		
 		c.beginPath();
 
-		for(let i = 0; i < p.points.length; i++) {
-			let point = p.points[i];
-			
-			if(point.visible) {
+		for(const [idx, point] of p.points.entries()) {
+			const image = this.project(point);
+
+			if(image) {
 				visible = true;
-				c.lineTo(point.imageX, point.imageY);
+
+				c.lineTo(image.x, image.y);
+				// console.log(image);
 			} else {
-				const prevPoint = i <= 0 ? p.points[p.points.length - 1] : p.points[i - 1];
-				const nextPoint = i >= p.points.length - 1 ? p.points[0] : p.points[i + 1];
-				const curPoint = p.points[i];
-				this.clipPath(curPoint, prevPoint, nextPoint);
+				const prevPoint = idx <= 0 ? p.points[p.points.length - 1] : p.points[idx - 1];
+				const nextPoint = idx >= p.points.length - 1 ? p.points[0] : p.points[idx + 1];
+	
+				// this.clipPath(point, prevPoint, nextPoint);
 			}
 		}
 
 		c.closePath();
 
 		if(!visible) return;
-		
 		
 		if(p.color != null) {
 			let color = "rgb("+p.color.r+", "+p.color.g+", "+p.color.b+")";
@@ -477,12 +458,12 @@ function Camera(x, y, z, pitch = 0, yaw = 0, roll = 0) {
 	}
 
 	this.renderEnvironment = function (env) {
-		for(const plane of env.planes) {
-			for(const point of plane.points) {
-				camera.alignToFrame(point);
-				camera.projectToPlane(point);
-			}
-		}
+		// for(const plane of env.planes) {
+		// 	for(const point of plane.points) {
+		// 		camera.alignToFrame(point);
+		// 		camera.projectToPlane(point);
+		// 	}
+		// }
 
 		let bst = new SortedBinaryTree();
 		for(let plane of env.planes) {
@@ -493,12 +474,10 @@ function Camera(x, y, z, pitch = 0, yaw = 0, roll = 0) {
 		}
 
         for(let plane of bst.iter()) {
-			for(const point of plane.points) {
-				if(point.nx == null) {
-					this.alignToFrame(point);
-					this.projectToPlane(point);
-				}
-			}
+			// for(const point of plane.points) {
+			// 	this.alignToFrame(point);
+			// 	this.projectToPlane(point);
+			// }
 
 			this.renderPlane(plane);
 		}
@@ -506,18 +485,9 @@ function Camera(x, y, z, pitch = 0, yaw = 0, roll = 0) {
 }
 
 class DirectionalLight {
-	constructor(vector, color, intensity) {
+	constructor(vector, color) {
 		this.vec = vector;
 		this.color = color;
-		this.intensity = intensity;
-	}
-}
-
-class Light {
-	constructor(position, color, intensity) {
-		this.pos = position;
-		this.color = color;
-		this.intensity = intensity;
 	}
 }
 

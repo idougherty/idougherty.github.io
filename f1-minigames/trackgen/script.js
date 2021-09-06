@@ -1,16 +1,19 @@
-import {Track} from "./trackGenerator.js";
+// import {Track} from "./trackGenerator.js";
+// const TrackGen = require('./trackGenerator');
+// const Track = TrackGen.Track;
 
 let canvas = document.getElementById("paper");
-let c = canvas.getContext("2d");
-c.imageSmoothingEnabled = false;
-c.mozImageSmoothingEnabled = false;
+let ctx = canvas.getContext("2d");
+ctx.imageSmoothingEnabled = false;
+ctx.mozImageSmoothingEnabled = false;
 
 let center = {x: canvas.width/2, y: canvas.height/2}
 
 let track = new Track(center);
 Track.genMesh(track);
 
-c.fillStyle = "#080F0F";
-c.fillRect(0, 0, canvas.width, canvas.height);
+ctx.fillStyle = "#080F0F";
+ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-track.draw(c);
+track.draw(ctx);
+track.drawMesh(ctx);

@@ -1,3 +1,4 @@
+let BEAR_HEALTH = 12 * 40;
 function Bear(x, y) {
   this.x = x;
   this.y = y;
@@ -9,8 +10,8 @@ function Bear(x, y) {
   this.size = 12;
   this.base = 40;
   this.mass = 2;
-  this.health = this.size * this.base;
-  this.maxHealth = this.health;
+  this.health = BEAR_HEALTH;
+  this.maxHealth = 12 * 40;
   this.opacity = 1;
   this.target = Math.random() * Math.PI;
   this.timer = 0;
@@ -21,6 +22,7 @@ function Bear(x, y) {
   this.sprite2.src = "art/bear2.png";
 
   this.update = function() {
+    BEAR_HEALTH = this.health;
     if(this.health > 0) {
       this.move();
       return this.ping();
@@ -49,6 +51,7 @@ function Bear(x, y) {
   }
 
   this.move = function() {
+
     this.kx *= .92;
     this.ky *= .92;
     this.vx *= .96;

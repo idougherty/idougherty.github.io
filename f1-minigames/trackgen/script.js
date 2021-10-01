@@ -4,16 +4,28 @@
 
 let canvas = document.getElementById("paper");
 let ctx = canvas.getContext("2d");
-ctx.imageSmoothingEnabled = false;
-ctx.mozImageSmoothingEnabled = false;
 
+let track;
 let center = {x: canvas.width/2, y: canvas.height/2}
+let drawTrack = true;
+let drawMesh = false;
 
-let track = new Track(center);
-Track.genMesh(track);
+function generateTrack() {
+    track = new Track(center);
+    Track.genMesh(track);
 
-ctx.fillStyle = "#080F0F";
-ctx.fillRect(0, 0, canvas.width, canvas.height);
+    refreshCanvas(track);
+}
 
-track.draw(ctx);
-track.drawMesh(ctx);
+function refreshCanvas() {
+    ctx.fillStyle = "#080F0F";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    if(drawTrack)
+        track.draw(ctx);
+    
+    if(drawMesh)
+        track.drawMesh(ctx);
+}
+
+generateTrack();

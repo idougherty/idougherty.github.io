@@ -71,7 +71,7 @@ function resetScene(scene) {
         case "boxes":
             let ball = new PhysObject(new Vec2D(-2500, 100), pts6, rubber);
             ball.vel.x = 2500;
-            // env.addObject(ball);
+            env.addObject(ball);
 
             for(let x = 150; x < canvas.width - 100; x += 51) {
                 for(let y = 250; y < canvas.height - 50; y += 50) {

@@ -255,7 +255,7 @@ function cameraTransform(timer, d) {
 let timer = 0;
 let cameraLock = true;
 
-setInterval(function() {
+function anim() {
 	c.clearRect(0, 0, canvas.width, canvas.height);
 	c.fillStyle = "black";
 	c.fillRect(0, 0, canvas.width, canvas.height);
@@ -264,10 +264,13 @@ setInterval(function() {
 		cameraTransform(timer, 1.5);
 	}
 
-	timer+= 2;
+	timer += 2;
 	camera.move();
 	camera.renderEnvironment(e);
-}, 20);
+
+	window.requestAnimationFrame(anim);
+}
+anim();
 
 document.addEventListener("keydown", function(e) {
 	let disableLock = true;

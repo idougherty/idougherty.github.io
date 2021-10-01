@@ -17,13 +17,15 @@ function resizeCanvas() {
 
     if(window.innerWidth < 768) {
 		C_SCALE = 1.5;
+        SPLASH_HEIGHT = canvas.height / C_SCALE; 
     } else if(window.innerWidth >= 768 && window.innerWidth < 1024) {
 		C_SCALE = 1.5;
+        SPLASH_HEIGHT = document.getElementsByClassName("splash-container")[0].clientHeight / C_SCALE; 
     } else if(window.innerWidth >= 1024) {
 		C_SCALE = 2;
+        SPLASH_HEIGHT = document.getElementsByClassName("splash-container")[0].clientHeight / C_SCALE; 
     }
-    
-	SPLASH_HEIGHT = document.getElementsByClassName("splash-container")[0].clientHeight / C_SCALE; 
+
     C_HEIGHT = document.getElementsByClassName("content-container")[0].clientHeight / C_SCALE;
     C_WIDTH = canvas.width / C_SCALE;
 
@@ -294,10 +296,10 @@ function attractorAnim(dt) {
     
             prev = cur;
 
-            // if(cur.x < bounds.left) bounds.left = cur.x;
-            // if(cur.x > bounds.right) bounds.right = cur.x;
-            // if(cur.y < bounds.top) bounds.top = cur.y;
-            // if(cur.y > bounds.bottom) bounds.bottom = cur.y;
+            if(cur.x < bounds.left) bounds.left = cur.x;
+            if(cur.x > bounds.right) bounds.right = cur.x;
+            if(cur.y < bounds.top) bounds.top = cur.y;
+            if(cur.y > bounds.bottom) bounds.bottom = cur.y;
         }
     }
 }
@@ -315,20 +317,20 @@ let attractor = attractors[Math.floor(Math.random() * attractors.length)];
 
 let dt = 0;
 let scrollTop;
-// let bounds;
+let bounds;
 function anim() {
 	dt = getDT();
 	scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
 
-    // if(bounds)
-    //     ctx.clearRect(bounds.left - 10, bounds.top - 10, bounds.right - bounds.left + 20, bounds.bottom - bounds.top + 20);
+    if(bounds)
+        ctx.clearRect(bounds.left - 10, bounds.top - 10, bounds.right - bounds.left + 20, bounds.bottom - bounds.top + 20);
     
-    // bounds = {
-    //     left: Infinity,
-    //     right: -Infinity,
-    //     top: Infinity,
-    //     bottom: -Infinity,
-    // };
+    bounds = {
+        left: Infinity,
+        right: -Infinity,
+        top: Infinity,
+        bottom: -Infinity,
+    };
 
     ctx.globalCompositeOperation = "source-over";
     ctx.fillStyle = "#121212";

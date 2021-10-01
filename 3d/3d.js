@@ -66,40 +66,6 @@ function SortedBinaryTree() {
 	}
 }
 
-// class Point3D {
-// 	constructor(x, y, z, nx = null, ny = null, nz = null) {
-// 		this.x = x;
-// 		this.y = y;
-// 		this.z = z;
-// 		this.nx = nx;
-// 		this.ny = ny;
-// 		this.nz = nz;
-// 		this.visible = true;
-// 		this.imageX = 0;
-// 		this.imageY = 0;
-// 	}
-
-// 	static findDistance(p1, p2) {
-// 		let nx = p1.x - p2.x;
-//         let ny = p1.y - p2.y;
-// 		let nz = p1.z - p2.z;
-		
-// 		const d = Math.sqrt(nx*nx + nz*nz + ny*ny);
-
-// 		return d;
-// 	}
-
-// 	static normalize(vector) {
-// 		const d = Point3D.findDistance(vector, new Point3D(0, 0, 0));
-		
-// 		vector.x = vector.x / d;
-// 		vector.y /= d;
-// 		vector.z /= d;		
-
-// 		return vector;
-// 	}
-// }
-
 class Plane {
 	constructor(points, color = null) {
 		this.points = points;
@@ -110,7 +76,7 @@ class Plane {
 			i: null,
 			j: null,
 			k: null,
-			unit: null,
+			d: null,
 		};
 	}
 	
@@ -163,9 +129,9 @@ class Plane {
 				const ndotl =  (plane.normal.i * light.vec.x - plane.normal.j * light.vec.y + plane.normal.k * light.vec.z);
 
 				//base shading
-				r += ndotl * light.color.r * Math.sign(v);
-				g += ndotl * light.color.g * Math.sign(v);
-				b += ndotl * light.color.b * Math.sign(v);
+				r += Math.max(ndotl * light.color.r * Math.sign(v), 0);
+				g += Math.max(ndotl * light.color.g * Math.sign(v), 0);
+				b += Math.max(ndotl * light.color.b * Math.sign(v), 0);
 				
 				const n = [ndotl * plane.normal.i, ndotl * plane.normal.j, ndotl * plane.normal.k];
 
@@ -173,20 +139,18 @@ class Plane {
 				h = Vec3D.normalize(h);
 
 				const ndoth = (a.x * h.x - a.y * h.y + a.z * h.z);
-				const m = 17;
+				const m = 10;
 				
 				//specular highlights
 				r += Math.max(Math.pow(ndoth, m) * 60, 0);
 				g += Math.max(Math.pow(ndoth, m) * 60, 0);
 				b += Math.max(Math.pow(ndoth, m) * 60, 0);
+			} if(light instanceof AmbientLight) {
+				r += light.color.r;
+				g += light.color.g;
+				b += light.color.b;
 			}
 		}
-
-		// if(plane.normal.d == 0) {
-		// 	r = 255;
-		// 	g = 0;
-		// 	b = 0;
-		// }
 
 		return {r: r, g: g, b: b};
 	}
@@ -289,12 +253,12 @@ class Plane {
 			front_plane = new Plane(front_points);
 			front_plane.color = p2.color;
 			front_plane.side = p2.side;
-			front_plane.updateNormalVector();
+			front_plane.normal = p2.normal;
 
 			back_plane = new Plane(back_points);
 			back_plane.color = p2.color;
 			back_plane.side = p2.side;
-			back_plane.updateNormalVector();
+			back_plane.normal = p2.normal;
 		}
 
 		return [front_plane, back_plane];
@@ -309,6 +273,7 @@ function Camera(pos, pitch = 0, yaw = 0, roll = 0) {
     this.DIR = new Vec3D(0, 0, 1);
 
 	this.f_plane = 800; //not really "fov" but serves the same function 
+	this.nearClippingDist = .01;
 
     this.pitch = pitch;
     this.yaw = yaw;
@@ -393,33 +358,48 @@ function Camera(pos, pitch = 0, yaw = 0, roll = 0) {
 		const rotP = Vec3D.qRotate(rotY, camera.FWD, camera.pitch);
 		const rotR = Vec3D.qRotate(rotP, camera.DIR, camera.roll);
 	
-		if(rotR.z < 0) return null;
+		if(rotR.z < camera.nearClippingDist - .01) return null;
 	
 		let x = rotR.x * camera.f_plane / rotR.z + canvas.width / 2;
-		let y = rotR.y * camera.f_plane / rotR.z + canvas.width / 2;
+		let y = rotR.y * camera.f_plane / rotR.z + canvas.height / 2;
 
 		return {x: x, y: y};
 	}
 
-	this.findZIntercept = function(p1, p2) {
-		dxdz = (p1.nx - p2.nx) / (p1.nz - p2.nz); 
-		dydz = (p1.ny - p2.ny) / (p1.nz - p2.nz);
-
-		const nz = this.focalPlane;
-		let nx = (nz - p1.nz) * dxdz + p1.nx;
-		let ny = (nz - p1.nz) * dydz + p1.ny;
-
-		return new Vec3D(0, 0, 0, nx, ny, nz);
-	};
-
     this.clipPath = function(curPoint, prevPoint, nextPoint) {
-		let p1 = this.findZIntercept(curPoint, prevPoint);
-		let p2 = this.findZIntercept(curPoint, nextPoint);
-		this.projectToPlane(p1);
-		this.projectToPlane(p2);
+		let norm = new Vec3D(-Math.sin(camera.yaw) * Math.cos(camera.pitch),
+							 Math.sin(camera.pitch),
+							 Math.cos(camera.yaw) * Math.cos(camera.pitch)); 
+
+		norm = Vec3D.normalize(norm);
+
+		let pos = camera.pos.sum(norm.mult(camera.nearClippingDist));
 		
-		c.lineTo(p1.imageX, p1.imageY);
-		c.lineTo(p2.imageX, p2.imageY);
+		const plane = {
+			normal: {
+				i: norm.x,
+				j: -norm.y,
+				k: norm.z,
+				d: pos.x * norm.x + pos.y * norm.y + pos.z * norm.z,
+			}
+		};
+		
+		let p1 = Plane.findLinePlaneIntercept(plane, curPoint, prevPoint);
+		let p2 = Plane.findLinePlaneIntercept(plane, curPoint, nextPoint);
+
+		if(p1) {
+			let image = this.project(p1);
+
+			if(image)
+				c.lineTo(image.x, image.y);
+		}
+
+		if(p2) {
+			let image = this.project(p2);
+	
+			if(image)
+				c.lineTo(image.x, image.y);
+		}
 	};
 
 	this.renderPlane = function(p) {
@@ -434,12 +414,11 @@ function Camera(pos, pitch = 0, yaw = 0, roll = 0) {
 				visible = true;
 
 				c.lineTo(image.x, image.y);
-				// console.log(image);
 			} else {
 				const prevPoint = idx <= 0 ? p.points[p.points.length - 1] : p.points[idx - 1];
 				const nextPoint = idx >= p.points.length - 1 ? p.points[0] : p.points[idx + 1];
-	
-				// this.clipPath(point, prevPoint, nextPoint);
+
+				this.clipPath(point, prevPoint, nextPoint);
 			}
 		}
 
@@ -458,13 +437,6 @@ function Camera(pos, pitch = 0, yaw = 0, roll = 0) {
 	}
 
 	this.renderEnvironment = function (env) {
-		// for(const plane of env.planes) {
-		// 	for(const point of plane.points) {
-		// 		camera.alignToFrame(point);
-		// 		camera.projectToPlane(point);
-		// 	}
-		// }
-
 		let bst = new SortedBinaryTree();
 		for(let plane of env.planes) {
 			plane.updateNormalVector();
@@ -474,11 +446,6 @@ function Camera(pos, pitch = 0, yaw = 0, roll = 0) {
 		}
 
         for(let plane of bst.iter()) {
-			// for(const point of plane.points) {
-			// 	this.alignToFrame(point);
-			// 	this.projectToPlane(point);
-			// }
-
 			this.renderPlane(plane);
 		}
 	}
@@ -487,6 +454,12 @@ function Camera(pos, pitch = 0, yaw = 0, roll = 0) {
 class DirectionalLight {
 	constructor(vector, color) {
 		this.vec = vector;
+		this.color = color;
+	}
+}
+
+class AmbientLight {
+	constructor(color) {
 		this.color = color;
 	}
 }

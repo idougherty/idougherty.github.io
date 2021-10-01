@@ -15,19 +15,21 @@ let mesh = cave.createMesh();
 const scale = .6;
 
 let e = new Environment();
-let camera = new Camera(cave.start.x * scale, -1, cave.start.y * scale);
+let spawnPos = new Vec3D(cave.start.x * scale, -1, cave.start.y * scale);
+// let spawnPos = new Vec3D(0, 0, 0);
+let camera = new Camera(spawnPos);
 
-let vec = new Point3D(.2, 1, -.3);
-vec  = Point3D.normalize(vec);
-e.lights.push(new DirectionalLight(vec, {r: 255, g: 255, b: 255}, 1));
+let vec = new Vec3D(.2, 1, -.3);
+vec  = Vec3D.normalize(vec);
+e.lights.push(new DirectionalLight(vec, {r: 255, g: 255, b: 255}));
+e.lights.push(new AmbientLight({r: 30, g: 30, b: 30}));
 
 for(const line of mesh) {
-    const p1 = new Point3D(line.p1.x * scale, 0, line.p1.y * scale);
-    const p2 = new Point3D(line.p1.x * scale, scale * -7, line.p1.y * scale);
-    const p3 = new Point3D(line.p2.x * scale, 0, line.p2.y * scale);
-	const p4 = new Point3D(line.p2.x * scale, scale * -7, line.p2.y * scale);
+    const p1 = new Vec3D(line.p1.x * scale, 0, line.p1.y * scale);
+    const p2 = new Vec3D(line.p1.x * scale, scale * -7, line.p1.y * scale);
+    const p3 = new Vec3D(line.p2.x * scale, 0, line.p2.y * scale);
+	const p4 = new Vec3D(line.p2.x * scale, scale * -7, line.p2.y * scale);
 	
-	// constr
 	const r = 70;
 	const g = 70;
 	const b = 70;
@@ -35,27 +37,26 @@ for(const line of mesh) {
 	const plane = new Plane([p1, p3, p4, p2], {r: r, g: g, b: b});
     e.planes.push(plane);
     
-    // const plane1 = new Plane([p1, p2, p3], "hsl("+Math.floor((line.p1.x + line.p1.y)/20 * 360)+", 50%, 50%)");
-    // const plane2 = new Plane([p2, p3, p4], "hsl("+Math.floor((line.p1.x + line.p1.y)/20 * 360)+", 50%, 50%)");
-    // e.planes.push(plane1);
-    // e.planes.push(plane2);
+	// break;
 }
 
-const p1 = new Point3D(0, .01, 0);
-const p2 = new Point3D(0, .01, 100 * scale);
-const p3 = new Point3D(100 * scale, .01, 0);
-const p4 = new Point3D(100 * scale, .01, 100 * scale);
+const p1 = new Vec3D(0, .01, 0);
+const p2 = new Vec3D(0, .01, 100 * scale);
+const p3 = new Vec3D(100 * scale, .01, 0);
+const p4 = new Vec3D(100 * scale, .01, 100 * scale);
 const floor = new Plane([p1, p3, p4, p2], {r: 100, g: 100, b: 100})
 e.planes.push(floor);
 
-setInterval(function() {
-	c.clearRect(0, 0, canvas.width, canvas.height);
+function anim() {
 	c.fillStyle = "black";
 	c.fillRect(0, 0, canvas.width, canvas.height);
 
 	camera.move();
     camera.renderEnvironment(e);
-}, 20);
+
+	window.requestAnimationFrame(anim);
+}
+anim();
 
 document.addEventListener("keydown", function(e) {
 	switch(e.keyCode) {
@@ -131,8 +132,8 @@ document.addEventListener("keyup", function(e) {
 
 document.addEventListener("mousemove", function(e) {
 	if(camera.mouse.down) {
-		camera.pitch -= (e.movementY)/400;
-		camera.yaw += (e.movementX)/400;
+		camera.pitch += (e.movementY)/400;
+		camera.yaw -= (e.movementX)/400;
 	}
 });
 

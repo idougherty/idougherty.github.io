@@ -27,8 +27,9 @@ function updateState(e) {
 }
 
 function updatePos(e) {
-    mouse.x = e.clientX;
-    mouse.y = e.clientY;
+    let rect = e.target.getBoundingClientRect();
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
 }
 
 let mouse = new Mouse();
@@ -298,7 +299,7 @@ let gameRunner = new fuelMixer();
 
 setInterval(function() {
     c.clearRect(0, 0, canvas.width, canvas.height);
-    c.fillStyle = "#ccc";
+    c.fillStyle = "#89b";
     c.fillRect(0, 0, canvas.width, canvas.height);
 
     gameRunner.update();

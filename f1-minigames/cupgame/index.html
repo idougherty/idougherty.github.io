@@ -1,9 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Formula Fun</title>
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Cutive+Mono&amp;display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;1,100&amp;display=swap" rel="stylesheet">
+
+    <title>Cup Game</title>
+	
+	<style>
+		body {
+			background-color: beige;
+		}
+
+		#paper {
+			box-shadow: 4px 4px 10px #852;
+		}
+
+		.canvas-container {
+			margin: 100px auto;
+			width: min-content;
+		}
+
+		.page-header {
+			color: #651;
+    		font-family: "Cutive Mono",monospace;
+			font-size: 2.5em;
+		}
+	</style>
+
 </head>
 <body>
-	<canvas id="paper" width="720px" height="480px"></canvas>
+	
+	<div class="canvas-container">
+		<h1 class="page-header">Cup Game</h1>
+		<canvas id="paper" width="720px" height="480px"></canvas>
+	</div>
+	
 	<script type="text/javascript" src="script.js"></script>
 </body>

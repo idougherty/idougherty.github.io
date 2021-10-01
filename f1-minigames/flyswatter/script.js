@@ -27,8 +27,9 @@ function updateState(e) {
 }
 
 function updatePos(e) {
-    mouse.x = e.clientX;
-    mouse.y = e.clientY;
+    let rect = e.target.getBoundingClientRect();
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
 }
 
 let mouse = new Mouse();
@@ -300,9 +301,7 @@ class FlyRunner {
         if(this.flies.length == 0) {
             this.gameOver = true;
             this.winState = true;
-        }
-
-        if(this.timer < 0) {
+        } else if(this.timer < 0) {
             this.gameOver = true;
             this.winState = false;
         }

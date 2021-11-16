@@ -65,8 +65,18 @@ function resetScene(scene) {
             center = new Vec2D(canvas.width / 2, canvas.width / 2);
             spread = new Vec2D(canvas.width, canvas.height);
 
-            for(let i = 0; i < 25; i++)
-                env.addObject(randObj(4, 20, center, spread));
+            for(let i = 0; i < 25; i++) {
+                let obj = randObj(4, 20, center, spread);
+                
+                const dif = Vec2D.dif(center, obj.pos);
+                let d = Vec2D.normalize(new Vec2D(-dif.y, dif.x));
+
+                obj.vel = d.mult(Math.random() * 400 - 100);
+
+                console.log(obj.vel);
+                env.addObject(obj);
+            }
+
             break;
         case "boxes":
             let ball = new PhysObject(new Vec2D(-2500, 100), pts6, rubber);

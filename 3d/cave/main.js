@@ -16,39 +16,39 @@ const scale = .6;
 
 let e = new Environment();
 let spawnPos = new Vec3D(cave.start.x * scale, -1, cave.start.y * scale);
-// let spawnPos = new Vec3D(0, 0, 0);
 let camera = new Camera(spawnPos);
 
 let vec = new Vec3D(.2, 1, -.3);
 vec  = Vec3D.normalize(vec);
-e.lights.push(new DirectionalLight(vec, {r: 255, g: 255, b: 255}));
-e.lights.push(new AmbientLight({r: 30, g: 30, b: 30}));
+e.lights.push(new DirectionalLight(vec, {r: 200, g: 200, b: 200}));
+e.lights.push(new AmbientLight({r: 90, g: 90, b: 90}));
 
 for(const line of mesh) {
+	const h1 = .5 * (Math.sin(line.p1.x * scale * .5) + Math.sin(line.p1.y * scale * .5)) - scale * 7;
+	const h2 = .5 * (Math.sin(line.p2.x * scale * .5) + Math.sin(line.p2.y * scale * .5)) - scale * 7;
+
     const p1 = new Vec3D(line.p1.x * scale, 0, line.p1.y * scale);
-    const p2 = new Vec3D(line.p1.x * scale, scale * -7, line.p1.y * scale);
+    const p2 = new Vec3D(line.p1.x * scale, h1, line.p1.y * scale);
     const p3 = new Vec3D(line.p2.x * scale, 0, line.p2.y * scale);
-	const p4 = new Vec3D(line.p2.x * scale, scale * -7, line.p2.y * scale);
+	const p4 = new Vec3D(line.p2.x * scale, h2, line.p2.y * scale);
 	
-	const r = 70;
-	const g = 70;
-	const b = 70;
+	const r = 200;
+	const g = 200;
+	const b = 200;
 
 	const plane = new Plane([p1, p3, p4, p2], {r: r, g: g, b: b});
     e.planes.push(plane);
-    
-	// break;
 }
 
 const p1 = new Vec3D(0, .01, 0);
 const p2 = new Vec3D(0, .01, 100 * scale);
 const p3 = new Vec3D(100 * scale, .01, 0);
 const p4 = new Vec3D(100 * scale, .01, 100 * scale);
-const floor = new Plane([p1, p3, p4, p2], {r: 100, g: 100, b: 100})
+const floor = new Plane([p1, p3, p4, p2], {r: 200, g: 200, b: 200})
 e.planes.push(floor);
 
 function anim() {
-	c.fillStyle = "black";
+	c.fillStyle = "#121212";
 	c.fillRect(0, 0, canvas.width, canvas.height);
 
 	camera.move();

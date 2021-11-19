@@ -111,6 +111,7 @@ const wood = {
     restitution: .45,
     sFriction: .3,
     dFriction: .2,
+    color: "#a98",
 };
 
 const rubber = {
@@ -118,6 +119,7 @@ const rubber = {
     restitution: .95,
     sFriction: .6,
     dFriction: .4,
+    color: "#a75",
 };
 
 const wall = {
@@ -125,6 +127,7 @@ const wall = {
     restitution: .5,
     sFriction: .24,
     dFriction: .16,
+    color: "#eee",
 };
 
 class Vec2D {
@@ -339,9 +342,8 @@ class PhysObject {
     }
 
     draw(ctx) {
-        ctx.strokeStyle = this.AABB.color;//"white";
-        this.AABB.color = "white";
-        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = this.material.color
+        ctx.lineWidth = 2.5;
 
         ctx.beginPath();
         for(const point of this.points) {

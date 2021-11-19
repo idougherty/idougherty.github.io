@@ -40,9 +40,10 @@ function bezier3D(p1, p2, p3, p4, t) {
 let e = new Environment();
 let camera = new Camera(new Vec3D(-7, -2, 0), 0, Math.PI/2);
 
-let vec = new Vec3D(.5, 1, -.5);
+let vec = new Vec3D(-.4, 1, -.2);
 vec  = Vec3D.normalize(vec);
-e.lights.push(new DirectionalLight(vec, {r: 105, g: 95, b: 85}));
+e.lights.push(new DirectionalLight(vec, {r: 210, g: 210, b: 205}));
+e.lights.push(new AmbientLight({r: 90, g: 90, b: 85}));
 
 let utahVerticies = [[  0.2000,  0.0000, 2.70000 ], [  0.2000, -0.1120, 2.70000 ],
 					[  0.1120, -0.2000, 2.70000 ], [  0.0000, -0.2000, 2.70000 ],
@@ -199,9 +200,9 @@ for(const [idx, part] of parts.entries()) {
 					}
 				}
 
-				let red = 180;
-				let green = 180;
-				let blue = 180;
+				let red = 255;
+				let green = 255;
+				let blue = 255;
 
 				switch(idx) {
 					case 0:
@@ -210,9 +211,9 @@ for(const [idx, part] of parts.entries()) {
 					case 6:
 					case 7:
 					case 9:
-						red = 80;
-						green = 80;
-						blue = 120;
+						red = 200;
+						green = 200;
+						blue = 230;
 						break;
 				}
 
@@ -256,8 +257,7 @@ let timer = 0;
 let cameraLock = true;
 
 function anim() {
-	c.clearRect(0, 0, canvas.width, canvas.height);
-	c.fillStyle = "black";
+	c.fillStyle = "#111";
 	c.fillRect(0, 0, canvas.width, canvas.height);
 	
 	if(cameraLock) {

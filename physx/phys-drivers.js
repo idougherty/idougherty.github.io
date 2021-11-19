@@ -133,10 +133,10 @@ let lastTime = getTime();
 let curTime = lastTime;
 let dt = 0;
 
-setInterval(function gameLoop() { 
-    lastTime = curTime;
-    curTime = getTime();
-    dt = Math.min(.015, curTime - lastTime)
+// setInterval(function gameLoop() { 
+
+function loop() {
+    dt = .015;
 
     for(const obj of env.objects) {
         if(obj.mass == Infinity) continue;
@@ -162,16 +162,15 @@ setInterval(function gameLoop() {
         obj.applyForce(f);
     }
 
-    ctx.fillStyle = "black";
+    ctx.fillStyle = "#111";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     env.update(dt, ctx);
 
     env.drawObjects(ctx);
-}, 25);
 
+    window.requestAnimationFrame(loop);
+}
+// , 25);
 
-//     window.requestAnimationFrame(gameLoop);
-// }
-
-// window.requestAnimationFrame(gameLoop);
+loop();

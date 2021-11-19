@@ -113,11 +113,15 @@ class Plane {
 	}
 
 	static calculateShading(plane, camera, lights) {
-		let r = plane.baseColor.r;
-		let g = plane.baseColor.g;
-		let b = plane.baseColor.b;
+		let r = 0;
+		let g = 0;
+		let b = 0;
 
 		for(const light of lights) {
+			const rf = light.color.r / 255 * plane.baseColor.r / 255;
+			const gf = light.color.g / 255 * plane.baseColor.g / 255;
+			const bf = light.color.b / 255 * plane.baseColor.b / 255;
+
 			if(light instanceof DirectionalLight) {
 				let middle = this.findCenter(plane); 
 
@@ -129,9 +133,9 @@ class Plane {
 				const ndotl =  (plane.normal.i * light.vec.x - plane.normal.j * light.vec.y + plane.normal.k * light.vec.z);
 
 				//base shading
-				r += Math.max(ndotl * light.color.r * Math.sign(v), 0);
-				g += Math.max(ndotl * light.color.g * Math.sign(v), 0);
-				b += Math.max(ndotl * light.color.b * Math.sign(v), 0);
+				r += plane.baseColor.r * Math.max(ndotl * rf * Math.sign(v), 0);
+				g += plane.baseColor.g * Math.max(ndotl * gf * Math.sign(v), 0);
+				b += plane.baseColor.b * Math.max(ndotl * bf * Math.sign(v), 0);
 				
 				const n = [ndotl * plane.normal.i, ndotl * plane.normal.j, ndotl * plane.normal.k];
 
@@ -139,16 +143,16 @@ class Plane {
 				h = Vec3D.normalize(h);
 
 				const ndoth = (a.x * h.x - a.y * h.y + a.z * h.z);
-				const m = 10;
+				const m = 3;
 				
 				//specular highlights
 				r += Math.max(Math.pow(ndoth, m) * 60, 0);
 				g += Math.max(Math.pow(ndoth, m) * 60, 0);
 				b += Math.max(Math.pow(ndoth, m) * 60, 0);
 			} if(light instanceof AmbientLight) {
-				r += light.color.r;
-				g += light.color.g;
-				b += light.color.b;
+				r += plane.baseColor.r * rf;
+				g += plane.baseColor.g * gf;
+				b += plane.baseColor.b * bf;
 			}
 		}
 

@@ -5,7 +5,7 @@ ctx.lineCap = "butt";
 const lorenz = {
     center: new Vec3D(.13, .13, 25.87),
     trail: 1000,
-    scale: 1,
+    scale: 1.5,
     particles: [[], [], []],
     leaders:   [new Vec3D(-4.7834, -6.4119, 19.2778), 
                 new Vec3D(-4.8834, -6.4119, 19.2778), 
@@ -193,9 +193,9 @@ function qRotate(vec, axis, angle) {
 }
 
 function updateCamera(cam, curTime) {
-    cam.yaw = 6 * Math.cos(curTime * .13);
-    cam.pitch = .2 * Math.cos(curTime * .19);
-    cam.roll = .2 * Math.cos(curTime * .2);
+    // cam.yaw = 6 * Math.cos(curTime * .13);
+    // cam.pitch = .2 * Math.cos(curTime * .19);
+    // cam.roll = .2 * Math.cos(curTime * .2);
 
     const dist = 200;
 
@@ -243,7 +243,7 @@ setInterval(() => {
     }
 
     ctx.globalCompositeOperation = "source-over";
-    ctx.fillStyle = "black";
+    ctx.fillStyle = "#121212";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.globalCompositeOperation = "lighter";
 

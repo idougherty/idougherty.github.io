@@ -81,18 +81,19 @@ const MAX_DIST = 100;
 let MAX_POINTS = 150;
 
 function resizeCanvas() {
+    const h = window.innerHeight;
+    const w = window.innerWidth;
+
     canvas.height = window.innerHeight;
 	canvas.width = window.innerWidth;
 
     if(window.innerWidth < 768) {
 		C_SCALE = 1.65;
         ANIM_LEFT = .5;
-    } else if(window.innerWidth >= 768 && window.innerWidth < 1024) {
-		C_SCALE = 1.65;
+    } else {
+        C_SCALE = (w / (w + h)) * 3;
         ANIM_LEFT = .75;
-    } else if(window.innerWidth >= 1024) {
-		C_SCALE = 2;
-        ANIM_LEFT = .75;
+        console.log(C_SCALE);
     }
     
 	SPLASH_HEIGHT = document.getElementsByClassName("splash-container")[0].clientHeight / C_SCALE; 
@@ -167,7 +168,7 @@ const aizawa = {
 const rossler = {
     center: new Vec3D(1, -26, 5.2),
     trail: 1000,
-    scale: 1.5,
+    scale: 1,
     particles: [[], [], [], [], [],],
     leaders:   [new Vec3D(0.04, 1.95, 3.19),
                 new Vec3D(0.14, 2.45, 3.29),
@@ -300,7 +301,7 @@ function qRotate(vec, axis, angle) {
 }
 
 function updateCamera(cam, curTime) {
-    cam.yaw = 6 * Math.cos(curTime * .000013);
+    cam.yaw = curTime * .00005;
     cam.pitch = .2 * Math.cos(curTime * .000019);
     cam.roll = .2 * Math.cos(curTime * .00002);
 

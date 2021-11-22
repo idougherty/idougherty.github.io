@@ -193,9 +193,9 @@ function qRotate(vec, axis, angle) {
 }
 
 function updateCamera(cam, curTime) {
-    // cam.yaw = 6 * Math.cos(curTime * .13);
-    // cam.pitch = .2 * Math.cos(curTime * .19);
-    // cam.roll = .2 * Math.cos(curTime * .2);
+    cam.yaw = 6 * Math.cos(curTime * .13);
+    cam.pitch = .2 * Math.cos(curTime * .19);
+    cam.roll = .2 * Math.cos(curTime * .2);
 
     const dist = 200;
 

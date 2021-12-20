@@ -81,19 +81,20 @@ const MAX_DIST = 100;
 let MAX_POINTS = 150;
 
 function resizeCanvas() {
-    const h = window.innerHeight;
-    const w = window.innerWidth;
+    // const w = window.innerWidth;
+    // const h = window.innerHeight;
+    const w = visualViewport.width;
+    const h = visualViewport.height;
 
-    canvas.height = window.innerHeight;
-	canvas.width = window.innerWidth;
+	canvas.width = w;
+    canvas.height = h;
 
-    if(window.innerWidth < 768) {
+    if(w < 768) {
 		C_SCALE = 1.65;
         ANIM_LEFT = .5;
     } else {
         C_SCALE = (w / (w + h)) * 3;
         ANIM_LEFT = .75;
-        console.log(C_SCALE);
     }
     
 	SPLASH_HEIGHT = document.getElementsByClassName("splash-container")[0].clientHeight / C_SCALE; 

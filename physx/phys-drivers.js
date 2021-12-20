@@ -114,7 +114,7 @@ function randObj(numPts, radius, center, spread) {
     let obj = new PhysObject(pos, points);
 
     obj.vel = new Vec2D(Math.random() * 400 - 200, Math.random() * 400 - 200);
-    obj.rotVel = Math.random()*6 - 3;
+    obj.rotVel = Math.random() * 6 - 3;
 
     return obj;
 }

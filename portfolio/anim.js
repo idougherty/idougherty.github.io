@@ -81,8 +81,6 @@ const MAX_DIST = 100;
 let MAX_POINTS = 150;
 
 function resizeCanvas() {
-    // const w = window.innerWidth;
-    // const h = window.innerHeight;
     const w = visualViewport.width;
     const h = visualViewport.height;
 
@@ -108,7 +106,7 @@ function resizeCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-window.onresize = resizeCanvas;
+window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
 const lorenz = {
@@ -216,34 +214,6 @@ const lorenzMod2 = {
         v.z += dz * dt * .34;
     },
 };
-
-// currently unstable
-// const dequanLi = {
-//     center: new Vec3D(0, 0, 0),
-//     trail: 10000,
-//     scale: .3,
-//     particles: [[], [], [],],
-//     leaders:   [new Vec3D(1.5, 3.2, 0.4),
-//                 new Vec3D(3.0, 5.2, 1.4),
-//                 new Vec3D(4.5, 7.2, 2.4),],
-
-//     func: (v, dt) => {
-//         const a = 40;
-//         const c = 11.0/6.0;
-//         const d = 0.16;
-//         const e = 0.65;
-//         const k = 55;
-//         const f = 20;
-    
-//         const dx = a * (v.y - v.x) + d * v.x * v.z;
-//         const dy = k * v.x + f * v.y - v.x * v.z;
-//         const dz = c * v.z + v.x * v.y - e * v.x * v.x;
-    
-//         v.x += dx * dt * .03;
-//         v.y += dy * dt * .03;
-//         v.z += dz * dt * .03;
-//     },
-// };
 
 function project(cam, vec) {
     const dif = Vec3D.dif(cam.pos, vec);

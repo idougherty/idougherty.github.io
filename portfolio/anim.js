@@ -1,4 +1,3 @@
-
 class Vec3D {
     static mag(vec) {
         return Math.sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
@@ -70,10 +69,10 @@ let canvas = document.getElementById("bg-anim");
 let ctx = canvas.getContext("2d", {alpha: false});
     
 let SPLASH_HEIGHT;
-let ANIM_LEFT = .75;
+let ANIM_LEFT;
 let C_HEIGHT;
 let C_WIDTH;
-let C_SCALE = 1.5;
+let C_SCALE;
 let parallax = 1.5;
 let SCREEN_TYPE;
 
@@ -88,10 +87,10 @@ function resizeCanvas() {
     canvas.height = h;
 
     if(w < 768) {
-		C_SCALE = 1.65;
+		C_SCALE = 2;
         ANIM_LEFT = .5;
     } else {
-        C_SCALE = (w / (w + h)) * 3;
+        C_SCALE = w / (w + h) * 3;
         ANIM_LEFT = .75;
     }
     
@@ -101,7 +100,7 @@ function resizeCanvas() {
 
     ctx.scale(C_SCALE, C_SCALE);
     ctx.globalCompositeOperation = "lighter";
-	ctx.lineCap = "butt";
+	ctx.lineJoin = "round";
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
@@ -113,6 +112,7 @@ const lorenz = {
     center: new Vec3D(.13, .13, 25.87),
     trail: 1000,
     scale: .8,
+    idx: 0,
     particles: [[], [], []],
     leaders:   [new Vec3D(-4.7834, -6.4119, 19.2778), 
                 new Vec3D(-4.8834, -6.4119, 19.2778), 
@@ -137,6 +137,7 @@ const aizawa = {
     center: new Vec3D(1, 0, 5.2),
     trail: 1000,
     scale: 10,
+    idx: 0,
     particles: [[], [], [], [], []],
     leaders:   [new Vec3D(0.0589, 0.0318, 0.3323),
                 new Vec3D(0.0689, 0.0318, 0.3323),
@@ -168,6 +169,7 @@ const rossler = {
     center: new Vec3D(1, -26, 5.2),
     trail: 1000,
     scale: 1,
+    idx: 0,
     particles: [[], [], [], [], [],],
     leaders:   [new Vec3D(0.04, 1.95, 3.19),
                 new Vec3D(0.14, 2.45, 3.29),
@@ -192,8 +194,9 @@ const rossler = {
 
 const lorenzMod2 = {
     center: new Vec3D(0, 0, 0),
-    trail: 1000,
+    trail: 700,
     scale: 1.5,
+    idx: 0,
     particles: [[], [], [],],
     leaders:   [new Vec3D(-2.58, 5.13, -0.65),
                 new Vec3D(-2.58, 5.15, -0.65),
@@ -300,17 +303,23 @@ function attractorAnim(dt) {
 
     for(const [idx, leader] of attractor.leaders.entries()) {
         attractor.func(leader, dt);
-        attractor.particles[idx].push(new Vec3D(leader.x * attractor.scale, leader.y * attractor.scale, leader.z * attractor.scale));
-
-        if(attractor.particles[idx].length > attractor.trail)
-            attractor.particles[idx].splice(0, 1);
+        let particle = new Vec3D(leader.x * attractor.scale, leader.y * attractor.scale, leader.z * attractor.scale);
+        
+        attractor.particles[idx][attractor.idx] = particle;
     }
-
+        
     for(const particles of attractor.particles) {
         let prev = null;
         let cur = null;
+        let lastHue = null;
 
-        for(const [idx, particle] of particles.entries()) {
+        for(let i = attractor.idx; i > attractor.idx - attractor.trail; i--) {
+            const idx = (i + attractor.trail) % attractor.trail;
+            const particle = particles[idx]; 
+
+            if(!particle)
+                break;
+
             cur = project(camera, particle);
     
             const offsetX = C_WIDTH * ANIM_LEFT;
@@ -323,16 +332,24 @@ function attractorAnim(dt) {
             cur.y += offsetY;
 
             if(prev && cur) {
-                const interp = idx / particles.length;
+                const interp = 1 - ((attractor.idx - i) / particles.length);
                 const h = .015 * curTime + 140 * interp;
-                ctx.strokeStyle = "hsl("+Math.floor(h)+", 100%, 60%)";
-                ctx.lineWidth = 3.5 * interp * interp + .5;
 
-                if(ctx.lineWidth > .5) {
+                if(lastHue == null) {
                     ctx.beginPath();
                     ctx.moveTo(prev.x, prev.y);
-                    ctx.lineTo(cur.x, cur.y);
+                    lastHue = h;
+                }
+
+                ctx.lineTo(cur.x, cur.y);
+                
+                if(lastHue != null && Math.abs(h - lastHue) > 4) {
+
+                    ctx.strokeStyle = "hsl("+Math.floor(h)+", 100%, 60%)";
+                    ctx.lineWidth = 3.5 * interp * interp + .5;
+
                     ctx.stroke();
+                    lastHue = null;
                 }
             }
     
@@ -343,11 +360,16 @@ function attractorAnim(dt) {
             if(cur.y < bounds.top) bounds.top = cur.y;
             if(cur.y > bounds.bottom) bounds.bottom = cur.y;
         }
+        ctx.stroke();
     }
+    
+    if((attractor.idx += 1) >= attractor.trail)
+        attractor.idx = 0;
 }
 
 let lastTime = 0;
 let curTime = new Date().getTime();
+
 function getDT() {
     lastTime = curTime;
     curTime = new Date().getTime();

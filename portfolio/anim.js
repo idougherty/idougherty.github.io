@@ -99,6 +99,8 @@ function resizeCanvas() {
     C_WIDTH = canvas.width / C_SCALE;
 
     ctx.scale(C_SCALE, C_SCALE);
+    // canvas.style.transformOrigin = '0 0';
+    // canvas.style.transform = `scale(${C_SCALE})`;
     ctx.globalCompositeOperation = "lighter";
 	ctx.lineJoin = "round";
 
@@ -194,7 +196,7 @@ const rossler = {
 
 const lorenzMod2 = {
     center: new Vec3D(0, 0, 0),
-    trail: 700,
+    trail: 800,
     scale: 1.5,
     idx: 0,
     particles: [[], [], [],],
@@ -303,6 +305,7 @@ function attractorAnim(dt) {
 
     for(const [idx, leader] of attractor.leaders.entries()) {
         attractor.func(leader, dt);
+        
         let particle = new Vec3D(leader.x * attractor.scale, leader.y * attractor.scale, leader.z * attractor.scale);
         
         attractor.particles[idx][attractor.idx] = particle;
@@ -317,8 +320,11 @@ function attractorAnim(dt) {
             const idx = (i + attractor.trail) % attractor.trail;
             const particle = particles[idx]; 
 
-            if(!particle)
+            if(particle == null)
                 break;
+
+            if(particle == 0)
+                continue;
 
             cur = project(camera, particle);
     
@@ -343,7 +349,7 @@ function attractorAnim(dt) {
 
                 ctx.lineTo(cur.x, cur.y);
                 
-                if(lastHue != null && Math.abs(h - lastHue) > 4) {
+                if(lastHue != null && Math.abs(h - lastHue) > 5) {
 
                     ctx.strokeStyle = "hsl("+Math.floor(h)+", 100%, 60%)";
                     ctx.lineWidth = 3.5 * interp * interp + .5;
@@ -405,4 +411,5 @@ function anim() {
 
 	window.requestAnimationFrame(anim);
 }
+
 anim();

@@ -1,98 +1,18 @@
 noise.seed(Date.now());
 
 const MAX_HEIGHT = 100;
-
-const track = new Track(new Vec2D(canvas.width/2, canvas.height/2), canvas.width * .9);
-track.genMesh(0, 0);
-const islandBounds = track.innerWall.map(obj => obj[0]);
-
-function pointInPoly(x, y, shape) {
-    var inside = false;
-    for (var i = 0, j = shape.length - 1; i < shape.length; j = i++) {
-        var xi = shape[i].x, yi = shape[i].y;
-        var xj = shape[j].x, yj = shape[j].y;
-        
-        var intersect = ((yi > y) != (yj > y))
-            && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
-        if (intersect) inside = !inside;
-    }
-    
-    return inside;
-};
-
-function sampleTrack(x, y) {
-    for(const part of track.parts) {
-        if(part instanceof Corner) {
-            const dx = x - part.focus.x;
-            const dy = y - part.focus.y;
-            const dist = Math.sqrt(dx*dx + dy*dy);
-
-            let alpha = 1 - (dist - (part.radius - track.width/2)) / (track.width);
-            if(part.counterClockwise)
-                alpha = 1 - alpha;
-
-            if(alpha > 1 || alpha < 0)
-                continue;
-
-            const a = Math.atan2(dy, dx);
-
-            if(a > part.startAngle && a < part.startAngle + part.theta)
-                return alpha;
-
-            if(a < part.startAngle && a > part.startAngle + part.theta)
-                return alpha;
-
-            if(a + 2*Math.PI > part.startAngle && a + 2*Math.PI < part.startAngle + part.theta)
-                return alpha;
-            
-            if(a + 2*Math.PI < part.startAngle && a + 2*Math.PI > part.startAngle + part.theta)
-                return alpha;
-
-            if(a - 2*Math.PI > part.startAngle && a - 2*Math.PI < part.startAngle + part.theta)
-                return alpha;
-
-            if(a - 2*Math.PI < part.startAngle && a - 2*Math.PI > part.startAngle + part.theta)
-                return alpha;
-        } else {
-            const v = new Vec2D(part.p2.x - part.p1.x, part.p2.y - part.p1.y);
-            const perp = Vec2D.normalize(new Vec2D(v.y, -v.x)).mult(track.width/2);
-            const p1 = new Vec2D(part.p1.x, part.p1.y).addRet(perp);
-            const p = new Vec2D(x, y);
-            const u = Vec2D.dif(p1, p); 
-
-            const scalar = u.dot(v) / v.dot(v);
-            const proj = v.mult(scalar).addRet(p1);
-
-            if(scalar < 0 || scalar > 1)
-                continue;
-
-            if(u.dot(perp) > 0)
-                continue;
-
-            const dist = Vec2D.mag(Vec2D.dif(proj, p));
-
-            let alpha = dist / track.width;
-
-            if(alpha > 0 && alpha < 1)
-                return alpha;
-        }
-    }
-
-    if(pointInPoly(x, y, islandBounds))
-        return 1;
-
-    return 0;
-}
+const WATER_LEVEL = 25;
+const SAND_LEVEL = 35;
 
 /* returns a value from 0 to 1 */
 function sampleNoise(x, y) {
-    const scale1 = .002;
-    const scale2 = .09;
-    const scale3 = .1;
+    const scale1 = .005;
+    const scale2 = .015;
+    const scale3 = .25;
 
-    const weight1 = 99;
-    const weight2 = 0;
-    const weight3 = .3;
+    const weight1 = 30;
+    const weight2 = 5;
+    const weight3 = 0;
 
     const layer1 = noise.simplex2(x * scale1, y * scale1);
     const layer2 = noise.simplex2(x * scale2, y * scale2);
@@ -106,10 +26,43 @@ function sampleNoise(x, y) {
 
 // Returns a value from 0 to 1, multiplies the sample noise by some island pattern
 function sampleHeight(x, y) {
-    const alpha = sampleTrack(x, y);
-    const islandHeight = (-1/2 * Math.cos(alpha * Math.PI) + .5);
+    const dx = x - canvas.width / 2;
+    const dy = y - canvas.width / 2;
+    const dist = Math.sqrt(dx * dx + dy * dy) / (canvas.width / 2);
+    const islandHeight = Math.pow(Math.max(1 - dist, 0), .8);
 
-    return (sampleNoise(x, y) * .8 + .2) * islandHeight * MAX_HEIGHT;
+    let noise = Math.pow(sampleNoise(x, y), .9);
+
+    return noise * MAX_HEIGHT * (islandHeight * MAX_HEIGHT + SAND_LEVEL) / (MAX_HEIGHT + SAND_LEVEL);
+}
+
+// Takes in a height from 0 to 100 and returns a color
+function sampleColor(x, y) {
+    const height = sampleHeight(x, y);
+    let hsl1, hsl2, alpha, levels;
+
+    if(height < WATER_LEVEL) {
+        hsl1 = [200, 70, 30];
+        hsl2 = [200, 30, 50];
+        alpha = height / WATER_LEVEL;
+        levels = 6;
+    } else if(height < SAND_LEVEL) {
+        hsl1 = [50, 35, 60];
+        hsl2 = [50, 40, 65];
+        alpha = (height - WATER_LEVEL) / (SAND_LEVEL - WATER_LEVEL);
+        levels = 3;
+    } else {
+        hsl1 = [130, 55, 30];
+        hsl2 = [70, 55, 55];
+        alpha = (height - SAND_LEVEL) / (MAX_HEIGHT - SAND_LEVEL);
+        levels = 8;
+    }
+
+    const hue = Math.floor(alpha * levels) * (hsl2[0] - hsl1[0]) / levels + hsl1[0];
+    const saturation = Math.floor(alpha * levels) * (hsl2[1] - hsl1[1]) / levels + hsl1[1];
+    const lightness = Math.floor(alpha * levels) * (hsl2[2] - hsl1[2]) / levels + hsl1[2];
+    
+    return hslToRgb(hue/360, saturation/100, lightness/100);
 }
 
 function normalize(vec) {
@@ -135,7 +88,12 @@ function getNormal(x, y) {
 
 function calcLight(normal, light, surfaceColor) {
     let r = 0, g = 0, b = 0;
-
+    
+    const ambientIntensity = .5;
+    r += ambientIntensity * surfaceColor[0];
+    g += ambientIntensity * surfaceColor[1];
+    b += ambientIntensity * surfaceColor[2];
+    
     const lightColor = [255, 255, 255]; 
 
     const rf = lightColor[0] / 255 * surfaceColor[0] / 255;
@@ -200,12 +158,7 @@ function createBackground() {
     
     for(let x = 0; x < canvas.width; x++) {
         for(let y = 0; y < canvas.height; y++) {
-            const height = sampleHeight(x, y);
-            const levels = 10;
-
-            const hue = Math.floor(height/MAX_HEIGHT * levels) * -60 / levels + 130;
-            const lightness = Math.floor(height/MAX_HEIGHT * levels) * 25 / levels + 30;
-            const surfaceColor = hslToRgb(hue/360, 55/100, lightness/100);
+            const surfaceColor = sampleColor(x, y);
 
             const normal = getNormal(x, y);
             const [r, g, b] = surfaceColor;

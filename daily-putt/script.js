@@ -34,10 +34,9 @@ function gameLoop() {
     window.requestAnimationFrame(gameLoop);
 }
 
-// window.requestAnimationFrame(gameLoop);
+window.requestAnimationFrame(gameLoop);
 
-ctx.putImageData(backgroundImage, 0, 0);
-// track.draw(ctx);
+// ctx.putImageData(backgroundImage, 0, 0);
 
 let mouse = {
     pos: new Vec2D(canvas.width, canvas.height),

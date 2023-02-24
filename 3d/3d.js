@@ -149,7 +149,7 @@ class Plane {
 				r += Math.max(Math.pow(ndoth, m) * 60, 0);
 				g += Math.max(Math.pow(ndoth, m) * 60, 0);
 				b += Math.max(Math.pow(ndoth, m) * 60, 0);
-			} if(light instanceof AmbientLight) {
+			} else if(light instanceof AmbientLight) {
 				r += plane.baseColor.r * rf;
 				g += plane.baseColor.g * gf;
 				b += plane.baseColor.b * bf;

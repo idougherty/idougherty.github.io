@@ -55,16 +55,18 @@ class Putter extends PhysObject {
     }
 
     tick(ball, mouse) {
+        this.vel.scale(.1);
+
         if(!this.locked) {
             this.angle = Math.atan2(ball.pos.y - this.pos.y, ball.pos.x - this.pos.x) + Math.PI/2;
-            this.vel = Vec2D.dif(this.pos, mouse.pos).mult(60);
+            this.vel.add(Vec2D.dif(this.pos, mouse.pos).mult(30));
         } else {
             const lineToBall = Vec2D.dif(ball.pos, this.pos);
             const lineToMouse = Vec2D.dif(this.pos, mouse.pos);
             const scalar = lineToBall.dot(lineToMouse) / lineToBall.dot(lineToBall);
             const target = lineToBall.mult(scalar).addRet(this.pos);
 
-            this.vel = Vec2D.dif(this.pos, target).mult(30);
+            this.vel.add(Vec2D.dif(this.pos, target).mult(30));
         }
     }
 }

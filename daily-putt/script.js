@@ -31,7 +31,7 @@ function gameLoop() {
 
     //drawscreen
     ctx.putImageData(backgroundImage, 0, 0);
-    
+
     ball.draw(ctx);
     putter.draw(ctx);
 
@@ -62,6 +62,8 @@ document.addEventListener("mousemove", (e) => {
 });
 
 document.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+
     mouse.down = true;
     putter.startSwing(ball, mouse);
 });

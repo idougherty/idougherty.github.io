@@ -38,3 +38,10 @@ body {
     box-shadow: 5px 5px 20px #0008;
     border-radius: 4px;
 }
+
+html, body {
+    overflow: hidden;
+}
+body {
+    position: relative;
+}

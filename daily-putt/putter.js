@@ -2,10 +2,10 @@ class Putter extends PhysObject {
     constructor(pos) {
         const shape = [
             new Vec2D(0, 0), 
-            new Vec2D(0, 6), 
-            new Vec2D(4, 10),
-            new Vec2D(20, 10),
-            new Vec2D(30, 4),
+            new Vec2D(0, 10), 
+            new Vec2D(4, 14),
+            new Vec2D(18, 14),
+            new Vec2D(30, 6),
             new Vec2D(30, 0),
         ];
 
@@ -15,9 +15,8 @@ class Putter extends PhysObject {
         this.locked = false;
 
         this.func = (A, B) => {
-            if(A.locked) {
-                A.locked = false;
-            }
+            if(A.locked)
+                A.endSwing();
         }
     }
 
@@ -32,7 +31,7 @@ class Putter extends PhysObject {
 
         ctx.fill();
 
-        ctx.fillStyle = "#ddd";
+        ctx.fillStyle = "#aaa";
 
         ctx.beginPath();
         for(const point of this.points) {
@@ -44,14 +43,19 @@ class Putter extends PhysObject {
     } 
 
     startSwing(ball, mouse) {
+        if(ball.vel.x != 0 && ball.vel.y != 0)
+            return;
+            
         this.locked = true;
         this.angle = Math.atan2(ball.pos.y - this.pos.y, ball.pos.x - this.pos.x) + Math.PI/2;
         this.pos = mouse.pos.mult(1); 
         this.vel.scale(0);
+        this.masks = [];
     }
 
     endSwing() {
         this.locked = false;
+        this.masks = ["putter-ball"];
     }
 
     tick(ball, mouse) {
@@ -59,14 +63,14 @@ class Putter extends PhysObject {
 
         if(!this.locked) {
             this.angle = Math.atan2(ball.pos.y - this.pos.y, ball.pos.x - this.pos.x) + Math.PI/2;
-            this.vel.add(Vec2D.dif(this.pos, mouse.pos).mult(30));
+            this.vel.add(Vec2D.dif(this.pos, mouse.pos).mult(15));
         } else {
             const lineToBall = Vec2D.dif(ball.pos, this.pos);
             const lineToMouse = Vec2D.dif(this.pos, mouse.pos);
             const scalar = lineToBall.dot(lineToMouse) / lineToBall.dot(lineToBall);
             const target = lineToBall.mult(scalar).addRet(this.pos);
 
-            this.vel.add(Vec2D.dif(this.pos, target).mult(30));
+            this.vel.add(Vec2D.dif(this.pos, target).mult(15));
         }
     }
 }

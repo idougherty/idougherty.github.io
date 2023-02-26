@@ -55,7 +55,7 @@ class Ball extends PhysObject {
         const normal = getNormal(this.pos.x, this.pos.y);
         const height = sampleHeight(this.pos.x, this.pos.y);
 
-        let friction = .98;
+        let friction = .975;
 
         if(height <= WATER_LEVEL) {
             this.force.x = 0;
@@ -63,6 +63,7 @@ class Ball extends PhysObject {
             this.vel.x = 0;
             this.vel.y = 0;
             this.pos = this.lastPos.mult(1);
+            this.strokes++;
         } else if(height <= SAND_LEVEL) {
             friction = .94;
         }
@@ -84,9 +85,9 @@ class Ball extends PhysObject {
         // Apply friction
         this.vel.scale(friction);
 
-        if(mouse.down && this.masks.length > 0)
+        if(putter.locked && this.masks.length > 0)
             this.masks = [];
-        else if(!mouse.down && this.masks.length == 0)
+        else if(!putter.locked && this.masks.length == 0)
             this.masks = ["putter-ball"];
 
         if(Vec2D.mag(this.vel) < 25 && Vec2D.mag(this.force) / this.mass < 60) {

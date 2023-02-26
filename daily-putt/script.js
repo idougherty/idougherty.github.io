@@ -2,6 +2,7 @@ const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
 const [teePos, holePos, backgroundImage] = generateTerrain();
+ctx.putImageData(backgroundImage, 0, 0);
 
 const physEnv = new PhysEnv(1);
 

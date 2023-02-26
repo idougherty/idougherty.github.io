@@ -150,37 +150,99 @@ function hslToRgb(h, s, l){
     return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
 }
 
-function floodFill() {
+function findLargestIsland(buffer) {
 
-}
-
-function nearOtherPoints([x, y], points, maxDist) {
-    for(let i = 0; i < points.length; i++) {
-        const dx = x - points[i][0];
-        const dy = y - points[i][1];
-
-        if(dx * dx + dy * dy < maxDist * maxDist)
-            return [true, i];
-    }
+    let floodFill = (point, tag) => {
+        let size = 0;
+        let boundary = [point];
+        let n, e, s, w;
     
-    return [false, null]
+        while(boundary.length > 0) {
+            const [x, y] = boundary.pop();
+            const idx = (y * canvas.width + x) * 4;
+    
+            buffer[idx] = tag;
+            buffer[idx + 1] = 255;
+            buffer[idx + 2] = 255;
+            buffer[idx + 3] = 255;
+            size++;
+    
+            n = buffer[idx + offset * canvas.width * 4];
+            s = buffer[idx - offset * canvas.width * 4];
+            e = buffer[idx - offset * 4];
+            w = buffer[idx + offset * 4];
+    
+            if(y + offset < canvas.height)
+                if(sampleHeight(x, y + offset) > minHeight && !n)
+                    boundary.push([x, y + offset]);
+    
+            if(y - offset >= 0)
+                if(sampleHeight(x, y - offset) > minHeight && !s)
+                    boundary.push([x, y - offset]);
+    
+            if(x - offset >= 0)
+                if(sampleHeight(x - offset, y) > minHeight && !e)
+                    boundary.push([x - offset, y]);
+    
+            if(x + offset < canvas.width)
+                if(sampleHeight(x + offset, y) > minHeight && !w)
+                    boundary.push([x + offset, y]);
+        }
+    
+        return size;
+    }
+
+    const offset = 5;
+    const minHeight = (SAND_LEVEL - WATER_LEVEL) / 5 + WATER_LEVEL;
+
+    let islandIdx = 0;
+    let islandSizes = [];
+
+    for(let x = 0; x < canvas.width; x += offset) {
+        for(let y = 0; y < canvas.height; y += offset) {
+            const idx = (y * canvas.width + x) * 4;
+
+            if(sampleHeight(x, y) > minHeight && !buffer[idx]) {
+                islandIdx++;
+                islandSizes.push(floodFill([x, y], islandIdx));
+            }
+        }
+    }
+
+    const largestIsland = islandSizes.indexOf(Math.max(...islandSizes)) + 1;
+
+    for(let x = 0; x < canvas.width; x += offset) {
+        for(let y = 0; y < canvas.height; y += offset) {
+            const idx = (y * canvas.width + x) * 4;
+
+            if(buffer[idx] && buffer[idx] != largestIsland) {
+                buffer[idx] = 0;
+                buffer[idx + 1] = 0;
+                buffer[idx + 2] = 0;
+                buffer[idx + 3] = 0;
+            }
+        }
+    }
 }
 
 // find flat spots on land to spawn the tee and hole
-function generateHole() {
+function generateHole(buffer) {
     let points = [];
-    let offset = 10;
-    let neighborDist = 40;
+    let offset = 5;
+
+    findLargestIsland(buffer);
 
     // Find points near local extrema
-    for(let x = offset; x < canvas.width - offset; x++) {
-        for(let y = offset; y < canvas.height - offset; y++) {
+    for(let x = offset; x < canvas.width - offset; x += offset) {
+        for(let y = offset; y < canvas.height - offset; y += offset) {
             const height = sampleHeight(x, y);
 
             if(height <= SAND_LEVEL)
                 continue;
 
-            // TODO ensure all points are selected from the largest contiguous green area
+            // Ensure all points are selected from the largest contiguous green area
+            if(!buffer[(y * canvas.width + x) * 4])
+                continue;
 
             const n = sampleHeight(x - offset, y);
             const s = sampleHeight(x + offset, y);
@@ -188,19 +250,8 @@ function generateHole() {
             const w = sampleHeight(x, y + offset);
 
             if((height > n && height > s && height > e && height > w) ||
-                (height < n && height < s && height < e && height < w)) {
-                const [nearby, idx] = nearOtherPoints([x, y], points, neighborDist);
-
-                if(nearby) {
-                    // either replace nearby point or do nothing
-                    if(Math.random() < .5) { 
-                        points.splice(idx, 1)
-                        points.push([x, y]);
-                    }
-                } else {
-                    points.push([x, y]);
-                }
-            }
+                (height < n && height < s && height < e && height < w))
+                points.push([x, y]);
         }
     }
 
@@ -232,6 +283,8 @@ function generateTerrain() {
     
     let image = ctx.getImageData(0, 0, canvas.width, canvas.height);
     let buffer = image.data;
+
+    let [tee, hole] = generateHole(buffer);
     
     for(let x = 0; x < canvas.width; x++) {
         for(let y = 0; y < canvas.height; y++) {
@@ -265,23 +318,31 @@ function generateTerrain() {
         }
     }
 
-    let [tee, hole] = generateHole();
-
     // Draw hole
     const r = HOLE_RADIUS;
+    const depth = 5;
     for(let x = hole[0] - r; x < hole[0] + r; x++) {
         for(let y = hole[1] - r; y < hole[1] + r; y++) {
             const dx = x - hole[0];
             const dy = y - hole[1];
+            const ddy = y - hole[1] - depth;
 
             if(dx*dx + dy*dy > r * r)
                 continue;
 
             const idx = (y * canvas.width + x) * 4;
-            buffer[idx + 0] = 30;
-            buffer[idx + 1] = 50;
-            buffer[idx + 2] = 30;
-            buffer[idx + 3] = 255;
+
+            if(dx*dx + ddy*ddy > r * r) {
+                buffer[idx + 0] = 30;
+                buffer[idx + 1] = 50;
+                buffer[idx + 2] = 30;
+                buffer[idx + 3] = 255;
+            } else {
+                buffer[idx + 0] = 50;
+                buffer[idx + 1] = 70;
+                buffer[idx + 2] = 50;
+                buffer[idx + 3] = 255;
+            }
         }
     }
 

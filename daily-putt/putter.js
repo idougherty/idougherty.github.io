@@ -2,8 +2,10 @@ class Putter extends PhysObject {
     constructor(pos) {
         const shape = [
             new Vec2D(0, 0), 
-            new Vec2D(5, 10),
-            new Vec2D(25, 10),
+            new Vec2D(0, 6), 
+            new Vec2D(4, 10),
+            new Vec2D(20, 10),
+            new Vec2D(30, 4),
             new Vec2D(30, 0),
         ];
 
@@ -18,6 +20,28 @@ class Putter extends PhysObject {
             }
         }
     }
+
+    draw(ctx) {
+        ctx.fillStyle = "#2224";
+
+        ctx.beginPath();
+        for(const point of this.points) {
+            ctx.lineTo(point.x, point.y + 3);
+        }
+        ctx.closePath();
+
+        ctx.fill();
+
+        ctx.fillStyle = "#ddd";
+
+        ctx.beginPath();
+        for(const point of this.points) {
+            ctx.lineTo(point.x, point.y + (this.locked ? 0 : -5));
+        }
+        ctx.closePath();
+
+        ctx.fill();
+    } 
 
     startSwing(ball, mouse) {
         this.locked = true;
@@ -40,7 +64,7 @@ class Putter extends PhysObject {
             const scalar = lineToBall.dot(lineToMouse) / lineToBall.dot(lineToBall);
             const target = lineToBall.mult(scalar).addRet(this.pos);
 
-            this.vel = Vec2D.dif(this.pos, target).mult(60);
+            this.vel = Vec2D.dif(this.pos, target).mult(30);
         }
     }
 }

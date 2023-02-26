@@ -1,10 +1,12 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
-const backgroundImage = createBackground();
+
+const [teePos, holePos, backgroundImage] = generateTerrain();
 
 const physEnv = new PhysEnv(1);
 
-const tee = new Vec2D(canvas.width/2, canvas.height/2);
+const tee = new Vec2D(teePos[0], teePos[1]);
+const hole = new Vec2D(holePos[0], holePos[1]);
 
 const ball = new Ball(tee);
 physEnv.addObject(ball);
@@ -29,14 +31,14 @@ function gameLoop() {
 
     //drawscreen
     ctx.putImageData(backgroundImage, 0, 0);
-    physEnv.drawObjects(ctx);
+    
+    ball.draw(ctx);
+    putter.draw(ctx);
 
     window.requestAnimationFrame(gameLoop);
 }
 
 window.requestAnimationFrame(gameLoop);
-
-// ctx.putImageData(backgroundImage, 0, 0);
 
 let mouse = {
     pos: new Vec2D(canvas.width, canvas.height),

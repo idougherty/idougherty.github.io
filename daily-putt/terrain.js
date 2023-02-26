@@ -3,16 +3,25 @@ noise.seed(Date.now());
 const MAX_HEIGHT = 100;
 const WATER_LEVEL = 25;
 const SAND_LEVEL = 35;
+const HOLE_RADIUS = 8;
+
+function normalize(vec) {
+    const [i, j, k] = vec;
+    const mag = Math.sqrt(i * i + j * j + k * k);
+    if(mag == 0)
+        return [0, 0, 0];
+    return [i / mag, j / mag, k / mag];
+}
 
 /* returns a value from 0 to 1 */
 function sampleNoise(x, y) {
     const scale1 = .005;
     const scale2 = .015;
-    const scale3 = .25;
+    const scale3 = .001;
 
     const weight1 = 30;
     const weight2 = 5;
-    const weight3 = 0;
+    const weight3 = 15;
 
     const layer1 = noise.simplex2(x * scale1, y * scale1);
     const layer2 = noise.simplex2(x * scale2, y * scale2);
@@ -29,9 +38,9 @@ function sampleHeight(x, y) {
     const dx = x - canvas.width / 2;
     const dy = y - canvas.width / 2;
     const dist = Math.sqrt(dx * dx + dy * dy) / (canvas.width / 2);
-    const islandHeight = Math.pow(Math.max(1 - dist, 0), .8);
+    const islandHeight = 1 / (1 + Math.pow(Math.E, 10 * dist - 7));
 
-    let noise = Math.pow(sampleNoise(x, y), .9);
+    let noise = Math.pow(sampleNoise(x, y), 1.2);
 
     return noise * MAX_HEIGHT * (islandHeight * MAX_HEIGHT + SAND_LEVEL) / (MAX_HEIGHT + SAND_LEVEL);
 }
@@ -41,12 +50,12 @@ function sampleColor(x, y) {
     const height = sampleHeight(x, y);
     let hsl1, hsl2, alpha, levels;
 
-    if(height < WATER_LEVEL) {
-        hsl1 = [200, 70, 30];
-        hsl2 = [200, 30, 50];
+    if(height <= WATER_LEVEL) {
+        hsl1 = [200, 60, 35];
+        hsl2 = [185, 30, 45];
         alpha = height / WATER_LEVEL;
-        levels = 6;
-    } else if(height < SAND_LEVEL) {
+        levels = 5;
+    } else if(height <= SAND_LEVEL) {
         hsl1 = [50, 35, 60];
         hsl2 = [50, 40, 65];
         alpha = (height - WATER_LEVEL) / (SAND_LEVEL - WATER_LEVEL);
@@ -65,14 +74,6 @@ function sampleColor(x, y) {
     return hslToRgb(hue/360, saturation/100, lightness/100);
 }
 
-function normalize(vec) {
-    const [i, j, k] = vec;
-    const mag = Math.sqrt(i * i + j * j + k * k);
-    if(mag == 0)
-        return [0, 0, 0];
-    return [i / mag, j / mag, k / mag];
-}
-
 function getNormal(x, y) {
     const delta = .1;
 
@@ -89,7 +90,7 @@ function getNormal(x, y) {
 function calcLight(normal, light, surfaceColor) {
     let r = 0, g = 0, b = 0;
     
-    const ambientIntensity = .5;
+    const ambientIntensity = 0.5;
     r += ambientIntensity * surfaceColor[0];
     g += ambientIntensity * surfaceColor[1];
     b += ambientIntensity * surfaceColor[2];
@@ -117,9 +118,9 @@ function calcLight(normal, light, surfaceColor) {
     const m = 100;
 
     //specular highlights
-    r += Math.max(Math.pow(ndoth, m) * 10, 0);
-    g += Math.max(Math.pow(ndoth, m) * 10, 0);
-    b += Math.max(Math.pow(ndoth, m) * 10, 0);
+    r += Math.max(Math.pow(ndoth, m) * 2, 0);
+    g += Math.max(Math.pow(ndoth, m) * 2, 0);
+    b += Math.max(Math.pow(ndoth, m) * 2, 0);
 
     return [r, g, b];
 }
@@ -149,7 +150,83 @@ function hslToRgb(h, s, l){
     return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
 }
 
-function createBackground() {
+function floodFill() {
+
+}
+
+function nearOtherPoints([x, y], points, maxDist) {
+    for(let i = 0; i < points.length; i++) {
+        const dx = x - points[i][0];
+        const dy = y - points[i][1];
+
+        if(dx * dx + dy * dy < maxDist * maxDist)
+            return [true, i];
+    }
+    
+    return [false, null]
+}
+
+// find flat spots on land to spawn the tee and hole
+function generateHole() {
+    let points = [];
+    let offset = 10;
+    let neighborDist = 40;
+
+    // Find points near local extrema
+    for(let x = offset; x < canvas.width - offset; x++) {
+        for(let y = offset; y < canvas.height - offset; y++) {
+            const height = sampleHeight(x, y);
+
+            if(height <= SAND_LEVEL)
+                continue;
+
+            // TODO ensure all points are selected from the largest contiguous green area
+
+            const n = sampleHeight(x - offset, y);
+            const s = sampleHeight(x + offset, y);
+            const e = sampleHeight(x, y - offset);
+            const w = sampleHeight(x, y + offset);
+
+            if((height > n && height > s && height > e && height > w) ||
+                (height < n && height < s && height < e && height < w)) {
+                const [nearby, idx] = nearOtherPoints([x, y], points, neighborDist);
+
+                if(nearby) {
+                    // either replace nearby point or do nothing
+                    if(Math.random() < .5) { 
+                        points.splice(idx, 1)
+                        points.push([x, y]);
+                    }
+                } else {
+                    points.push([x, y]);
+                }
+            }
+        }
+    }
+
+    // Create a list of potential start and end points
+    let tee = null;
+    let hole = null;
+    let maxDist = 0;
+
+    for(let i = 0; i < points.length - 1; i++) {
+        for(let j = i + 1; j < points.length; j++) {
+            const dx = points[i][0] - points[j][0];
+            const dy = points[i][1] - points[j][1];
+            const dist = dx*dx + dy*dy;
+
+            if(dist > maxDist) {
+                tee = points[i];
+                hole = points[j];
+                maxDist = dist;
+            }
+        }
+    }
+
+    return [tee, hole];
+}
+
+function generateTerrain() {
 
     const light = normalize([-1, -1, 50]);
     
@@ -160,9 +237,25 @@ function createBackground() {
         for(let y = 0; y < canvas.height; y++) {
             const surfaceColor = sampleColor(x, y);
 
-            const normal = getNormal(x, y);
-            const [r, g, b] = surfaceColor;
-            // const [r, g, b] = calcLight(normal, light, surfaceColor);
+            let normal = getNormal(x, y);
+            
+            if(sampleHeight(x, y) <= WATER_LEVEL) {
+                const delta = .1;
+                const scale = .015;
+                const height = 7;
+
+                const sample = height * noise.simplex2(x * scale, y * scale);
+                const dx = height * noise.simplex2((x + delta) * scale, y * scale) - sample;
+                const dy = height * noise.simplex2(x * scale, (y + delta) * scale) - sample;
+            
+                // [delta, 0, dx] x [0, delta, dy]
+                normal = [-delta * dx, delta * dy, delta * delta];
+
+                normal = normalize(normal);
+            }
+
+            // const [r, g, b] = surfaceColor;
+            const [r, g, b] = calcLight(normal, light, surfaceColor);
             
             const idx = (y * canvas.width + x) * 4;
             buffer[idx + 0] = r;
@@ -172,5 +265,25 @@ function createBackground() {
         }
     }
 
-    return image;
+    let [tee, hole] = generateHole();
+
+    // Draw hole
+    const r = HOLE_RADIUS;
+    for(let x = hole[0] - r; x < hole[0] + r; x++) {
+        for(let y = hole[1] - r; y < hole[1] + r; y++) {
+            const dx = x - hole[0];
+            const dy = y - hole[1];
+
+            if(dx*dx + dy*dy > r * r)
+                continue;
+
+            const idx = (y * canvas.width + x) * 4;
+            buffer[idx + 0] = 30;
+            buffer[idx + 1] = 50;
+            buffer[idx + 2] = 30;
+            buffer[idx + 3] = 255;
+        }
+    }
+
+    return [tee, hole, image];
 }

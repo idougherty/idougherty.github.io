@@ -9,6 +9,8 @@ const physEnv = new PhysEnv(1);
 const tee = new Vec2D(teePos[0], teePos[1]);
 const hole = new Vec2D(holePos[0], holePos[1]);
 
+const flag = new Flag(hole);
+
 const ball = new Ball(tee);
 physEnv.addObject(ball);
 
@@ -18,12 +20,21 @@ physEnv.addObject(putter);
 
 let tick = Date.now() / 16;
 
+let emitter = new Emitter(hole, 0, 0);
+
 function gameLoop() {
     const now = Date.now() / 16;
 
     while(tick < now) {
         ball.tick();
         putter.tick(ball, mouse);
+        flag.tick(ball);
+        emitter.tick();
+
+        if(ball.inHole && emitter.period == 0) {
+            emitter.period = 5;
+            emitter.duration = 100;
+        }
 
         physEnv.update(0.016);
 
@@ -34,12 +45,23 @@ function gameLoop() {
     ctx.putImageData(backgroundImage, 0, 0);
 
     ball.draw(ctx);
+    flag.draw(ctx);
     putter.draw(ctx);
+    emitter.draw(ctx);
+    drawHUD(ctx);
 
     window.requestAnimationFrame(gameLoop);
 }
 
 window.requestAnimationFrame(gameLoop);
+
+function drawHUD(ctx) {
+    ctx.fillStyle = "white";
+    ctx.font = "30px Coda";
+    ctx.textBaseline = "bottom";
+    ctx.textAlign = "center";
+    ctx.fillText(`Strokes: ${ball.strokes}`, canvas.width/2, canvas.height - 10);
+}
 
 let mouse = {
     pos: new Vec2D(canvas.width, canvas.height),

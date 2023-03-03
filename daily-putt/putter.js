@@ -3,8 +3,8 @@ class Putter extends PhysObject {
         const shape = [
             new Vec2D(0, 0), 
             new Vec2D(0, 10), 
-            new Vec2D(4, 14),
-            new Vec2D(18, 14),
+            new Vec2D(5, 15),
+            new Vec2D(18, 15),
             new Vec2D(30, 6),
             new Vec2D(30, 0),
         ];
@@ -21,6 +21,8 @@ class Putter extends PhysObject {
     }
 
     draw(ctx) {
+        const height = 6;
+
         ctx.fillStyle = "#2224";
 
         ctx.beginPath();
@@ -31,11 +33,23 @@ class Putter extends PhysObject {
 
         ctx.fill();
 
+        ctx.fillStyle = "#888";
+
+        for(let i = 0; i < height; i += 2) {
+            ctx.beginPath();
+            for(const point of this.points) {
+                ctx.lineTo(point.x, point.y + (this.locked ? 0 - i : -5 - i));
+            }
+            ctx.closePath();
+    
+            ctx.fill();
+        }
+
         ctx.fillStyle = "#aaa";
 
         ctx.beginPath();
         for(const point of this.points) {
-            ctx.lineTo(point.x, point.y + (this.locked ? 0 : -5));
+            ctx.lineTo(point.x, point.y + (this.locked ? -height : -height - 5));
         }
         ctx.closePath();
 

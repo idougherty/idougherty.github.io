@@ -50,12 +50,12 @@ class Ball extends PhysObject {
 
     tick() {
         // Apply gravity
-        const GRAVITY_STRENGTH = 100;
+        const GRAVITY_STRENGTH = 90;
 
         const normal = getNormal(this.pos.x, this.pos.y);
         const height = sampleHeight(this.pos.x, this.pos.y);
 
-        let friction = .975;
+        let friction = .97;
 
         if(height <= WATER_LEVEL) {
             this.force.x = 0;

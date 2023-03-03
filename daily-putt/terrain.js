@@ -40,7 +40,7 @@ function sampleHeight(x, y) {
     const dist = Math.sqrt(dx * dx + dy * dy) / (canvas.width / 2);
     const islandHeight = 1 / (1 + Math.pow(Math.E, 10 * dist - 7));
 
-    let noise = Math.pow(sampleNoise(x, y), 1.2);
+    let noise = Math.pow(sampleNoise(x, y), 1.3);
 
     return noise * MAX_HEIGHT * (islandHeight * MAX_HEIGHT + SAND_LEVEL) / (MAX_HEIGHT + SAND_LEVEL);
 }
@@ -294,8 +294,8 @@ function generateTerrain() {
             
             if(sampleHeight(x, y) <= WATER_LEVEL) {
                 const delta = .1;
-                const scale = .015;
-                const height = 7;
+                const scale = .012;
+                const height = 12;
 
                 const sample = height * noise.simplex2(x * scale, y * scale);
                 const dx = height * noise.simplex2((x + delta) * scale, y * scale) - sample;
@@ -307,7 +307,6 @@ function generateTerrain() {
                 normal = normalize(normal);
             }
 
-            // const [r, g, b] = surfaceColor;
             const [r, g, b] = calcLight(normal, light, surfaceColor);
             
             const idx = (y * canvas.width + x) * 4;
@@ -338,9 +337,9 @@ function generateTerrain() {
                 buffer[idx + 2] = 30;
                 buffer[idx + 3] = 255;
             } else {
-                buffer[idx + 0] = 50;
-                buffer[idx + 1] = 70;
-                buffer[idx + 2] = 50;
+                buffer[idx + 0] = 60;
+                buffer[idx + 1] = 80;
+                buffer[idx + 2] = 60;
                 buffer[idx + 3] = 255;
             }
         }

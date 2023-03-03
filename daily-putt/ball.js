@@ -18,6 +18,7 @@ class Ball extends PhysObject {
         this.masks = ["putter-ball"];
 
         this.strokes = 0;
+        this.inHole = false;
         this.lastPos = this.pos;
 
         this.func = (A, B) => {
@@ -69,6 +70,9 @@ class Ball extends PhysObject {
         }
 
         if(Vec2D.mag(Vec2D.dif(hole, this.pos)) <= HOLE_RADIUS) {
+            if(this.vel.x == 0 && this.vel.y == 0)
+                this.inHole = true;
+            
             friction = .9;
 
             this.applyForce({

@@ -7,14 +7,17 @@ class Particle {
         this.rotVel = Math.random() * .6 - .3;
         this.lifespan = lifespan;
         this.size = 16;
-        this.color = `hsl(${Math.floor(Math.random() * 360)}, 60%, 60%)`;
+        this.color = `hsl(${Math.floor(Math.random() * 360)}, 60%, 70%)`;
     }
 
     tick() {
         this.pos.add(this.vel);
         this.vel.add(this.acc);
         this.vel.scale(.98);
+
         this.angle += this.rotVel;
+        this.rotVel *= .99;
+
         this.lifespan--;
 
         return this.lifespan > 0;
@@ -27,9 +30,9 @@ class Particle {
         const sin = Math.sin(this.angle);
 
         const x = this.size * Math.sqrt(Math.min(this.lifespan, 50) / 50);
-        const p1 = [-x*Math.sqrt(3)/4, -x/2];
-        const p2 = [x*Math.sqrt(3)/4, 0];
-        const p3 = [-x*Math.sqrt(3)/4, x/2];
+        const p1 = [-x*Math.sqrt(3)/6, -x/2];
+        const p2 = [x*Math.sqrt(3)/3, 0];
+        const p3 = [-x*Math.sqrt(3)/6, x/2];
 
         ctx.beginPath();
         ctx.moveTo(

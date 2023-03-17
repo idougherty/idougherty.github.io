@@ -56,7 +56,7 @@ class Ball extends PhysObject {
         const normal = getNormal(this.pos.x, this.pos.y);
         const height = sampleHeight(this.pos.x, this.pos.y);
 
-        let friction = .97;
+        let friction = .96;
 
         if(height <= WATER_LEVEL) {
             this.force.x = 0;
@@ -64,7 +64,7 @@ class Ball extends PhysObject {
             this.vel.x = 0;
             this.vel.y = 0;
             this.pos = this.lastPos.mult(1);
-            this.strokes++;
+            // this.strokes++; EXTRA STROKE FOR WATER HAZARD
         } else if(height <= SAND_LEVEL) {
             friction = .94;
         }

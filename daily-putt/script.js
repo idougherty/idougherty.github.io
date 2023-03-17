@@ -54,7 +54,8 @@ function gameLoop() {
     window.requestAnimationFrame(gameLoop);
 }
 
-window.requestAnimationFrame(gameLoop);
+ctx.putImageData(backgroundImage, 0, 0);
+// window.requestAnimationFrame(gameLoop);
 
 function drawGuide(ctx, ball, putter) {
     if(!putter.locked)
@@ -64,7 +65,7 @@ function drawGuide(ctx, ball, putter) {
     const endPoint = d.mult(-100).addRet(ball.pos);
 
     ctx.lineWidth = 6;
-    ctx.strokeStyle = "#FFFB";
+    ctx.strokeStyle = "#FFFC";
     ctx.setLineDash([0, 30]);
 
     ctx.beginPath();
@@ -73,10 +74,16 @@ function drawGuide(ctx, ball, putter) {
 
     ctx.globalCompositeOperation = "exclusion";
     ctx.stroke();
+
+    ctx.strokeStyle = "#FFF";
     ctx.globalCompositeOperation = "saturation";
     ctx.stroke();
-    ctx.globalCompositeOperation = "source-over";
 
+    ctx.strokeStyle = "#222";
+    ctx.globalCompositeOperation = "lighter";
+    ctx.stroke();
+
+    ctx.globalCompositeOperation = "source-over";
     ctx.setLineDash([]);
 }
 

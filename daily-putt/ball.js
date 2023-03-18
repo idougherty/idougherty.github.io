@@ -18,7 +18,6 @@ class Ball extends PhysObject {
         this.masks = ["putter-ball"];
 
         this.strokes = 0;
-        this.inHole = false;
         this.lastPos = this.pos;
 
         this.func = (A, B) => {
@@ -56,7 +55,9 @@ class Ball extends PhysObject {
         const normal = getNormal(this.pos.x, this.pos.y);
         const height = sampleHeight(this.pos.x, this.pos.y);
 
-        let friction = .97;
+        const {hole, putter} = Game;
+
+        let friction = .96;
 
         if(height <= WATER_LEVEL) {
             this.force.x = 0;
@@ -64,14 +65,14 @@ class Ball extends PhysObject {
             this.vel.x = 0;
             this.vel.y = 0;
             this.pos = this.lastPos.mult(1);
-            this.strokes++;
+            // this.strokes++; EXTRA STROKE FOR WATER HAZARD
         } else if(height <= SAND_LEVEL) {
             friction = .94;
         }
 
-        if(Vec2D.mag(Vec2D.dif(hole, this.pos)) <= HOLE_RADIUS) {
-            if(this.vel.x == 0 && this.vel.y == 0)
-                this.inHole = true;
+        if(Vec2D.mag(Vec2D.dif(Game.hole, this.pos)) <= HOLE_RADIUS) {
+            if(this.vel.x == 0 && this.vel.y == 0 && !Game.winState) 
+                Game.onWin();
             
             friction = .9;
 

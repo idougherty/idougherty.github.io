@@ -1,10 +1,20 @@
+#canvas {
+    margin: 0;
+    box-shadow: 5px 5px 20px #0008;
+    border-radius: 4px;
+}
+
+html, body {
+    overflow: hidden;
+}
+body {
+    position: relative;
+}
 
 body {
-    /* background-color: #faf9f9; */
     margin: 0;
     height: 100vh;
     color: #eee;
-    /* background-image: url("background.jpg"); */
     
     background: 
         linear-gradient(
@@ -22,26 +32,107 @@ body {
     display: block;
     width: min-content;
     transform: translate(-50%, -50%);
-    padding-bottom: 100px;
 }
 
 .title {
     font-family: 'Abril Fatface', serif;
-    color: #ffdca8;
+    color: #ffd493;
     font-size: 3em;
-    margin-bottom: 10px;
-    margin-top: 0;
-}
-
-#canvas {
     margin: 0;
-    box-shadow: 5px 5px 20px #0008;
-    border-radius: 4px;
+    padding: 5px;
+    position: absolute;
+    transform: translateY(-100%);
+
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
 }
 
-html, body {
-    overflow: hidden;
-}
-body {
+.canvas-wrapper {
     position: relative;
+    
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+}
+
+.canvas-overlay {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    font-family: 'Coda', sans-serif;
+}
+
+.canvas-overlay button:hover {
+    text-decoration: underline;
+}
+
+#menus > *[data-hidden=true] {
+    display: none;
+}
+
+#menus > * {
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    display: block;
+    transform: translateY(-50%);
+}
+
+#menus > div > * {
+    text-shadow: 0 0 8px #000;
+    border: 5px solid white;
+    border-radius: 4px;
+    backdrop-filter: contrast(.6) blur(16px);
+    box-shadow: 5px 5px 20px #0008;
+}
+
+#menus > * button {
+    cursor: pointer;
+    background: none;
+    padding: 10px 15px;
+    color: inherit;
+    font-size: 2em;
+    font-family: inherit;
+    display: block;
+    margin: 20px auto;
+}
+
+.tutorial-info {
+    display: block;
+    margin: 0 auto;
+    padding: 10px;
+    width: 80%;
+    backdrop-filter: contrast(.4);
+}
+
+.tutorial-info h2 {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 2em;
+    text-decoration: underline;
+}
+
+.tutorial-info p {
+    font-size: 1.3em;
+}
+
+.score-info {
+    display: block;
+    margin: 0 auto;
+    padding: 10px;
+    width: max-content;
+    backdrop-filter: contrast(.4);
+}
+
+.score-info h2 {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 2em;
+    text-decoration: underline;
+}
+
+.score-info p {
+    font-size: 1.3em;
 }

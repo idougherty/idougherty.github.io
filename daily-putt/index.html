@@ -18,12 +18,70 @@
         <script src="particles.js" defer></script>
         <script src="ball.js" defer></script>
         <script src="putter.js" defer></script>
+        <script src="game.js" defer></script>
+        <script src="controls.js" defer></script>
+        <script src="menu.js" defer></script>
         <script src="script.js" defer></script>
     </head>
     <body>
         <div class="content-body">
             <h1 class="title">The Daily Putt</h1>
-            <canvas id="canvas" width="700px" height="700px"></canvas>
+            
+            <div class="canvas-wrapper">
+                <canvas id="canvas" width="700px" height="700px"></canvas>
+                <div class="canvas-overlay" id="menus">
+                    
+                    <div data-hidden="false" class="splash-menu" id="splash">
+                        <button onclick="Menu.changeScreen('daily-putt')">Daily Putt</button>
+                        <button onclick="Menu.changeScreen('daily-3-hole')">Daily 3-Hole</button>
+                        <button onclick="Menu.changeScreen('endless')">Endless Mode</button>
+                        <button onclick="Menu.changeScreen('tutorial')">Tutorial</button>
+                    </div>
+
+                    <div data-hidden="true" class="tutorial-menu" id="tutorial">
+                        <div class="tutorial-info">
+                            <h2>Tutorial</h2>
+                            <p>
+                                Putting: <br /> Move the putter to the angle you want and hold down left click, this locks in your angle on the ball. Swipe the putter towards the ball to complete your stroke. The putting in this game is physically simulated, so be careful when choosing how hard to swing the putter!  
+                            </p>
+                            <p>
+                                Terrain: <br /> Hitting the ball into the water will reset you to your last location. Sand will create a lot more friction on the ball. Make sure to account for terrain elevation in your putts as well, lighter green areas of grass are higher than dark green areas.
+                            </p>
+                        </div>
+                        <button onclick="Menu.changeScreen('splash')">Back</button>
+                    </div>
+
+                    <div data-hidden="true" class="daily-putt-menu" id="daily-putt">
+                        <div class="score-info">
+                            <h2>Daily Putt</h2>
+                            <p>
+                                Your Score: <span id="daily-putt-score"></span>
+                            </p>
+                        </div>
+                        <button onclick="Menu.changeScreen('splash')">Back</button>
+                    </div>
+
+                    <div data-hidden="true" class="daily-3-hole-menu" id="daily-3-hole">
+                        <div class="score-info">
+                            <h2>Daily 3-Hole</h2>
+                            <p>
+                                Your Score: <span id="daily-3-hole-score"></span>
+                            </p>
+                        </div>
+                        <button onclick="Menu.changeScreen('splash')">Back</button>
+                    </div>
+
+                    <div data-hidden="true" class="continue-back-btn" id="continue-back-btn">
+                        <button onclick="Game.advanceHole()">Continue</button>
+                        <button onclick="Menu.hide('continue-btn'); Game.stopGame();">Back To Menu</button>
+                    </div>
+
+                    <div data-hidden="true" class="continue-btn" id="continue-btn">
+                        <button onclick="Game.advanceHole()">Continue</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </body>
 </html>
+

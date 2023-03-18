@@ -5,10 +5,10 @@ class Flag {
         this.threshold = 75;
     }
 
-    tick(ball) {
-        const dist = Vec2D.mag(Vec2D.dif(this.pos, ball.pos));
+    tick() {
+        const dist = Vec2D.mag(Vec2D.dif(this.pos, Game.ball.pos));
         const dl = .02;
-        const max = ball.inHole ? 1 : .5;
+        const max = Game.winState ? 1 : .5;
 
         if(dist < this.threshold) {
             this.lift = this.lift + dl >= max ? max : this.lift + dl;
@@ -24,18 +24,19 @@ class Flag {
         const poleX = this.pos.x;
         const poleY = this.pos.y - poleHeight - alpha * 50;
         const flagWidth = 25;
-        const flagHeight = 15;
+        const flagHeight = 20;
+        const wave = 2 * Math.sin(Date.now() / 700);
 
-        ctx.fillStyle = `rgba(250, 70, 70, ${1 - alpha})`;
+        ctx.fillStyle = `rgba(220, 80, 80, ${1 - alpha})`;
 
         ctx.beginPath();
         ctx.moveTo(poleX, poleY);
-        ctx.lineTo(poleX + flagWidth, poleY + flagHeight / 2 + Math.sin(Date.now()/700)*3);
+        ctx.lineTo(poleX + flagWidth, poleY + flagHeight / 2 + wave);
         ctx.lineTo(poleX, poleY + flagHeight);
         ctx.closePath();
         ctx.fill();
 
-        ctx.strokeStyle = `rgba(185, 170, 130, ${1 - alpha})`;
+        ctx.strokeStyle = `rgba(185, 180, 160, ${1 - alpha})`;
         ctx.lineWidth = poleWidth;
         ctx.lineCap = "round";
 

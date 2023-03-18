@@ -4,10 +4,10 @@ class Particle {
         this.vel = vel;
         this.acc = acc;
         this.angle = Math.random() * Math.PI * 2;
-        this.rotVel = Math.random() * .6 - .3;
+        this.rotVel = Math.random() * .4 - .2;
         this.lifespan = lifespan;
-        this.size = 16;
-        this.color = `hsl(${Math.floor(Math.random() * 360)}, 60%, 60%)`;
+        this.size = 14;
+        this.color = `hsl(${Math.floor(Math.random() * 360)}, 70%, 60%)`;
     }
 
     tick() {
@@ -27,9 +27,9 @@ class Particle {
         const sin = Math.sin(this.angle);
 
         const x = this.size * Math.sqrt(Math.min(this.lifespan, 50) / 50);
-        const p1 = [-x*Math.sqrt(3)/4, -x/2];
-        const p2 = [x*Math.sqrt(3)/4, 0];
-        const p3 = [-x*Math.sqrt(3)/4, x/2];
+        const p1 = [-x*Math.sqrt(3)/6, -x/2];
+        const p2 = [x*Math.sqrt(3)*1/3, 0];
+        const p3 = [-x*Math.sqrt(3)/6, x/2];
 
         ctx.beginPath();
         ctx.moveTo(
@@ -49,30 +49,33 @@ class Particle {
     }
 }
 
-class Emitter {
-    constructor(pos, duration, period) {
-        this.pos = pos;
-        this.duration = duration;
-        this.period = period;
+class ParticleHandler {
+    constructor() {
         this.particles = [];
+        this.emitters = [];
     }
 
     tick() {
-        if(this.duration > 0 && this.duration % this.period == 0) {
-            let pos = new Vec2D(this.pos.x, this.pos.y);
-            let vel = new Vec2D(Math.random()*2-1, Math.random()*-3-2);
-            let acc = new Vec2D(0, .02);
-            let lifespan = Math.random()*100 + 100;
-
-            let p = new Particle(pos, vel, acc, lifespan);
-            this.particles.push(p);
-        }
+        for(const [idx, emitter] of this.emitters.entries())
+            if(!emitter(this.particles))
+                this.emitters.splice(idx, 1);
 
         for(const [idx, particle] of this.particles.entries())
             if(!particle.tick())
                 this.particles.splice(idx, 1);
+    }
 
-        this.duration--;
+    registerEmitter(genParticle, duration, freq) {
+        let emitter = () => {
+            if(duration % freq == 0)
+                this.particles.push(genParticle());
+
+            duration--;
+
+            return duration > 0;
+        }
+
+        this.emitters.push(emitter);
     }
 
     draw(ctx) {

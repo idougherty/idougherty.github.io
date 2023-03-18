@@ -20,20 +20,32 @@ physEnv.addObject(putter);
 
 let tick = Date.now() / 16;
 
-let emitter = new Emitter(hole, 0, 0);
+let particles = new ParticleHandler(hole, 0, 0);
 
 function gameLoop() {
     const now = Date.now() / 16;
 
     while(tick < now) {
+        let winFlag = ball.inHole;
+
         ball.tick();
         putter.tick(ball, mouse);
         flag.tick(ball);
-        emitter.tick();
+        particles.tick();
 
-        if(ball.inHole && emitter.period == 0) {
-            emitter.period = 5;
-            emitter.duration = 100;
+        if(!winFlag && ball.inHole) {
+            let emitter = () => {
+                const pos = new Vec2D(ball.pos.x, ball.pos.y);
+                const theta = Math.random() * 2 * Math.PI;
+                const mag = Math.random() * 1;
+                const vel = new Vec2D(mag*Math.cos(theta), mag*Math.sin(theta) - 3);
+                const acc = new Vec2D(0, .01);
+                const lifespan = Math.random()*150 + 100;
+    
+                return new Particle(pos, vel, acc, lifespan);
+            }
+
+            particles.registerEmitter(emitter, 100, 4);
         }
 
         physEnv.update(0.016);
@@ -47,7 +59,7 @@ function gameLoop() {
     ball.draw(ctx);
     flag.draw(ctx);
     putter.draw(ctx);
-    emitter.draw(ctx);
+    particles.draw(ctx);
     drawHUD(ctx);
 
     window.requestAnimationFrame(gameLoop);

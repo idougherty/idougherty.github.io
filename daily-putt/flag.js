@@ -7,7 +7,7 @@ class Flag {
 
     tick(ball) {
         const dist = Vec2D.mag(Vec2D.dif(this.pos, ball.pos));
-        const dl = .03;
+        const dl = .02;
         const max = ball.inHole ? 1 : .5;
 
         if(dist < this.threshold) {
@@ -20,17 +20,17 @@ class Flag {
     draw(ctx) {
         const alpha = this.lift  * this.lift * (3 - 2 * this.lift);
         const poleWidth = 5;
-        const poleHeight = 40;
+        const poleHeight = 45;
         const poleX = this.pos.x;
         const poleY = this.pos.y - poleHeight - alpha * 50;
         const flagWidth = 25;
-        const flagHeight = 20;
+        const flagHeight = 15;
 
         ctx.fillStyle = `rgba(250, 70, 70, ${1 - alpha})`;
 
         ctx.beginPath();
         ctx.moveTo(poleX, poleY);
-        ctx.lineTo(poleX + flagWidth, poleY + flagHeight / 2);
+        ctx.lineTo(poleX + flagWidth, poleY + flagHeight / 2 + Math.sin(Date.now()/700)*3);
         ctx.lineTo(poleX, poleY + flagHeight);
         ctx.closePath();
         ctx.fill();
@@ -41,7 +41,7 @@ class Flag {
 
         ctx.beginPath();
         ctx.moveTo(poleX, poleY);
-        ctx.lineTo(poleX, poleY + poleHeight);
+        ctx.lineTo(poleX, poleY + poleHeight + 2);
         ctx.stroke();
     }
 }

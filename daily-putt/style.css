@@ -61,18 +61,19 @@ body {
     top: 0;
     width: 100%;
     height: 100%;
-    backdrop-filter: contrast(0.7) blur(4px);
 }
 
 .canvas-overlay button {
     cursor: pointer;
     background: none;
-    padding: 10px;
+    padding: 10px 15px;
     color: inherit;
     border: none;
     font-size: 2em;
     font-family: 'Coda', sans-serif;
     text-shadow: 0 0 8px #000;
+    border: 5px solid white;
+    backdrop-filter: contrast(.8) blur(16px);
 }
 
 .canvas-overlay button:hover {
@@ -85,7 +86,6 @@ body {
     top: 50%;
     display: block;
     transform: translateY(-50%);
-
 }
 
 .title-menu button {

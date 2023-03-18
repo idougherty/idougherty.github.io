@@ -1,5 +1,3 @@
-noise.seed(Date.now());
-
 const MAX_HEIGHT = 100;
 const WATER_LEVEL = 25;
 const SAND_LEVEL = 35;
@@ -277,7 +275,8 @@ function generateHole(buffer) {
     return [tee, hole];
 }
 
-function generateTerrain() {
+function generateTerrain(seed) {
+    noise.seed(seed);
 
     const light = normalize([-1, -1, 50]);
     

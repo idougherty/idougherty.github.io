@@ -43,6 +43,7 @@ class Game {
         const seed = this.getSeed(this.mode, this.holes);
         this.setup(seed);
         this.running = true;
+        this.score = 0;
 
         gameloop();
     }

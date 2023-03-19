@@ -57,7 +57,7 @@ class Ball extends PhysObject {
 
         const {hole, putter} = Game;
 
-        let friction = .96;
+        let friction = .97;
 
         if(height <= WATER_LEVEL) {
             this.force.x = 0;
@@ -67,7 +67,7 @@ class Ball extends PhysObject {
             this.pos = this.lastPos.mult(1);
             // this.strokes++; EXTRA STROKE FOR WATER HAZARD
         } else if(height <= SAND_LEVEL) {
-            friction = .94;
+            friction = .95;
         }
 
         if(Vec2D.mag(Vec2D.dif(Game.hole, this.pos)) <= HOLE_RADIUS) {

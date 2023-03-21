@@ -3,7 +3,7 @@
     <head>
         <title>The Daily Putt</title>
 
-        <link rel="icon" type="image/x-icon" href="favicon.png">
+        <link rel="icon" type="image/x-icon" href="assets/favicon.png">
         
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,22 +11,35 @@
         
         <link rel="stylesheet" href="style.css">
         
-        <script src="perlin.js" defer></script>
-        <script src="physx.js" defer></script>
-        <script src="terrain.js" defer></script>
-        <script src="flag.js" defer></script>
-        <script src="particles.js" defer></script>
-        <script src="ball.js" defer></script>
-        <script src="putter.js" defer></script>
-        <script src="game.js" defer></script>
-        <script src="controls.js" defer></script>
-        <script src="menu.js" defer></script>
-        <script src="script.js" defer></script>
+        <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+        <script src="scripts/auth.js" defer></script>
+        <script src="scripts/perlin.js" defer></script>
+        <script src="scripts/physx.js" defer></script>
+        <script src="scripts/terrain.js" defer></script>
+        <script src="scripts/flag.js" defer></script>
+        <script src="scripts/particles.js" defer></script>
+        <script src="scripts/ball.js" defer></script>
+        <script src="scripts/putter.js" defer></script>
+        <script src="scripts/game.js" defer></script>
+        <script src="scripts/controls.js" defer></script>
+        <script src="scripts/menu.js" defer></script>
+        <script src="scripts/script.js" defer></script>
     </head>
     <body>
+           
+        <div id="g_id_onload"
+            data-client_id="115725711625-i6hkglkt9o4aa34lpbc1p4rc0ctkrcjp.apps.googleusercontent.com"
+            data-login_uri=""
+            data-callback="handleCredentialResponse"
+            data-auto_prompt="true">
+        </div>
+        <!-- data-login_uri="https://idougherty.net/daily-putt" -->
+        <!-- data-login_uri="http://localhost:8080" -->
+
         <div class="content-body">
             <h1 class="title">The Daily Putt</h1>
-            
+            <!-- https://developers.google.com/identity/gsi/web/guides/display-button#javascript -->
             <div class="canvas-wrapper">
                 <canvas id="canvas" width="700px" height="700px"></canvas>
                 <div class="canvas-overlay" id="menus">
@@ -57,6 +70,23 @@
                             <p>
                                 Your Score: <span id="daily-putt-score"></span>
                             </p>
+                            <div data-hidden="true" class="sign-in-wrapper" id="sign-in-menu">
+                                <p>Submit score:</p>
+                                
+                                <div class="google-sign-in g_id_signin"
+                                    data-type="standard"
+                                    data-size="medium"
+                                    data-theme="outline"
+                                    data-text="sign_in_with"
+                                    data-shape="rectangular"
+                                    data-logo_alignment="left">
+                                </div>
+                            </div>
+                            <h3 class="scoreboard-title">Scoreboard: </h3>
+                            <div class="scoreboard-wrapper">
+                                <table class="scoreboard" id="daily-putt-scoreboard">
+                                </table>
+                            </div>
                         </div>
                         <button onclick="Menu.changeScreen('splash')">Back</button>
                     </div>
@@ -67,6 +97,23 @@
                             <p>
                                 Your Score: <span id="daily-3-hole-score"></span>
                             </p>
+                            <div data-hidden="true" class="sign-in-wrapper" id="sign-in-menu">
+                                <p>Submit score:</p>
+                                
+                                <div class="google-sign-in g_id_signin"
+                                    data-type="standard"
+                                    data-size="large"
+                                    data-theme="outline"
+                                    data-text="sign_in_with"
+                                    data-shape="rectangular"
+                                    data-logo_alignment="left">
+                                </div>
+                            </div>
+                            <h3 class="scoreboard-title">Scoreboard: </h3>
+                            <div class="scoreboard-wrapper">
+                                <table class="scoreboard" id="daily-3-hole-scoreboard">
+                                </table>
+                            </div>
                         </div>
                         <button onclick="Menu.changeScreen('splash')">Back</button>
                     </div>

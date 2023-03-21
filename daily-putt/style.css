@@ -22,7 +22,7 @@ body {
             rgba(0, 0, 0, 0.8)
         ),
         /* bottom, image */
-        url(background.jpg);
+        url('assets/background.jpg');
 }
 
 .content-body {
@@ -135,4 +135,68 @@ body {
 
 .score-info p {
     font-size: 1.3em;
+}
+
+.scoreboard-title {
+    margin-bottom: 0;
+    font-size: 1.5em;
+    text-decoration: underline;
+}
+
+.scoreboard-wrapper {
+    max-height: 300px;
+    overflow-y: scroll;
+    border: 3px solid white;
+}
+
+.scoreboard {
+    width: 100%;
+    /* border-spacing: 1; */
+    border-collapse: collapse; 
+    text-align: center;
+    font-size: large;
+}
+
+.scoreboard tr > *:nth-child(1) { 
+    width: 50px;
+    max-width: 50px;
+}
+
+.scoreboard tr > *:nth-child(2) { 
+    width: 150px;
+    max-width: 150px;
+}
+
+.scoreboard tr > *:nth-child(3) { 
+    width: 150px;
+    max-width: 150px;
+}
+
+.scoreboard tr > * {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    border: 2px solid #cacaca;
+}
+
+.scoreboard tr:nth-child(odd) {
+    background-color: #47853b;
+}
+
+.scoreboard tr:nth-child(even) {
+    background-color: #55b145;
+}
+
+.sign-in-wrapper {
+    display: flex;
+}
+
+.sign-in-wrapper > * {
+    display: inline-block;
+    align-self: center;
+    margin: 0 10px 0 0;
+}
+
+.google-sign-in {
+    width: max-content;
+    text-shadow: none;
 }

@@ -50,7 +50,36 @@ class Menu {
     }
 
     static updateScores(screen, score) {
-        const element = document.getElementById(screen+"-score");
-        element.innerHTML = score;
+        const userScore = document.getElementById(screen+"-score");
+        userScore.innerHTML = score;
+
+        const scoreboard = document.getElementById(screen+"-scoreboard");
+        
+        while(scoreboard.firstChild)
+            scoreboard.removeChild(scoreboard.firstChild);
+
+        this.scoreboardData = Game.getScoreboard(screen);
+
+        if(!this.scoreboardData)
+            return;
+
+        const header = scoreboard.insertRow();
+        header.insertCell().appendChild(document.createTextNode("Rank"));
+        header.insertCell().appendChild(document.createTextNode("Name"));
+        header.insertCell().appendChild(document.createTextNode("Score"));
+
+        let lastScore = -1;
+        let rank = 0;
+        for(const row of this.scoreboardData) {
+            if(lastScore != row["score"]) {
+                rank++;
+                lastScore = row["score"];
+            }
+
+            const header = scoreboard.insertRow();
+            header.insertCell().appendChild(document.createTextNode(rank));
+            header.insertCell().appendChild(document.createTextNode(row["name"]));
+            header.insertCell().appendChild(document.createTextNode(row["score"]));
+        }
     }
 }

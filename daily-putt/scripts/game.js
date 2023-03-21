@@ -23,6 +23,21 @@ class Game {
         localStorage.setItem(seed, this.score);
     }
 
+    static getScoreboard(mode) {
+        let scores = [
+            { name: "Billy", score: 3 },
+            { name: "Joe", score: 5 },
+            { name: "Bob", score: 6 },
+            { name: "Billy", score: 3 },
+            { name: "Joe", score: 5 },
+            { name: "Bob", score: 6 },
+        ];
+
+        scores.sort((a, b) => a.score - b.score);
+
+        return scores;
+    }
+
     static startMode(mode) {
         this.mode = mode;
 

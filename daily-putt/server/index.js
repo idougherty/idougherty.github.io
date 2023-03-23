@@ -136,7 +136,7 @@ app.post("/:day/:mode", async (req, res) => {
             { "$push": { scoreboard: entry } }
         );
 
-        return res.json([...scores, entry]);
+        return res.json([...scores.scoreboard, entry]);
     } catch(error) {
         console.log(error);
         return res.status(500).json({ ok: false, message: "Bad request" });

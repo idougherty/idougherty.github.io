@@ -64,9 +64,6 @@ class Vec3D {
         return this.x * other.x + this.y * other.y + this.z * other.z;
     }
 }
-
-let canvas = document.getElementById("bg-anim");
-let ctx = canvas.getContext("2d", {alpha: false});
     
 let SPLASH_HEIGHT;
 let ANIM_LEFT;
@@ -107,8 +104,6 @@ function resizeCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
 
 const lorenz = {
     center: new Vec3D(.13, .13, 25.87),
@@ -412,4 +407,14 @@ function anim() {
 	window.requestAnimationFrame(anim);
 }
 
-anim();
+let canvas, ctx;
+
+window.addEventListener('resize', resizeCanvas);
+
+window.addEventListener("load", () => {
+    canvas = document.getElementById("bg-anim");
+    ctx = canvas.getContext("2d", {alpha: false});
+    
+    resizeCanvas();
+    anim();
+})

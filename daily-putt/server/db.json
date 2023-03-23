@@ -1,13 +1,17 @@
 {
   "scores": {
-    "1-daily-putt": [
+    "19438-daily-putt": [
       {
-        "name": "Joe",
-        "score": "3"
-      },
+        "id": "117995541148601474991",
+        "name": "Ian",
+        "score": "2"
+      }
+    ],
+    "19438-daily-3-hole": [
       {
-        "name": "Joe",
-        "score": "3"
+        "id": "117995541148601474991",
+        "name": "Ian",
+        "score": 8
       }
     ]
   }

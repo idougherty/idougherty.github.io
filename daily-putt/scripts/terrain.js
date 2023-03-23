@@ -38,7 +38,7 @@ function sampleHeight(x, y) {
     const dist = Math.sqrt(dx * dx + dy * dy) / (canvas.width / 2);
     const islandHeight = 1 / (1 + Math.pow(Math.E, 10 * dist - 7));
 
-    let noise = Math.pow(sampleNoise(x, y), 1.3);
+    let noise = Math.pow(sampleNoise(x, y), 1.35);
 
     return noise * MAX_HEIGHT * (islandHeight * MAX_HEIGHT + SAND_LEVEL) / (MAX_HEIGHT + SAND_LEVEL);
 }

@@ -5,36 +5,40 @@ class Menu {
 
     static drawBackground() {
         if(!this.backgroundImage) {
-            const seed = Date.now();
-            const [hole, tee, backgroundImage] = generateTerrain(seed);
-            this.backgroundImage = backgroundImage;
+            this.backgroundImage = new Image();
+            this.backgroundImage.src = "assets/background_image.png";
+            this.backgroundImage.onload = () => {
+                this.ctx.drawImage(this.backgroundImage, 0, 0);
+            };
         }
 
-        this.ctx.putImageData(this.backgroundImage, 0, 0);
+        this.ctx.drawImage(this.backgroundImage, 0, 0);
     }
 
-    static hide(screen) {
-        const menu = document.getElementById(screen);
-    
-        if(menu)
-            menu.dataset.hidden = true;
+    static hide(id) {
+        const elements = document.querySelectorAll(`[id=${id}]`);
+        
+        for(const element of elements)
+            if(element)
+                element.dataset.hidden = true;
     }
 
-    static unhide(screen) {
-        const menu = document.getElementById(screen);
-    
-        if(menu)
-            menu.dataset.hidden = false;
+    static unhide(id) {
+        const elements = document.querySelectorAll(`[id=${id}]`);
+        
+        for(const element of elements)
+            if(element)
+                element.dataset.hidden = false;
     }
 
-    static changeScreen(newScreen) {
+    static async changeScreen(newScreen) {
         if(newScreen == this.screen)
             return;
 
         this.hide(this.screen);
 
         if(newScreen == "daily-putt" || newScreen == "daily-3-hole" || newScreen == "endless") {
-            const score = Game.getScore(newScreen);
+            const score = await Game.getScore(newScreen);
 
             if(score != null) {
                 this.updateScores(newScreen, score);
@@ -49,19 +53,31 @@ class Menu {
         this.screen = newScreen;
     }
 
-    static updateScores(screen, score) {
+    static async updateScores(screen, score) {
         const userScore = document.getElementById(screen+"-score");
         userScore.innerHTML = score;
 
+        const scores = await fetchScoreboard(screen);
+        this.updateScoreboard(screen, scores);
+    }
+
+    static updateScoreboard(screen, scores) {
         const scoreboard = document.getElementById(screen+"-scoreboard");
         
         while(scoreboard.firstChild)
             scoreboard.removeChild(scoreboard.firstChild);
 
-        this.scoreboardData = Game.getScoreboard(screen);
-
-        if(!this.scoreboardData)
+        if(!scores) {
+            const header = scoreboard.insertRow();
+            header.insertCell().appendChild(document.createTextNode("Couldn't find the scores. :("));
             return;
+        }
+
+        if(scores.length == 0) {
+            const header = scoreboard.insertRow();
+            header.insertCell().appendChild(document.createTextNode("No scores yet today!"));
+            return;
+        }
 
         const header = scoreboard.insertRow();
         header.insertCell().appendChild(document.createTextNode("Rank"));
@@ -70,7 +86,7 @@ class Menu {
 
         let lastScore = -1;
         let rank = 0;
-        for(const row of this.scoreboardData) {
+        for(const row of scores) {
             if(lastScore != row["score"]) {
                 rank++;
                 lastScore = row["score"];
@@ -81,5 +97,6 @@ class Menu {
             header.insertCell().appendChild(document.createTextNode(row["name"]));
             header.insertCell().appendChild(document.createTextNode(row["score"]));
         }
+
     }
 }

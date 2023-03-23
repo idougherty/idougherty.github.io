@@ -10,32 +10,39 @@ class Game {
     static holes = 0;
     static score = 0;
 
-    static getScore(mode) {
+    static async getScore(mode) {
         if(mode == "endless")
             return null;
 
-        const seed = this.getSeed(mode, 0);
-        return localStorage.getItem(seed);
+        const day = this.getDay();
+
+        let score = await fetchScore(mode);
+
+        if(score) {
+            localStorage.setItem(`${day}-${mode}`, score);
+        } else {
+            score = localStorage.getItem(`${day}-${mode}`);
+
+            const user = getUser();
+            if(user)
+                submitScore(user, mode, score);
+        }
+
+        return score;
     }
 
     static saveScore() {
-        const seed = this.getSeed(this.mode, 0);
-        localStorage.setItem(seed, this.score);
+        const user = getUser();
+        if(user)
+            submitScore(user, this.mode, this.score);
+
+        const day = this.getDay();
+        localStorage.setItem(`${day}-${this.mode}`, this.score);
     }
 
-    static getScoreboard(mode) {
-        let scores = [
-            { name: "Billy", score: 3 },
-            { name: "Joe", score: 5 },
-            { name: "Bob", score: 6 },
-            { name: "Billy", score: 3 },
-            { name: "Joe", score: 5 },
-            { name: "Bob", score: 6 },
-        ];
-
-        scores.sort((a, b) => a.score - b.score);
-
-        return scores;
+    static getDay() {
+        const offset = (new Date()).getTimezoneOffset() * 60 * 1000;
+        return Math.floor((Date.now() - offset)/8.64e7);
     }
 
     static startMode(mode) {
@@ -92,9 +99,12 @@ class Game {
         if(this.mode == "endless")
             return Date.now();
 
-        const offset = (new Date()).getTimezoneOffset() * 60 * 1000;
-        const day = Math.floor((Date.now() - offset)/8.64e7);
-        return day + mode.length * 1e5 + hole * 1e6;
+        const str = this.getDay() + hole * 1e5 + mode.length * 1e6 + ""
+
+        const hash = str.split('').reduce((prevHash, currVal) =>
+            (((prevHash << 5) - prevHash) + currVal.charCodeAt(0))|0, 0);
+
+        return hash;
     }
 
     static setup(seed) {

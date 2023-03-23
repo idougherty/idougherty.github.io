@@ -64,11 +64,11 @@ body {
     font-family: 'Coda', sans-serif;
 }
 
-.canvas-overlay button:hover {
+.menu-button:hover {
     text-decoration: underline;
 }
 
-#menus > *[data-hidden=true] {
+#menus *[data-hidden=true] {
     display: none;
 }
 
@@ -88,7 +88,7 @@ body {
     box-shadow: 5px 5px 20px #0008;
 }
 
-#menus > * button {
+.menu-button {
     cursor: pointer;
     background: none;
     padding: 10px 15px;
@@ -145,7 +145,7 @@ body {
 
 .scoreboard-wrapper {
     max-height: 300px;
-    overflow-y: scroll;
+    overflow-y: auto;
     border: 3px solid white;
 }
 
@@ -199,4 +199,19 @@ body {
 .google-sign-in {
     width: max-content;
     text-shadow: none;
+    cursor: pointer;
+    border: none;
+    border-radius: 100px;
+    padding: 5px 10px;
+    color: #333;
+    vertical-align: middle;
+    background-color: #eee;
+    font-size: 1em;
+    font-family: "Roboto", sans-serif;
+}
+
+.google-sign-in svg {
+    display: inline-block;
+    height: 1em;
+    margin-right: 5px;
 }

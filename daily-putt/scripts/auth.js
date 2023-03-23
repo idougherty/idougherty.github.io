@@ -26,7 +26,7 @@ function decodeJWT(jwt) {
 }
 
 // const DB_URL = "http://localhost:3000";
-const DB_URL = "http://3.145.178.206:5000/";
+const DB_URL = "http://3.145.178.206:5000";
 
 async function submitScore(token, mode, score) {
 

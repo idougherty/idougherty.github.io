@@ -17,8 +17,9 @@ function getMongoClient() {
 const app = express();
 const port = 5000;
 
+// 'http://localhost:8080',
 const corsOptions ={
-   origin:['http://localhost:8080','https://www.idougherty.net'], 
+   origin:['https://www.idougherty.net'], 
    credentials:true,            //access-control-allow-credentials:true
    optionSuccessStatus:200,
 }

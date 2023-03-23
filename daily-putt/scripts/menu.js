@@ -53,17 +53,24 @@ class Menu {
         this.screen = newScreen;
     }
 
-    static async updateScores(screen, score) {
+    static updateScores(screen, score) {
         const userScore = document.getElementById(screen+"-score");
         userScore.innerHTML = score;
 
-        const scores = await fetchScoreboard(screen);
-        this.updateScoreboard(screen, scores);
+        this.updateScoreboard(screen);
     }
 
-    static updateScoreboard(screen, scores) {
+    static async updateScoreboard(screen) {
         const scoreboard = document.getElementById(screen+"-scoreboard");
         
+        while(scoreboard.firstChild)
+            scoreboard.removeChild(scoreboard.firstChild);
+
+        const loading = scoreboard.insertRow();
+        loading.insertCell().appendChild(document.createTextNode("Loading..."));
+
+        const scores = await fetchScoreboard(screen);
+
         while(scoreboard.firstChild)
             scoreboard.removeChild(scoreboard.firstChild);
 

@@ -26,7 +26,7 @@ function decodeJWT(jwt) {
 }
 
 // const DB_URL = "http://localhost:5000";
-const DB_URL = "https://idougherty-github-io.vercel.app/19438/daily-putt";
+const DB_URL = "https://idougherty-github-io.vercel.app";
 
 async function submitScore(token, mode, score) {
 

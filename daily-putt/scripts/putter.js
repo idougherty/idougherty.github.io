@@ -39,7 +39,13 @@ class Putter extends PhysObject {
     }
 
     draw(ctx) {
-        const height = 6;
+
+        for(let i = 0; i < this.mesh.length; i++) {
+            this.mesh[i] = Vec2D.rotate(new Vec2D(0, 0), this.meshShape[i], this.angle);
+            this.mesh[i].add(this.pos);
+        }
+
+        const height = 8;
 
         ctx.fillStyle = "#2224";
 
@@ -72,6 +78,29 @@ class Putter extends PhysObject {
         ctx.closePath();
 
         ctx.fill();
+
+        const poleWidth = 6.5;
+        const poleHeight = 60;
+        const offset = Vec2D.rotate(new Vec2D(0, 0), new Vec2D(-9, 0), this.angle);
+        const poleX = this.pos.x + offset.x;
+        const poleY = this.pos.y - poleHeight + offset.y + (this.locked ? -height : -height - 5);
+
+        ctx.lineWidth = poleWidth;
+        ctx.lineCap = "round";
+
+        ctx.strokeStyle = "#888";
+
+        ctx.beginPath();
+        ctx.moveTo(poleX, poleY + poleHeight * .25);
+        ctx.lineTo(poleX, poleY + poleHeight);
+        ctx.stroke();
+
+        ctx.strokeStyle = "#555";
+
+        ctx.beginPath();
+        ctx.moveTo(poleX, poleY);
+        ctx.lineTo(poleX, poleY + poleHeight * .25);
+        ctx.stroke();
     } 
 
     startSwing() {
@@ -107,11 +136,6 @@ class Putter extends PhysObject {
             const target = lineToBall.mult(scalar).addRet(this.pos);
 
             this.vel.add(Vec2D.dif(this.pos, target).mult(30));
-        }
-
-        for(let i = 0; i < this.mesh.length; i++) {
-            this.mesh[i] = Vec2D.rotate(new Vec2D(0, 0), this.meshShape[i], this.angle);
-            this.mesh[i].add(this.pos);
         }
     }
 }

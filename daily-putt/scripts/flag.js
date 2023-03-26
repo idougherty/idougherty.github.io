@@ -25,7 +25,7 @@ class Flag {
         const poleY = this.pos.y - poleHeight - alpha * 50;
         const flagWidth = 25;
         const flagHeight = 20;
-        const wave = 2 * Math.sin(Date.now() / 700);
+        const wave = 3 * Math.sin(Date.now() / 700);
 
         ctx.fillStyle = `rgba(220, 80, 80, ${1 - alpha})`;
 
@@ -36,7 +36,7 @@ class Flag {
         ctx.closePath();
         ctx.fill();
 
-        ctx.strokeStyle = `rgba(185, 180, 160, ${1 - alpha})`;
+        ctx.strokeStyle = `rgba(170, 170, 170, ${1 - alpha})`;
         ctx.lineWidth = poleWidth;
         ctx.lineCap = "round";
 

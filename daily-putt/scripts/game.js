@@ -90,6 +90,7 @@ class Game {
         if(this.holes <= 0) {
             this.saveScore();
             Menu.changeScreen(this.mode);
+            google.accounts.id.prompt();
         } else {
             Menu.changeScreen("splash");
         }

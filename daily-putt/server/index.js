@@ -9,18 +9,13 @@ import { MongoClient, ServerApiVersion } from 'mongodb';
 
 dotenv.config();
 
-function getMongoClient() {
-    const uri = process.env.MONGO_URL;
-    return new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
-}
-
 const app = express();
 const port = 5000;
 
 // 'http://localhost:8080',
 const corsOptions ={
    origin:['https://www.idougherty.net'], 
-   credentials:true,            //access-control-allow-credentials:true
+   credentials:true,
    optionSuccessStatus:200,
 }
 
@@ -33,12 +28,9 @@ const client = new OAuth2Client(CLIENT_ID);
 app.get("/:day/:mode", async (req, res) => {
 
     const {day, mode} = req.params;
-    const mongo = getMongoClient();
+    const db = req.app.locals.db;
 
     try {
-        await mongo.connect();
-
-        const db = mongo.db("daily-putt");
         const scores = await db.collection("scores")
             .findOne({ "day": day, "mode": mode });
 
@@ -49,20 +41,15 @@ app.get("/:day/:mode", async (req, res) => {
     } catch(error) {
         console.log(error);
         return res.status(500).json({ ok: false, message: "Bad request" });
-    } finally {
-        await mongo.close();
     }
 });
 
 app.get("/:day/:mode/:id", async (req, res) => {
 
     const {day, mode, id} = req.params;
-    const mongo = getMongoClient();
+    const db = req.app.locals.db;
 
     try {
-        await mongo.connect();
-
-        const db = mongo.db("daily-putt");
         const scores = await db.collection("scores")
             .findOne({ "day": day, "mode": mode });
 
@@ -75,9 +62,7 @@ app.get("/:day/:mode/:id", async (req, res) => {
     } catch(error) {
         console.log(error);
         return res.status(500).json({ ok: false, message: "Bad request" });
-    } finally {
-        await mongo.close();
-    }
+    } 
 });
 
 // parse application/json
@@ -96,9 +81,7 @@ app.post("/:day/:mode", async (req, res) => {
     try {
         ticket = await client.verifyIdToken({
             idToken: jwt,
-            audience: CLIENT_ID,  // Specify the CLIENT_ID of the app that accesses the backend
-            // Or, if multiple clients access the backend:
-            //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
+            audience: CLIENT_ID,
         });
     } catch (error) {
         return res.status(400).json({ ok: false, message: "Bad request" });
@@ -112,12 +95,9 @@ app.post("/:day/:mode", async (req, res) => {
         return res.status(400).json({ ok: false, message: "Bad request" });
 
     const entry = { id, name, score };
-    const mongo = getMongoClient();
+    const db = req.app.locals.db;
 
     try {
-        await mongo.connect();
-
-        const db = mongo.db("daily-putt");
         const scores = await db.collection("scores")
             .findOne({ "day": day, "mode": mode });
 
@@ -140,30 +120,14 @@ app.post("/:day/:mode", async (req, res) => {
     } catch(error) {
         console.log(error);
         return res.status(500).json({ ok: false, message: "Bad request" });
-    } finally {
-        await mongo.close();
     }
-    // let scores = db.data.scores;
-
-    // if(!scores[`${day}-${mode}`])
-    //     scores[`${day}-${mode}`] = [];
-
-    // let dailyScores = scores[`${day}-${mode}`];
-
-    // if(dailyScores.find(e => e["id"] == id))
-    //     return res.status(400).json({ ok: false, message: "Score exists already" });
-
-    // dailyScores.push({
-    //     "id": id,
-    //     "name": name,
-    //     "score": score,
-    // });
-
-    // await db.write();
-
-    // return res.json(dailyScores);
 });
 
-app.listen(port, () => {
-    console.log(`Daily Putt listening on port ${port}!`);
-});
+MongoClient.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 })
+    .catch(err => console.error(err.stack))
+    .then(client => {
+        app.locals.db = client.db("daily-putt");
+        app.listen(port, () => {
+            console.log(`Daily Putt listening on port ${port}!`);
+        });
+    });

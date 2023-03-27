@@ -19,3 +19,6 @@ function gameloop() {
     else
         Menu.drawBackground();
 }
+
+if(window.location.host == "idougherty.github.io")
+    window.location.href = "https://idougherty.net/daily-putt";

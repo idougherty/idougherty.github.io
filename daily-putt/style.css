@@ -197,6 +197,10 @@ body {
 }
 
 .google-sign-in {
+    text-shadow: none;
+}
+
+/* .google-sign-in {
     width: max-content;
     text-shadow: none;
     cursor: pointer;
@@ -214,4 +218,4 @@ body {
     display: inline-block;
     height: 1em;
     margin-right: 5px;
-}
+} */

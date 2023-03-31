@@ -105,7 +105,7 @@ app.post("/:day/:mode", async (req, res) => {
             await db.collection("scores").insertOne(
                 { "day": day, "mode": mode, "scoreboard": [ entry ]});
 
-            return [ entry ];
+            return res.json([ entry ]);
         }
 
         if(scores.scoreboard.find(e => e["id"] == id))

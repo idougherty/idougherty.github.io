@@ -10,10 +10,15 @@ async function handleCredentialResponse(res) {
     localStorage.setItem("user", JSON.stringify(token));
 
     Menu.hide("sign-in-menu");
-    
-    const day = Game.getDay();
-    const score = localStorage.getItem(`${day}-${Menu.screen}`);
-    submitScore(token, Menu.screen, score);
+
+    // User has a score but was not signed in on hole end
+    if(Menu.screen == "daily-putt" || Menu.screen == "daily-3-hole") {
+        const day = Game.getDay();
+        const score = localStorage.getItem(`${day}-${Menu.screen}`);
+
+        if(score)
+            submitScore(token, Menu.screen, score);
+    }
 }
 
 function decodeJWT(jwt) {
@@ -24,6 +29,7 @@ function decodeJWT(jwt) {
 
     return token;
 }
+
 
 // const DB_URL = "http://localhost:5000";
 const DB_URL = "https://idougherty-github-io.vercel.app";
@@ -104,6 +110,16 @@ function getUser() {
 
     return user;
 }
+
+google.accounts.id.initialize({
+    client_id: '115725711625-i6hkglkt9o4aa34lpbc1p4rc0ctkrcjp.apps.googleusercontent.com',
+    callback: handleCredentialResponse,
+    context: "signin",
+    ux_mode: "popup",
+    auto_select: "true",
+    cancel_on_tap_outside: "false",
+    itp_support: "true"
+});
 
 if(getUser())
     Menu.hide("sign-in-menu");

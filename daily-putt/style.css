@@ -199,23 +199,3 @@ body {
 .google-sign-in {
     text-shadow: none;
 }
-
-/* .google-sign-in {
-    width: max-content;
-    text-shadow: none;
-    cursor: pointer;
-    border: none;
-    border-radius: 100px;
-    padding: 5px 10px;
-    color: #333;
-    vertical-align: middle;
-    background-color: #eee;
-    font-size: 1em;
-    font-family: "Roboto", sans-serif;
-}
-
-.google-sign-in svg {
-    display: inline-block;
-    height: 1em;
-    margin-right: 5px;
-} */

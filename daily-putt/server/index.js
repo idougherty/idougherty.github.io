@@ -9,21 +9,25 @@ import { MongoClient, ServerApiVersion } from 'mongodb';
 
 dotenv.config();
 
-const app = express();
-const port = 5000;
-
-// 'http://localhost:8080',
-const corsOptions ={
-   origin:['https://www.idougherty.net'], 
-   credentials:true,
-   optionSuccessStatus:200,
-}
-
-app.use(cors(corsOptions)) // Use this after the variable declaration
-
 // create jwt verifier
 const CLIENT_ID = "115725711625-i6hkglkt9o4aa34lpbc1p4rc0ctkrcjp.apps.googleusercontent.com";
 const client = new OAuth2Client(CLIENT_ID);
+
+const app = express();
+const port = 5000;
+
+const allowed_origins = process.env.DEV_ENV == "dev" ? 
+    ['https://www.idougherty.net', 'http://localhost:8080'] :
+    ['https://www.idougherty.net'];
+
+const corsOptions ={
+   origin: allowed_origins, 
+   credentials: true,
+   optionSuccessStatus: 200,
+}
+
+app.use(cors(corsOptions));
+app.use(bodyParser.json());
 
 app.get("/:day/:mode", async (req, res) => {
 
@@ -64,9 +68,6 @@ app.get("/:day/:mode/:id", async (req, res) => {
         return res.status(500).json({ ok: false, message: "Bad request" });
     } 
 });
-
-// parse application/json
-app.use(bodyParser.json());
 
 app.post("/:day/:mode", async (req, res) => {
     

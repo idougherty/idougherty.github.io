@@ -7,24 +7,24 @@ class Game {
     static running = false;
     static winState = false;
     static mode = null;
-    static holes = 0;
+    static curHole = 0;
+    static numHoles = 0;
     static score = 0;
 
     static async getScore(mode) {
         if(mode == "endless")
             return null;
 
-        const day = this.getDay();
-
+        const storageString = this.getModeString(mode);
         let score = await fetchScore(mode);
 
         if(score) {
-            localStorage.setItem(`${day}-${mode}`, score);
+            localStorage.setItem(storageString, score);
         } else {
-            score = localStorage.getItem(`${day}-${mode}`);
+            score = localStorage.getItem(storageString);
 
             const user = getUser();
-            if(user)
+            if(user && score)
                 submitScore(user, mode, score);
         }
 
@@ -36,8 +36,11 @@ class Game {
         if(user)
             submitScore(user, this.mode, this.score);
 
-        const day = this.getDay();
-        localStorage.setItem(`${day}-${this.mode}`, this.score);
+        const storageString = this.getModeString(this.mode);
+        const lastScore = localStorage.getItem(storageString);
+        
+        if(!lastScore || lastScore > this.score)
+            localStorage.setItem(storageString, this.score);
     }
 
     static getDay() {
@@ -45,27 +48,41 @@ class Game {
         return Math.floor((Date.now() - offset)/8.64e7);
     }
 
+    static getWeek() {
+        // 1/1/1970 was a Thursday
+        return Math.floor(this.getDay() + 4) / 7;
+    }
+
+    static getModeString(mode) {
+        const date = mode == "weekly-9-hole" ? this.getWeek() : this.getDay();
+        return `${date}-${mode}`;
+    }
+
     static startMode(mode) {
         this.mode = mode;
 
         switch(mode) {
             case "daily-putt":
-                this.holes = 0;
+                this.numHoles = 1;
                 break;
             case "daily-3-hole":
-                this.holes = 3;
+                this.numHoles = 3;
+                break;
+            case "weekly-9-hole":
+                this.numHoles = 9;
                 break;
             case "endless":
-                this.holes = Infinity;
+                this.numHoles = Infinity;
                 break;
             default:
                 throw Error("bad");
         }
 
-        const seed = this.getSeed(this.mode, this.holes);
+        this.score = 0;
+        this.curHole = 1;
+        const seed = this.getSeed(this.mode, this.curHole);
         this.setup(seed);
         this.running = true;
-        this.score = 0;
 
         gameloop();
     }
@@ -74,12 +91,12 @@ class Game {
         Menu.hide("continue-btn");
         Menu.hide("continue-back-btn");
         
-        this.holes--;
+        this.curHole++;
 
-        if(this.holes <= 0) {
+        if(this.curHole > this.numHoles) {
             this.stopGame();
         } else {
-            const seed = this.getSeed(this.mode, this.holes);
+            const seed = this.getSeed(this.mode, this.curHole);
             this.setup(seed);
         }
     }
@@ -87,7 +104,7 @@ class Game {
     static stopGame() {
         this.running = false;
 
-        if(this.holes <= 0) {
+        if(this.curHole > this.numHoles) {
             this.saveScore();
             Menu.changeScreen(this.mode);
         } else {
@@ -99,7 +116,8 @@ class Game {
         if(this.mode == "endless")
             return Date.now();
 
-        const str = this.getDay() + hole * 1e5 + mode.length * 1e6 + ""
+        const date = this.mode == "weekly-9-hole" ? this.getWeek() : this.getDay();
+        const str = date + (hole-1) * 1e5 + mode.length * 1e6 + ""
 
         const hash = str.split('').reduce((prevHash, currVal) =>
             (((prevHash << 5) - prevHash) + currVal.charCodeAt(0))|0, 0);
@@ -148,6 +166,7 @@ class Game {
 
         this.winState = true;
         this.score += this.ball.strokes;
+        this.ball.strokes = 0;
 
         if(this.mode == "endless") {
             Menu.unhide("continue-back-btn");
@@ -209,15 +228,39 @@ class Game {
     
     static drawHUD(ctx) {
         ctx.fillStyle = "white";
-        ctx.font = "30px Coda";
-        ctx.textBaseline = "bottom";
-        ctx.textAlign = "center";
-    
         ctx.shadowColor = "#000";
         ctx.shadowBlur = 5;
     
-        ctx.fillText(`Strokes: ${this.ball.strokes}`, canvas.width/2, canvas.height - 10);
+        ctx.font = "40px Coda";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "top";
+
+        ctx.fillText(modeToText(this.mode), canvas.width/2, 20);
+        
+        ctx.font = "35px Coda";
+        ctx.textBaseline = "bottom";
+        ctx.textAlign = "left";
+        ctx.fillText(`Strokes: ${this.ball.strokes + this.score}`, 40, canvas.height - 10);
+
+        ctx.textAlign = "right";
+        const totalHoles = this.mode == "endless" ? "∞" : this.numHoles;
+        ctx.fillText(`Hole: ${this.curHole}/${totalHoles}`, canvas.width - 40, canvas.height - 10);
     
         ctx.shadowBlur = 0;
+    }
+}
+
+function modeToText(mode) {
+    switch(mode) {
+        case "weekly-9-hole":
+            return "Weekly 9-Hole";
+        case "daily-putt":
+            return "Daily Putt";
+        case "daily-3-hole":
+            return "Daily 3-Hole";
+        case "endless":
+            return "Endless";
+        default:
+            return mode;
     }
 }

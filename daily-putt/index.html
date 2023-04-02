@@ -38,6 +38,7 @@
                     <div data-hidden="false" class="splash-menu" id="splash">
                         <button class="menu-button" onclick="Menu.changeScreen('daily-putt')">Daily Putt</button>
                         <button class="menu-button" onclick="Menu.changeScreen('daily-3-hole')">Daily 3-Hole</button>
+                        <button class="menu-button" onclick="Menu.changeScreen('weekly-9-hole')">Weekly 9-Hole</button>
                         <button class="menu-button" onclick="Menu.changeScreen('endless')">Endless Mode</button>
                         <button class="menu-button" onclick="Menu.changeScreen('tutorial')">Tutorial</button>
                     </div>
@@ -106,6 +107,34 @@
                                 </table>
                             </div>
                         </div>
+                        <button class="menu-button" onclick="Menu.changeScreen('splash')">Back</button>
+                    </div>
+
+                    <div data-hidden="true" class="weekly-9-hole-menu" id="weekly-9-hole">
+                        <div class="score-info">
+                            <h2>Weekly 9-Hole</h2>
+                            <p>
+                                Your Best Score: <span id="weekly-9-hole-score"></span>
+                            </p>
+                            <div data-hidden="false" class="sign-in-wrapper" id="sign-in-menu">
+                                <p>Submit score:</p>
+                                
+                                <div class="g_id_signin google-sign-in"
+                                    data-type="standard"
+                                    data-shape="pill"
+                                    data-theme="outline"
+                                    data-text="signin_with"
+                                    data-size="medium"
+                                    data-logo_alignment="left">
+                                </div>
+                            </div>
+                            <h3 class="scoreboard-title">Today's Rankings</h3>
+                            <div class="scoreboard-wrapper">
+                                <table class="scoreboard" id="weekly-9-hole-scoreboard">
+                                </table>
+                            </div>
+                        </div>
+                        <button class="menu-button" onclick="Menu.changeScreen(null);Game.startMode('weekly-9-hole');">Play Again!</button>
                         <button class="menu-button" onclick="Menu.changeScreen('splash')">Back</button>
                     </div>
 

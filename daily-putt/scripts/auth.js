@@ -13,8 +13,8 @@ async function handleCredentialResponse(res) {
 
     // User has a score but was not signed in on hole end
     if(Menu.screen == "daily-putt" || Menu.screen == "daily-3-hole") {
-        const day = Game.getDay();
-        const score = localStorage.getItem(`${day}-${Menu.screen}`);
+        const storageString = Game.getModeString(Menu.screen);
+        const score = localStorage.getItem(storageString);
 
         if(score)
             submitScore(token, Menu.screen, score);
@@ -35,8 +35,10 @@ function decodeJWT(jwt) {
 const DB_URL = "https://idougherty-github-io.vercel.app";
 
 async function submitScore(token, mode, score) {
+    console.log(mode, score);
+    const date = mode == "weekly-9-hole" ? Game.getWeek() : Game.getDay();
 
-    const res = await fetch(`${DB_URL}/${Game.getDay()}/${mode}`, {
+    const res = await fetch(`${DB_URL}/${date}/${mode}`, {
         method: 'POST',
         headers: {
             Accept: 'application.json',
@@ -60,7 +62,8 @@ async function fetchScore(mode) {
         return null;
 
     try {
-        const res = await fetch(`${DB_URL}/${Game.getDay()}/${mode}/${user.payload.sub}`, {
+        const date = mode == "weekly-9-hole" ? Game.getWeek() : Game.getDay();
+        const res = await fetch(`${DB_URL}/${date}/${mode}/${user.payload.sub}`, {
             method: 'GET',
             headers: {
                 Accept: 'application.json',
@@ -78,7 +81,8 @@ async function fetchScore(mode) {
 
 async function fetchScoreboard(mode) {
     try {
-        const res = await fetch(`${DB_URL}/${Game.getDay()}/${mode}`, {
+        const date = mode == "weekly-9-hole" ? Game.getWeek() : Game.getDay();
+        const res = await fetch(`${DB_URL}/${date}/${mode}`, {
             method: 'GET',
             headers: {
                 Accept: 'application.json',
@@ -86,8 +90,10 @@ async function fetchScoreboard(mode) {
             },
         });
 
-        if(!res.ok)
+        if(!res.ok) {
+            console.log(res.json());
             return null;
+        }
     
         const scores = await res.json();
 

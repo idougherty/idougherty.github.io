@@ -69,6 +69,7 @@ app.get("/:day/:mode/:id", async (req, res) => {
     } 
 });
 
+// phew this is uglee
 app.post("/:day/:mode", async (req, res) => {
     
     const {day, mode} = req.params;
@@ -108,14 +109,40 @@ app.post("/:day/:mode", async (req, res) => {
             return res.json([ entry ]);
         }
 
-        if(scores.scoreboard.find(e => e["id"] == id))
-            return res.status(400).json({ ok: false, message: "Score exists already" });
-    
-        await db.collection("scores").updateOne(
-            { "day": day, "mode": mode },
-            { "$push": { scoreboard: entry } }
-        );
+        if(mode == "daily-putt" || mode == "daily-3-hole") {
+            if(scores.scoreboard.find(e => e["id"] == id))
+                return res.status(400).json({ ok: false, message: "Score exists already" });
+        
+            await db.collection("scores").updateOne(
+                { "day": day, "mode": mode },
+                { "$push": { scoreboard: entry } }
+            );
 
+        } else if(mode == "weekly-9-hole") {
+            const prev = scores.scoreboard.findIndex(e => e["id"] == id);
+
+            if(prev >= 0) {
+                if(scores.scoreboard[prev].score < score)
+                    return res.status(200).json(scores.scoreboard);
+               
+                await db.collection("scores").updateOne(
+                    { 
+                        "day": day, 
+                        "mode": mode, 
+                        "scoreboard.id": id
+                    },
+                    { "$set": { "scoreboard.$.score": score } }
+                );
+                
+                scores.scoreboard.splice(prev, 1);
+            } else {
+                await db.collection("scores").updateOne(
+                    { "day": day, "mode": mode },
+                    { "$push": { scoreboard: entry } }
+                );
+            }
+        }
+        
         return res.json([...scores.scoreboard, entry]);
     } catch(error) {
         console.log(error);

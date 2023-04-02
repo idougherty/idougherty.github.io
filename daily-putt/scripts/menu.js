@@ -37,7 +37,7 @@ class Menu {
 
         this.hide(this.screen);
 
-        if(newScreen == "daily-putt" || newScreen == "daily-3-hole" || newScreen == "endless") {
+        if(newScreen == "daily-putt" || newScreen == "daily-3-hole" || newScreen == "weekly-9-hole" || newScreen == "endless") {
             const score = await Game.getScore(newScreen);
 
             if(score != null) {

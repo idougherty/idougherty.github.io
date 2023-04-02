@@ -73,7 +73,6 @@ app.post("/:day/:mode", async (req, res) => {
     const {day, mode} = req.params;
     const {jwt, score} = req.body;
     
-    // TODO: verify jwt
     if(!jwt)
         return res.status(400).json({ ok: false, message: "Bad request" });
 

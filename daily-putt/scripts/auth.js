@@ -105,6 +105,7 @@ function getUser() {
     return user;
 }
 
-if(getUser()) {
+if(getUser())
     Menu.hide("sign-in-menu");
-}
+else if(localStorage.getItem("user"))
+    google.accounts.id.prompt();

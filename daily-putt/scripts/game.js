@@ -31,10 +31,10 @@ class Game {
         return score;
     }
 
-    static saveScore() {
+    static async saveScore() {
         const user = getUser();
         if(user)
-            submitScore(user, this.mode, this.score);
+            await submitScore(user, this.mode, this.score);
 
         const storageString = this.getModeString(this.mode);
         const lastScore = localStorage.getItem(storageString);
@@ -69,7 +69,7 @@ class Game {
                 this.numHoles = 3;
                 break;
             case "weekly-9-hole":
-                this.numHoles = 9;
+                this.numHoles = 1;
                 break;
             case "endless":
                 this.numHoles = Infinity;
@@ -101,11 +101,11 @@ class Game {
         }
     }
 
-    static stopGame() {
+    static async stopGame() {
         this.running = false;
 
         if(this.curHole > this.numHoles) {
-            this.saveScore();
+            await this.saveScore();
             Menu.changeScreen(this.mode);
         } else {
             Menu.changeScreen("splash");

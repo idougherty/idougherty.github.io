@@ -12,7 +12,7 @@ async function handleCredentialResponse(res) {
     Menu.hide("sign-in-menu");
 
     // User has a score but was not signed in on hole end
-    if(Menu.screen == "daily-putt" || Menu.screen == "daily-3-hole") {
+    if(Menu.screen == "daily-putt" || Menu.screen == "daily-3-hole" || Menu.screen == "weekly-9-hole") {
         const storageString = Game.getModeString(Menu.screen);
         const score = localStorage.getItem(storageString);
 

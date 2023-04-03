@@ -113,10 +113,10 @@ class Game {
     }
 
     static getSeed(mode, hole) {
-        if(this.mode == "endless")
+        if(mode == "endless")
             return Date.now();
 
-        const date = this.mode == "weekly-9-hole" ? this.getWeek() : this.getDay();
+        const date = mode == "weekly-9-hole" ? this.getWeek() : this.getDay();
         const str = date + (hole-1) * 1e5 + mode.length * 1e6 + ""
 
         const hash = str.split('').reduce((prevHash, currVal) =>

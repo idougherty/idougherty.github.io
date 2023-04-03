@@ -50,7 +50,7 @@ class Game {
 
     static getWeek() {
         // 1/1/1970 was a Thursday
-        return Math.floor(this.getDay() + 4) / 7;
+        return Math.floor((this.getDay() + 4) / 7);
     }
 
     static getModeString(mode) {

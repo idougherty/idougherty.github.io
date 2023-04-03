@@ -69,7 +69,7 @@ class Game {
                 this.numHoles = 3;
                 break;
             case "weekly-9-hole":
-                this.numHoles = 1;
+                this.numHoles = 9;
                 break;
             case "endless":
                 this.numHoles = Infinity;

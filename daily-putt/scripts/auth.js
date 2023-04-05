@@ -30,8 +30,9 @@ function decodeJWT(jwt) {
     return token;
 }
 
-// const DB_URL = "http://localhost:5000";
-const DB_URL = "https://idougherty-github-io.vercel.app";
+const DB_URL = window.location.hostname == 'localhost' ? 
+    "http://localhost:5000" :
+    "https://idougherty-github-io.vercel.app";
 
 async function submitScore(token, mode, score) {
     console.log(mode, score);

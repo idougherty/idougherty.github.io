@@ -67,7 +67,7 @@ class Menu {
             scoreboard.removeChild(scoreboard.firstChild);
 
         const loading = scoreboard.insertRow();
-        loading.insertCell().appendChild(document.createTextNode("Loading..."));
+        loading.insertCell().innerHTML = "Loading...";
 
         const scores = await fetchScoreboard(screen);
 
@@ -76,20 +76,20 @@ class Menu {
 
         if(!scores) {
             const header = scoreboard.insertRow();
-            header.insertCell().appendChild(document.createTextNode("Couldn't find the scores. :("));
+            header.insertCell().innerHTML = "Couldn't find the scores. :(";
             return;
         }
 
         if(scores.length == 0) {
             const header = scoreboard.insertRow();
-            header.insertCell().appendChild(document.createTextNode("No scores yet today!"));
+            header.insertCell().innerHTML = "No scores yet today!";
             return;
         }
 
         const header = scoreboard.insertRow();
-        header.insertCell().appendChild(document.createTextNode("Rank"));
-        header.insertCell().appendChild(document.createTextNode("Name"));
-        header.insertCell().appendChild(document.createTextNode("Score"));
+        header.insertCell().innerHTML = "Rank";
+        header.insertCell().innerHTML = "Name";
+        header.insertCell().innerHTML = "Score";
 
         let lastScore = -1;
         let rank = 0;
@@ -100,9 +100,15 @@ class Menu {
             }
 
             const header = scoreboard.insertRow();
-            header.insertCell().appendChild(document.createTextNode(rank));
-            header.insertCell().appendChild(document.createTextNode(row["name"]));
-            header.insertCell().appendChild(document.createTextNode(row["score"]));
+            header.insertCell().innerHTML = rank;
+            header.insertCell().innerHTML = row["name"];
+            header.insertCell().innerHTML = row["score"];
+            
+            if(rank <= 3) {
+                const trophy = document.createElement("span");
+                trophy.classList.add("scoreboard-rank-"+rank,"fa", "fa-solid", "fa-trophy");
+                header.lastChild.appendChild(trophy);
+            }
         }
 
     }

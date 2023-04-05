@@ -150,7 +150,7 @@ body {
 }
 
 .scoreboard {
-    width: 100%;
+    width: 350px;
     /* border-spacing: 1; */
     border-collapse: collapse; 
     text-align: center;
@@ -184,6 +184,24 @@ body {
 
 .scoreboard tr:nth-child(even) {
     background-color: #55b145;
+}
+
+.scoreboard-rank-1 {
+    color: #ebdb52;
+    padding: 5px;
+    position: absolute;
+}
+
+.scoreboard-rank-2 {
+    color: #bbb;
+    padding: 5px;
+    position: absolute;
+}
+
+.scoreboard-rank-3 {
+    color: #e69c56;
+    padding: 5px;
+    position: absolute;
 }
 
 .sign-in-wrapper {

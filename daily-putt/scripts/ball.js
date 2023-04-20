@@ -78,7 +78,7 @@ class Ball extends PhysObject {
             if(this.vel.x == 0 && this.vel.y == 0 && !Game.winState) 
                 Game.onWin();
             
-            friction = .9;
+            friction = .75;
 
             this.applyForce({
                 pos: this.pos,

@@ -28,14 +28,8 @@ class Putter extends PhysObject {
         this.meshShape.forEach((p) => p.sub(center));
 
         this.mesh = [...this.meshShape];
-
-        this.masks = ["putter-ball"];
         this.locked = false;
-
-        this.func = (A, B) => {
-            if(A.locked)
-                A.endSwing();
-        }
+        this.masks = ["ball-putter"];
     }
 
     draw(ctx) {
@@ -113,12 +107,10 @@ class Putter extends PhysObject {
         this.angle = Math.atan2(ball.pos.y - this.pos.y, ball.pos.x - this.pos.x) + Math.PI/2;
         this.pos = mouse.pos.mult(1); 
         this.vel.scale(0);
-        this.masks = [];
     }
 
     endSwing() {
         this.locked = false;
-        this.masks = ["putter-ball"];
     }
 
     tick() {

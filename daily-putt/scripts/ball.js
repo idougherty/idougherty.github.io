@@ -13,16 +13,20 @@ class Ball extends PhysObject {
         }
 
         super(pos, shape, ball_material);
-
         this.moi = Infinity;
-        this.masks = ["putter-ball"];
+        this.masks = ["ball-putter"];
 
         this.strokes = 0;
         this.lastPos = this.pos;
 
         this.func = (A, B) => {
-            if(A.masks.length == 0)
+            if(B.locked) {
+                const scale = 17*Math.pow(Vec2D.mag(B.vel)/8, .8);
+                console.log(Vec2D.mag(B.vel), scale);
+                A.vel = Vec2D.normalize(B.vel).mult(scale);
+                B.endSwing();
                 A.strokes++;
+            }
         };
     }
 
@@ -55,7 +59,7 @@ class Ball extends PhysObject {
         const normal = getNormal(this.pos.x, this.pos.y);
         const height = sampleHeight(this.pos.x, this.pos.y);
 
-        const {hole, putter} = Game;
+        const { hole } = Game;
 
         let friction = .97;
 
@@ -90,19 +94,12 @@ class Ball extends PhysObject {
         // Apply friction
         this.vel.scale(friction);
 
-        if(putter.locked && this.masks.length > 0)
-            this.masks = [];
-        else if(!putter.locked && this.masks.length == 0)
-            this.masks = ["putter-ball"];
-
         if(Vec2D.mag(this.vel) < 25 && Vec2D.mag(this.force) / this.mass < 60) {
             this.force.x = 0;
             this.force.y = 0;
             this.vel.x = 0;
             this.vel.y = 0;
             this.lastPos = this.pos.mult(1);
-        } else if(this.masks.length == 0) {
-            this.masks = ["putter-ball"]
         }
     }
 }

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="description" content="Procedurally generated crossword puzzles solved as constraint satisfaction problems.">
+        <meta name="keywords" content="crossword puzzles, procedural generation, Ian Dougherty">
+        <meta name="author" content="Ian Dougherty">
+
+        <title>Procedural Crossword Generator</title>
+
+        <link rel="icon" type="image/x-icon" href="assets/favicon.png">
+
+        <!-- google fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Chonburi&family=Coda&family=PT+Serif&display=swap" rel="stylesheet">
+        
+        <!-- font awesome icons -->
+        <script src="https://kit.fontawesome.com/233901bd2f.js" crossorigin="anonymous"></script>
+
+        <!-- css -->
+        <link rel="stylesheet" href="style.css">
+
+        <!-- javascript -->
+        <script src="scripts/defs.js"></script>
+        <script src="scripts/user-selection.js"></script>
+        <script src="scripts/dom-board.js"></script>
+        <script src="scripts/board.js"></script>
+        <script src="scripts/script.js" defer></script>
+
+        <!-- web assembly -->
+        <script src="scripts/wasm/crosswordgen.js" id="wasmScript" defer></script>
+    </head>
+    <body>
+
+        <div class="content-body">
+            <h1 class="title">Procedural Crossword Generator</h1>
+            <h3 class="subtitle">Created by: Ian Dougherty &emsp;|&emsp; <a href="https:\\idougherty.net">Check out my other projects!</a></h3>
+            
+            <div class="content" id="contentWrapper">
+                <table class="crossword-grid" id="crossword"></table>
+                <div class="side-panel">
+                    <div class="settings-bar">
+                        <p>Progress:</p>
+                        <div class="progress-meter" id="progressCounter"><i class="fa-solid fa-check"></i></div>
+
+                        <p>Size:</p>
+                        <input id="sizeInput" type="number" min="3" max="18" value="5" step="1"></input>
+                        <button onclick="generateBoard()">Generate!</button>
+                    </div>
+                    <div class="clue-wrapper">
+                        <div class="clue-list hide-loading">
+                            <h3>Across:</h3>
+                            <ol id="acrossClues"></ol>
+                        </div>
+                        <div class="clue-list hide-loading">
+                            <h3>Down:</h3>
+                            <ol id="downClues"></ol>
+                        </div>
+                        <div class="clue-list show-loading">
+                            <h3>Loading...</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+

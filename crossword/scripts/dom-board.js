@@ -30,6 +30,7 @@ class DomBoard {
         this.isLoading = isLoading;
         this.contentPane.dataset.loading = isLoading;
 
+        console.log(data)
         this.fillDomTable();
         this.updateBoard();
     }
@@ -158,8 +159,7 @@ class DomBoard {
 
         let wordIndex = 0;
 
-        while(this.DomTable.firstChild)
-            this.DomTable.removeChild(this.DomTable.firstChild);
+        this.clearChildren(this.DomTable);
         
         for(let row = 0; row < this.data.length; row++) {
             let tr = this.DomTable.insertRow();
@@ -204,13 +204,15 @@ class DomBoard {
         let row = Number(li.dataset.wordRow);
         let col = Number(li.dataset.wordCol);
         let isAcross = li.dataset.wordAcross === 'true';
-        console.log(li.dataset.wordAcross, isAcross);
 
         this.selection.moveCursor(this, row, col, isAcross);
 
     }
 
     fillDomClues(words) {
+        this.clearChildren(this.DomClues['across']);
+        this.clearChildren(this.DomClues['down']);
+
         for (const word of words) {
             let clueList = word.isAcross ? 'across' : 'down';
             let clue = this.clues[clueList][word.label];
@@ -227,6 +229,11 @@ class DomBoard {
 
             this.DomClues[clueList].appendChild(li);
         }
+    }
+
+    clearChildren(element) {
+        while(element.firstChild)
+            element.removeChild(element.firstChild);
     }
 
     isStartOfWord(row, col) {

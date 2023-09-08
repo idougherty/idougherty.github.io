@@ -10,6 +10,8 @@ function generateBoard() {
 }
 
 async function loadNewBoard(size) {
+    board.loadBoard(board.loadingBoardData, {}, true);
+
     let start = Date.now();
     const boardVector = await Module.generate_board_with_seed(size, Math.floor(Math.random() * 10000));
     console.log(`Generated board in: ${Date.now()-start} ms`);
@@ -50,4 +52,4 @@ Module['locateFile'] = function(path, prefix) {
   return 'scripts/wasm/'+path;
 }
 
-// Module['onRuntimeInitialized'] = loadNewBoard(5);
+Module['onRuntimeInitialized'] = () => loadNewBoard(5);

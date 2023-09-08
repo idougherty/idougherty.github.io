@@ -8,6 +8,7 @@ class Board extends DomBoard {
         this.lettersFilled = 0;
         this.wordsSolved = 0;
         this.totalLetters = 0;
+        this.setProgress(0);
 
         if(!this.isLoading) {
             this.words = this.populateWords();

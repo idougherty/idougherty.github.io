@@ -16,9 +16,8 @@ class UserSelection {
         this.isAcross = isAcross;
 
         let cell = board.getCell(row, col);
-        let click = new PointerEvent('click');
         cell.focus();
-        cell.dispatchEvent(click);
+        cell.click();
     }
 
     advanceCursor(board, dir = 1) {

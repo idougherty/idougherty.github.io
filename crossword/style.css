@@ -241,6 +241,8 @@ body {
     opacity: 0;
     color: #58ac6d;
     font-size: larger;
+    display: inline-block;
+    vertical-align: center;
     transform: scale(1);
 }
 

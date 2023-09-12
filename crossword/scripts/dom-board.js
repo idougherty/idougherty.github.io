@@ -206,7 +206,6 @@ class DomBoard {
         let isAcross = li.dataset.wordAcross === 'true';
 
         this.selection.moveCursor(this, row, col, isAcross);
-
     }
 
     fillDomClues(words) {
@@ -216,6 +215,7 @@ class DomBoard {
         for (const word of words) {
             let clueList = word.isAcross ? 'across' : 'down';
             let clue = this.clues[clueList][word.label];
+            console.log(clue, clueList, word.label);
 
             let li = document.createElement('li');
             li.innerHTML = clue.hint;

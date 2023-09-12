@@ -12,6 +12,10 @@ function generateBoard() {
 async function loadNewBoard(size) {
     board.loadBoard(board.loadingBoardData, {}, true);
 
+    await new Promise(resolve => {
+            requestAnimationFrame(() => requestAnimationFrame(resolve));
+        });
+
     let start = Date.now();
     const boardVector = await Module.generate_board_with_seed(size, Math.floor(Math.random() * 10000));
     console.log(`Generated board in: ${Date.now()-start} ms`);

@@ -146,8 +146,8 @@ body {
     overflow-y: scroll;
     flex-grow: 1;
     box-shadow: inset 2px 2px 5px #0005;
+    position: relative;
 }
-
 
 .content[data-loading="true"] .hide-loading {
     display: none;
@@ -155,6 +155,20 @@ body {
 
 .content[data-loading="false"] .show-loading {
     display: none;
+}
+
+.content[data-error="true"] .hide-error {
+    display: none;
+}
+
+.content[data-error="false"] .show-error {
+    display: none;
+}
+
+.clue-list.show-error > h3, .clue-list.show-loading > h3 {
+    width: 100%;
+    text-align: center;
+    margin-top: 30px;
 }
 
 .clue-list h3 {

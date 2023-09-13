@@ -4,7 +4,6 @@ let board = new Board();
 function generateBoard() {
     let size = document.getElementById("sizeInput").value;
     size = Math.round(Math.max(3, Math.min(size, 18)));
-    console.log(size);
 
     loadNewBoard(size);
 }
@@ -37,12 +36,19 @@ async function loadNewBoard(size) {
     const clueVector = await Module.solve_given_board(size, boardVector);
     console.log(`Generated solution in: ${Date.now()-start} ms`);
 
+    if(clueVector.size() == 0) {
+        console.log("No solution found!");
+
+        board.loadBoard(board.errorBoardData, clueVector, false, true);
+        return;
+    }
+
     let clues = { across: {}, down: {} };
 
     for(let i = 0; i < clueVector.size(); i++) {
         let clue = clueVector.get(i);
         let clueList = clue.is_across ? "across" : "down";
-        clues[clueList][clue.word_num] = { value: clue.word, hint: clue.clue };
+        clues[clueList][clue.word_num] = { value: clue.word, hint: clue.hint };
     }
 
     console.log(clues);

@@ -17,10 +17,18 @@ class DomBoard {
                                  ['#', '.', '.', '.', '#', '#', '#'],
                                  ['#', '#', '#', '#', '#', '#', '#']];
 
+        this.errorBoardData =  [['#', '#', '#', '#', '#', '#', '#'],
+                                ['#', 'C', 'A', 'N', 'T', '#', '#'],
+                                ['S', 'O', 'L', 'V', 'E', '#', '#'],
+                                ['#', '#', 'T', 'H', 'I', 'S', '#'],
+                                ['#', 'P', 'U', 'Z', 'Z', 'L', 'E'],
+                                ['#', '#', '#', ':(', '#', '#', '#'],
+                                ['#', '#', '#', '#', '#', '#', '#']];
+
         this.loadBoard(this.loadingBoardData, {}, true);
     }
 
-    loadBoard(data, clues, isLoading = false) {
+    loadBoard(data, clues, isLoading = false, isError = false) {
         this.selection = new UserSelection();
 
         this.data = data;
@@ -28,9 +36,10 @@ class DomBoard {
         this.width = data[0].length;
         this.clues = clues;
         this.isLoading = isLoading;
+        this.isError = isError;
         this.contentPane.dataset.loading = isLoading;
+        this.contentPane.dataset.error = isError;
 
-        console.log(data)
         this.fillDomTable();
         this.updateBoard();
     }
@@ -186,7 +195,7 @@ class DomBoard {
                         td.tabIndex = wordIndex;
                     }
         
-                    td.innerHTML = this.isLoading ? this.data[row][col] : OPEN_CHAR;
+                    td.innerHTML = this.isLoading || this.isError ? this.data[row][col] : OPEN_CHAR;
         
                     if(!this.isLoading) {
                         td.addEventListener("keydown", e => this.onInput(e));
@@ -215,7 +224,6 @@ class DomBoard {
         for (const word of words) {
             let clueList = word.isAcross ? 'across' : 'down';
             let clue = this.clues[clueList][word.label];
-            console.log(clue, clueList, word.label);
 
             let li = document.createElement('li');
             li.innerHTML = clue.hint;

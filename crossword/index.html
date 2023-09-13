@@ -49,16 +49,19 @@
                         <button onclick="generateBoard()">Generate!</button>
                     </div>
                     <div class="clue-wrapper">
-                        <div class="clue-list hide-loading">
+                        <div class="clue-list hide-loading hide-error">
                             <h3>Across:</h3>
                             <ol id="acrossClues"></ol>
                         </div>
-                        <div class="clue-list hide-loading">
+                        <div class="clue-list hide-loading hide-error">
                             <h3>Down:</h3>
                             <ol id="downClues"></ol>
                         </div>
                         <div class="clue-list show-loading">
                             <h3>Loading...</h3>
+                        </div>
+                        <div class="clue-list show-error">
+                            <h3>No solution found, try generating another puzzle.</h3>
                         </div>
                     </div>
                 </div>

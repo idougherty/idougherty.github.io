@@ -1,80 +1,8 @@
-class Vec3D {
-    static mag(vec) {
-        return Math.sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
-    }
-
-    static normalize(vec) {
-        if(vec.x == 0 && vec.y == 0 && vec.z == 0) return new Vec3D(0, 0, 0);
-        const mag = Vec3D.mag(vec);
-        return new Vec3D(vec.x / mag, vec.y / mag, vecz / mag);
-    }
-
-    static dif(v1, v2) {
-        return new Vec3D(v2.x - v1.x, v2.y - v1.y, v2.z - v1.z);
-    }
-
-    static cross(v1, v2) {
-        const i = v1.y * v2.z - v1.z * v2.y;
-        const j = v1.x * v2.z - v1.z * v2.x;
-        const k = v1.x * v2.y - v1.y * v2.x;
-        return new Vec3D(i, -j, k);
-    }
-
-    constructor(x, y, z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
-
-    extend(other) {
-        this.x += other.x;
-        this.y += other.y;
-        this.z += other.z;
-    }
-
-    subtract(other) {
-        this.x -= other.x;
-        this.y -= other.y;
-        this.z -= other.z;
-    }
-
-    scale(num) {
-        this.x *= num;
-        this.y *= num;
-        this.z *= num;
-    }
-    
-    sum(other) {
-        return new Vec3D(this.x + other.x, this.y + other.y, this.z + other.z);
-    }
-
-    dif(other) {
-        return new Vec3D(this.x - other.x, this.y - other.y, this.z - other.z);
-    }
-
-    mult(num) {
-        return new Vec3D(this.x * num, this.y * num, this.z * num);
-    }
-
-    div(num) {
-        return new Vec3D(this.x / num, this.y / num, this.z / num);
-    }
-
-    dot(other) {
-        return this.x * other.x + this.y * other.y + this.z * other.z;
-    }
-}
-    
 let SPLASH_HEIGHT;
 let ANIM_LEFT;
 let C_HEIGHT;
 let C_WIDTH;
 let C_SCALE;
-let parallax = 1.5;
-let SCREEN_TYPE;
-
-const MAX_DIST = 100;
-let MAX_POINTS = 150;
 
 function resizeCanvas() {
     const w = visualViewport.width;
@@ -87,7 +15,7 @@ function resizeCanvas() {
 		C_SCALE = 2;
         ANIM_LEFT = .5;
     } else {
-        C_SCALE = w / (w + h) * 3;
+        C_SCALE = w / (w + h) * 3.5;
         ANIM_LEFT = .75;
     }
     
@@ -96,8 +24,6 @@ function resizeCanvas() {
     C_WIDTH = canvas.width / C_SCALE;
 
     ctx.scale(C_SCALE, C_SCALE);
-    // canvas.style.transformOrigin = '0 0';
-    // canvas.style.transform = `scale(${C_SCALE})`;
     ctx.globalCompositeOperation = "lighter";
 	ctx.lineJoin = "round";
 
@@ -106,14 +32,14 @@ function resizeCanvas() {
 
 
 const lorenz = {
-    center: new Vec3D(.13, .13, 25.87),
+    center: new Vec3(.13, .13, 25.87),
     trail: 1000,
     scale: .8,
     idx: 0,
     particles: [[], [], []],
-    leaders:   [new Vec3D(-4.7834, -6.4119, 19.2778), 
-                new Vec3D(-4.8834, -6.4119, 19.2778), 
-                new Vec3D(-4.9834, -6.4119, 19.2778)],
+    leaders:   [new Vec3(-4.7834, -6.4119, 19.2778), 
+                new Vec3(-4.8834, -6.4119, 19.2778), 
+                new Vec3(-4.9834, -6.4119, 19.2778)],
 
     func: (v, dt) => {
         const P = 10;
@@ -131,16 +57,16 @@ const lorenz = {
 };
 
 const aizawa = {
-    center: new Vec3D(1, 0, 5.2),
+    center: new Vec3(1, 0, 5.2),
     trail: 1000,
     scale: 10,
     idx: 0,
     particles: [[], [], [], [], []],
-    leaders:   [new Vec3D(0.0589, 0.0318, 0.3323),
-                new Vec3D(0.0689, 0.0318, 0.3323),
-                new Vec3D(0.0789, 0.0318, 0.3323),
-                new Vec3D(0.0889, 0.0318, 0.3323),
-                new Vec3D(0.0989, 0.0318, 0.3323),],
+    leaders:   [new Vec3(0.0589, 0.0318, 0.3323),
+                new Vec3(0.0689, 0.0318, 0.3323),
+                new Vec3(0.0789, 0.0318, 0.3323),
+                new Vec3(0.0889, 0.0318, 0.3323),
+                new Vec3(0.0989, 0.0318, 0.3323),],
 
     func: (v, dt) => {
         const e = .25;
@@ -163,16 +89,16 @@ const aizawa = {
 };
 
 const rossler = {
-    center: new Vec3D(1, -26, 5.2),
+    center: new Vec3(1, -26, 5.2),
     trail: 1000,
     scale: 1,
     idx: 0,
     particles: [[], [], [], [], [],],
-    leaders:   [new Vec3D(0.04, 1.95, 3.19),
-                new Vec3D(0.14, 2.45, 3.29),
-                new Vec3D(0.24, 2.95, 3.39),
-                new Vec3D(0.34, 3.45, 3.49),
-                new Vec3D(0.44, 3.95, 3.59),],
+    leaders:   [new Vec3(0.04, 1.95, 3.19),
+                new Vec3(0.14, 2.45, 3.29),
+                new Vec3(0.24, 2.95, 3.39),
+                new Vec3(0.34, 3.45, 3.49),
+                new Vec3(0.44, 3.95, 3.59),],
 
     func: (v, dt) => {
         const a = .2;
@@ -190,14 +116,14 @@ const rossler = {
 };
 
 const lorenzMod2 = {
-    center: new Vec3D(0, 0, 0),
+    center: new Vec3(0, 0, 0),
     trail: 800,
     scale: 1.5,
     idx: 0,
     particles: [[], [], [],],
-    leaders:   [new Vec3D(-2.58, 5.13, -0.65),
-                new Vec3D(-2.58, 5.15, -0.65),
-                new Vec3D(-2.58, 5.17, -0.65),],
+    leaders:   [new Vec3(-2.58, 5.13, -0.65),
+                new Vec3(-2.58, 5.15, -0.65),
+                new Vec3(-2.58, 5.17, -0.65),],
 
     func: (v, dt) => {
         const a = .9;
@@ -216,7 +142,7 @@ const lorenzMod2 = {
 };
 
 function project(cam, vec) {
-    const dif = Vec3D.dif(cam.pos, vec);
+    const dif = Vec3.dif(cam.pos, vec);
 
     const rotY = qRotate(dif, cam.UP, cam.yaw);
     const rotP = qRotate(rotY, cam.FWD, cam.pitch);
@@ -268,7 +194,7 @@ function qRotate(vec, axis, angle) {
 
     let W = qMult(qMult(R, V), R1);
 
-    return new Vec3D(W.i, W.j, W.k);
+    return new Vec3(W.i, W.j, W.k);
 }
 
 function updateCamera(cam, curTime) {
@@ -284,24 +210,24 @@ function updateCamera(cam, curTime) {
 }
 
 let camera = {
-    pos: new Vec3D(0, 0, -50),
-    dir: new Vec3D(0, 0, 1),
+    pos: new Vec3(0, 0, -50),
+    dir: new Vec3(0, 0, 1),
     f_plane: 1000,
     pitch: 0,
     yaw: 0,
     roll: 0,
-    UP: new Vec3D(0, 1, 0),
-    FWD: new Vec3D(1, 0, 0),
-    DIR: new Vec3D(0, 0, 1),
+    UP: new Vec3(0, 1, 0),
+    FWD: new Vec3(1, 0, 0),
+    DIR: new Vec3(0, 0, 1),
 }
 
-function attractorAnim(dt) {
+function drawAttractor(dt) {
 	updateCamera(camera, curTime);
 
     for(const [idx, leader] of attractor.leaders.entries()) {
         attractor.func(leader, dt);
         
-        let particle = new Vec3D(leader.x * attractor.scale, leader.y * attractor.scale, leader.z * attractor.scale);
+        let particle = new Vec3(leader.x * attractor.scale, leader.y * attractor.scale, leader.z * attractor.scale);
         
         attractor.particles[idx][attractor.idx] = particle;
     }
@@ -324,7 +250,7 @@ function attractorAnim(dt) {
             cur = project(camera, particle);
     
             const offsetX = C_WIDTH * ANIM_LEFT;
-            const offsetY = SPLASH_HEIGHT / 2 - scrollTop / C_HEIGHT * 100;
+            const offsetY = canvas.height / C_SCALE / 3 - scrollTop / C_HEIGHT * 100;
 
             cur.x *= C_SCALE;
             cur.y *= C_SCALE;
@@ -355,17 +281,24 @@ function attractorAnim(dt) {
             }
     
             prev = cur;
-
-            if(cur.x < bounds.left) bounds.left = cur.x;
-            if(cur.x > bounds.right) bounds.right = cur.x;
-            if(cur.y < bounds.top) bounds.top = cur.y;
-            if(cur.y > bounds.bottom) bounds.bottom = cur.y;
         }
         ctx.stroke();
     }
     
     if((attractor.idx += 1) >= attractor.trail)
         attractor.idx = 0;
+}
+
+function drawBackground() {
+    let x = C_WIDTH * ANIM_LEFT;
+    let y = canvas.height / C_SCALE / 3 - scrollTop / C_HEIGHT * 100;
+
+    const grd = ctx.createRadialGradient(x, y, 30, x, y, 300);
+    grd.addColorStop(0, "#222");
+    grd.addColorStop(1, "#111");
+
+    ctx.fillStyle = grd;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
 let lastTime = 0;
@@ -380,29 +313,17 @@ function getDT() {
 let attractors = [aizawa, lorenz, lorenzMod2];
 let attractor = attractors[Math.floor(Math.random() * attractors.length)];
 
-let dt = 0;
 let scrollTop;
-let bounds;
 function anim() {
-	dt = getDT();
-	scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
+	scrollTop = (document.documentElement || document.body.parentNode || document.body).scrollTop;
 
-    if(bounds)
-        ctx.clearRect(bounds.left - 10, bounds.top - 10, bounds.right - bounds.left + 20, bounds.bottom - bounds.top + 20);
-    
-    bounds = {
-        left: Infinity,
-        right: -Infinity,
-        top: Infinity,
-        bottom: -Infinity,
-    };
+	let ms = getDT();
+    let dt = Math.min(ms, 20) / 1500;
 
     ctx.globalCompositeOperation = "source-over";
-    ctx.fillStyle = "#121212";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    drawBackground();
     ctx.globalCompositeOperation = "lighter";
-
-	attractorAnim(Math.min(dt, 20) / 1500);
+	drawAttractor(dt);
 
 	window.requestAnimationFrame(anim);
 }
@@ -414,7 +335,7 @@ window.addEventListener('resize', resizeCanvas);
 window.addEventListener("load", () => {
     canvas = document.getElementById("bg-anim");
     ctx = canvas.getContext("2d", {alpha: false});
-    
+
     resizeCanvas();
     anim();
 })

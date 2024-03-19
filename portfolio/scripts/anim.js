@@ -15,7 +15,7 @@ function resizeCanvas() {
 		C_SCALE = 2;
         ANIM_LEFT = .5;
     } else {
-        C_SCALE = w / (w + h) * 3.5;
+        C_SCALE = h * 0.002;
         ANIM_LEFT = .75;
     }
     
@@ -250,7 +250,7 @@ function drawAttractor(dt) {
             cur = project(camera, particle);
     
             const offsetX = C_WIDTH * ANIM_LEFT;
-            const offsetY = canvas.height / C_SCALE / 3 - scrollTop / C_HEIGHT * 100;
+            const offsetY = canvas.height / C_SCALE / 2 - scrollTop / C_HEIGHT * 100;
 
             cur.x *= C_SCALE;
             cur.y *= C_SCALE;
